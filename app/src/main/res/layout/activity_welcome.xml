@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:attrs="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    tools:context="view.activity.WelcomeActivity">
+
+    <view.customview.CustomTextViewBold
+        android:id="@+id/tvSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skip"
+        android:paddingHorizontal="@dimen/margin_10"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"
+        android:typeface="normal"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/margin_5"/>
+
+   <android.support.v4.view.ViewPager
+       android:id="@+id/viewPager"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_below="@+id/tvSkip"/>
+
+    <com.rd.PageIndicatorView
+        android:id="@+id/pageIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:piv_animationType="scale"
+        app:piv_dynamicCount="true"
+        app:piv_interactiveAnimation="true"
+        app:piv_selectedColor="@color/black"
+        app:piv_unselectedColor="@color/white"
+        app:piv_viewPager="@id/viewPager"
+        attrs:piv_padding="@dimen/margin_5"
+        attrs:piv_radius="@dimen/margin_5"
+        android:layout_marginBottom="@dimen/margin_10"/>
+
+</RelativeLayout>

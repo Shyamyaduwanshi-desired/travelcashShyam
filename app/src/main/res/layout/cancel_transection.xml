@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigate" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Cancellation Successfully"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="@dimen/margin_5"
+            app:cardElevation="3dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_10">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imgCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:src="@drawable/ic_check"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <view.customview.CustomTextViewBold
+                    android:id="@+id/tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:text="Your Cancellation is Successful."
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imgCheck" />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tvText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:text="@string/sorry"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv" />
+
+                <view.customview.CustomTextViewBold
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:text="help@travelcash.com"
+                    android:textColor="@color/light_red"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvText" />
+
+                <view.customview.CustomTextViewBold
+                    android:id="@+id/tvTransaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:text="Transaction ID : "
+                    android:textColor="@color/select_back"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tvTransactionID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:text="SGW85631599"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tvTransaction"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+
+                <view.customview.CustomButton
+                    android:id="@+id/appCompatButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/margin_35"
+                    android:layout_marginHorizontal="@dimen/margin_15"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_button"
+                    android:text="View Details"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTransactionID" />
+
+                <view.customview.CustomButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/margin_35"
+                    android:layout_marginHorizontal="@dimen/margin_15"
+                    android:layout_marginVertical="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_button_home"
+                    android:text="Return Home"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_back"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

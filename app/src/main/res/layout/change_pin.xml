@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/margin_35"
+            android:layout_height="@dimen/margin_35"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_left" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Change Pin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
+                android:layout_marginHorizontal="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_120"
+                android:theme="@style/TextLabel"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/white">
+
+                <view.customview.CustomEditText
+                    android:id="@+id/edtOldPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter old pin."
+                    android:imeOptions="actionNext"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:padding="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="normal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_20"
+                android:layout_marginVertical="@dimen/margin_10"
+                android:theme="@style/TextLabel"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/white">
+
+                <view.customview.CustomEditText
+                    android:id="@+id/edtNewPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter new pin"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:padding="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="normal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_20"
+                android:theme="@style/TextLabel"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/white">
+
+                <view.customview.CustomEditText
+                    android:id="@+id/edtConfirmPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirm pin"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:padding="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="normal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <view.customview.CustomButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_marginHorizontal="@dimen/margin_40"
+                android:layout_marginTop="@dimen/margin_30"
+                android:background="@drawable/round_button"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_normal" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

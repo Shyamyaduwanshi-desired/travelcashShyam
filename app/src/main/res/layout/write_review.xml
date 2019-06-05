@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigate" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Write a Review"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.AppCompatRatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:isIndicator="false"
+        android:max="5"
+        android:scaleX=".8"
+        android:scaleY=".8"
+        android:theme="@style/MyRatingBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <view.customview.CustomTextViewBold
+        android:id="@+id/appCompatTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:text="Tap a star to rate"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    <view.customview.CustomEditText
+        android:id="@+id/edtComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:background="@drawable/round_edt"
+        android:gravity="start"
+        android:hint="Write a review"
+        android:lines="5"
+        android:maxLines="5"
+        android:minLines="3"
+        android:padding="@dimen/margin_5"
+        android:scrollbars="vertical"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
+
+    <view.customview.CustomButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_40"
+        android:layout_marginTop="@dimen/margin_20"
+        android:background="@drawable/round_button"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtComment" />
+</android.support.constraint.ConstraintLayout>

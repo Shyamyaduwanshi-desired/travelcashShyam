@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigate" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Ratings &amp; Reviews"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/tvNext"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/margin_15"
+            android:src="@drawable/ic_next"
+            android:visibility="visible" />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="@dimen/margin_70"
+            android:layout_height="@dimen/margin_70"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:src="@drawable/persion"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintStart_toStartOf="@+id/ratingBar" />
+
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_35"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginTop="@dimen/margin_5"
+            android:isIndicator="true"
+            android:max="5"
+            android:rating="0"
+            android:theme="@style/MyRatingBar"
+            app:layout_constraintStart_toEndOf="@+id/imgProfile"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginTop="@dimen/margin_5"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/ratingBar"
+            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "911296867357",
+    "firebase_url": "https://travelcash-1550306150264.firebaseio.com",
+    "project_id": "travelcash-1550306150264",
+    "storage_bucket": "travelcash-1550306150264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911296867357:android:882a35808dfc5a56",
+        "android_client_info": {
+          "package_name": "com.travelcash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911296867357-0tqjs8mh1epcsouogh7t65p6el2d4rim.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travelcash",
+            "certificate_hash": "beb52f5558e6fe5098c357141d57dee9c4ecf930"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsqTAlspygMwlA2DgJ4BAjptECOWdO1Vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911296867357-umkr29aird6seaoqj0pvlpju5rmlstoa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

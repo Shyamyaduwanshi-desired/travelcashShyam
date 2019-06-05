@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        tool:ignore="MissingConstraints">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_left" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Transaction Detail"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal" />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_15"
+        app:cardCornerRadius="@dimen/margin_5"
+        app:cardElevation="@dimen/margin_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_10">
+
+            <view.customview.CustomTextViewBold
+                android:id="@+id/tvQR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/qr_code"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold"
+                tool:ignore="MissingConstraints"/>
+
+            <view.customview.CustomTextView
+                android:id="@+id/tvRN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_5"
+                android:drawableLeft="@drawable/ic_persion"
+                android:drawablePadding="@dimen/margin_10"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="normal"
+                app:layout_constraintTop_toBottomOf="@+id/tvQR"
+                tool:ignore="MissingConstraints"/>
+
+            <view.customview.CustomTextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_5"
+                android:drawableLeft="@drawable/ic_location"
+                android:drawablePadding="@dimen/margin_10"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="normal"
+                app:layout_constraintTop_toBottomOf="@+id/tvRN"
+                tool:ignore="MissingConstraints"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <fragment
+        android:id="@+id/barcode"
+        android:name="com.google.android.gms.samples.vision.barcodereader.BarcodeCapture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginBottom="@dimen/margin_15"
+        app:gvb_auto_focus="true"
+        app:gvb_code_format="all_format"
+        app:gvb_flash="false"
+        app:gvb_rect_colors="@array/rect_color"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <view.customview.CustomButton
+        android:id="@+id/btnCancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/margin_40"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_20"
+        android:background="@drawable/round_button"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

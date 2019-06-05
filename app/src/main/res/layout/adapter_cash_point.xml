@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_10">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgShop"
+            android:layout_width="@dimen/margin_70"
+            android:layout_height="@dimen/margin_70"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:text="name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgShop"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_5"
+            android:drawableLeft="@drawable/ic_road"
+            android:drawablePadding="@dimen/margin_5"
+            android:text="location"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgShop"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_5"
+            android:drawableLeft="@drawable/ic_pin"
+            android:drawablePadding="@dimen/margin_5"
+            android:singleLine="true"
+            android:text="address"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgShop"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvPromotion"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_35"
+            android:text="Promotions"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            android:background="@drawable/oval_white"
+            android:paddingHorizontal="@dimen/margin_10"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/imgShop"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:visibility="gone"/>
+
+        <view.customview.CustomTextView
+            android:id="@+id/tvPurchase"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_35"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/oval_white"
+            android:gravity="center"
+            android:text="With Purchase"
+            android:paddingHorizontal="@dimen/margin_10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintStart_toEndOf="@+id/tvPromotion"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+            app:layout_constraintWidth_default="wrap"
+            android:visibility="gone"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/margin_70"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/banner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout"
+        android:visibility="gone"/>
+</android.support.constraint.ConstraintLayout>

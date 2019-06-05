@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:ignore="MissingConstraints">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigate" />
+    </android.support.v7.widget.Toolbar>
+
+    <view.customview.CustomTextViewBold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:text="OTP Verification"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <view.customview.CustomTextView
+        android:id="@+id/tvLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginBottom="@dimen/margin_15"
+        android:gravity="center"
+        android:text="Enter OTP sent to: +91-9945632320"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/otp_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- <com.arvind.otpview.OTPView
+         android:id="@+id/otp_view"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:BG_TYPE="UNDERLINE"
+         app:border_color="@color/black"
+         app:inner_color="@color/green"
+         app:is_secure="true"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:length="4"
+         app:otp_font_textSize="@dimen/text_size_normal"
+         app:secure_symbol="*"
+         app:text_color="@color/white"
+         app:zero_allowed_begining="false" />-->
+
+    <com.goodiebag.pinview.Pinview
+        android:id="@+id/otp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cursorVisible="true"
+        app:forceKeyboard="true"
+        app:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:password="false"
+        app:pinHeight="40dp"
+        app:pinLength="4"
+        app:pinWidth="40dp" />
+
+    <view.customview.CustomTextView
+        android:id="@+id/tvResend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:gravity="center"
+        android:text="Don't receive the OTP ? RESEND OTP"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otp_view" />
+
+    <view.customview.CustomButton
+        android:id="@+id/btnContinue"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/margin_40"
+        android:layout_marginStart="@dimen/margin_30"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_30"
+        android:background="@drawable/oval_blue"
+        android:text="Verify &amp; Continue"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvResend" />
+</android.support.constraint.ConstraintLayout>

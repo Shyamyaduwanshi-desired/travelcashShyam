@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TravelCash</string>
+    <string name="sign_up">Don\'t have an account? <u>Sign Up</u> </string>
+    <string name="dummytext">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="qr_code">Please scan the QR code at the cashier.</string>
+    <string name="address">Buzz@Ang Mo Kio @ Blk 233 Ang Mo Kio Avg 3 #01-1178, Singapore 563320</string>
+    <string name="wallet">Wallet</string>
+    <string name="discover">Discover</string>
+    <string name="home">Home</string>
+    <string name="history">History</string>
+    <string name="setting">Settings</string>
+    <string name="sorry">We are sorry this didn\'t work out. Let us know how we can make your experience better at.</string>
+    <string name="register">Enter your mobile number we will send you OTP to register account.</string>
+    <string name="api_key">c26b952cf256107329b42f97bd9af382</string>
+</resources>

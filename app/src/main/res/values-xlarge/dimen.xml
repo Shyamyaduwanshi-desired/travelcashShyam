@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_normal">30sp</dimen>
+    <dimen name="text_size_small">24sp</dimen>
+    <dimen name="text_size_large">36sp</dimen>
+    <dimen name="text_size_xlarge">60sp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_10">20dp</dimen>
+    <dimen name="margin_15">30dp</dimen>
+    <dimen name="margin_20">40dp</dimen>
+    <dimen name="margin_25">50dp</dimen>
+    <dimen name="margin_30">60dp</dimen>
+    <dimen name="margin_35">70dp</dimen>
+    <dimen name="margin_40">80dp</dimen>
+    <dimen name="margin_45">90dp</dimen>
+    <dimen name="margin_50">100dp</dimen>
+    <dimen name="margin_70">140dp</dimen>
+    <dimen name="margin_100">180dp</dimen>
+    <dimen name="margin_120">240dp</dimen>
+    <dimen name="margin_150">300dp</dimen>
+    <dimen name="margin_180">350dp</dimen>
+    <dimen name="margin_200">400dp</dimen>
+    <dimen name="text_size_25">45sp</dimen>
+</resources>

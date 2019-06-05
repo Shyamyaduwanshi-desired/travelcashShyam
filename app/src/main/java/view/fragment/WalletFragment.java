@@ -1,0 +1,134 @@
+package view.fragment;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.travelcash.R;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import constant.AppData;
+import model.RecentActivity;
+import presenter.RecentActivityPresenter;
+import view.activity.AddMoney;
+import view.adapter.RecentActivityAdapter;
+import view.customview.CustomTextViewBold;
+
+public class WalletFragment extends Fragment implements RecentActivityPresenter.Wallet {
+    private static WalletFragment walletFragment;
+    private CustomTextViewBold tvTopUp, tvAmount;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecentActivityPresenter presenter;
+    private AppData appData;
+
+    public static WalletFragment getInstance(){
+        walletFragment = new WalletFragment();
+
+        return walletFragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_wallet, container, false);
+
+        presenter = new RecentActivityPresenter(getContext(), WalletFragment.this);
+        appData = new AppData(getContext());
+        initView(view);
+
+
+        return view;
+    }
+
+    private void initView(View view){
+        tvTopUp = view.findViewById(R.id.tvTopUp);
+        tvTopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getContext(), AddMoney.class), 100);
+                Animatoo.animateSlideRight(getContext());
+            }
+        });
+
+        tvAmount = view.findViewById(R.id.tvAmount);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        if(isNetworkConnected()){
+            presenter.recentActivity(appData.getUserID());
+        }else {
+            showDialog("Please connect to internet");
+        }
+
+    }
+
+    @Override
+    public void success(ArrayList<RecentActivity> arrayList, String walletAmount) {
+        DecimalFormat df = new DecimalFormat( "#,###,###,###" );
+        double dd = Double.parseDouble(walletAmount);
+        tvAmount.setText("" + df.format(dd));
+        mAdapter = new RecentActivityAdapter(getActivity(), arrayList);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void error(String response) {
+       showDialog(response);
+    }
+
+    @Override
+    public void fail(String response) {
+       showDialog(response);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100) {
+            if (resultCode == Activity.RESULT_OK) {
+               presenter.recentActivity(appData.getUserID());
+            }else {
+                showDialog("Failed to add money to wallet.");
+            }
+        }
+    }
+
+    private void showDialog(String message) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("")
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
+}
+

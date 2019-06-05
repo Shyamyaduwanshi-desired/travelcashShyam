@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.travelcash">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication">
+
+        <activity
+            android:name="view.activity.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="view.activity.WelcomeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+        <activity
+            android:name="view.activity.ForgotPassword"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+        <activity
+            android:name="view.activity.ScanActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.TransactionDetail"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+
+        <activity
+            android:name="view.activity.ConfirmCashpoint"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.ScanAndCollect"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.CancelTransaction"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.AddMoney"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.VerifyOtp"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.SignUpActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.StartActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.ChangePassword"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.ChangePin"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.SetPassword"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.ViewReview"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.ViewVendorReview"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.TransferToFriend"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.WriteReview"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.WalletTransactionDetail"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="view.activity.ForgotPassOtp"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name="view.activity.QRActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="view.activity.ScanQR"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg" />
+
+        <!--  <meta-data
+              android:name="com.facebook.sdk.ApplicationId"
+              android:value="AIzaSyD1GfQuSnmYCthLiEzmnPZdEtRrWiSoK48" />-->
+    </application>
+</manifest>

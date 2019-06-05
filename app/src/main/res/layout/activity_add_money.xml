@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigate" />
+
+        <view.customview.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Add Money To Wallet"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_100"
+                    android:background="@color/colorPrimary" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="@dimen/margin_5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_180"
+                        android:orientation="vertical">
+
+                        <view.customview.CustomTextViewBold
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_15"
+                            android:text="How much cash to add?"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_normal"
+                            android:textStyle="normal" />
+
+                        <view.customview.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:text="via DBS/POSB"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_normal"
+                            android:textStyle="normal" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/imgMinus"
+                                android:layout_width="@dimen/margin_25"
+                                android:layout_height="@dimen/margin_25"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/margin_15"
+                                android:src="@drawable/minus" />
+
+                            <view.customview.CustomTextViewBold
+                                android:id="@+id/tvAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:drawableLeft="@drawable/ic_dollar"
+                                android:drawableTint="@color/colorPrimary"
+                                android:layout_gravity="center_horizontal"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_xlarge"
+                                android:textStyle="bold" />
+
+                            <view.customview.CustomTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@+id/tvAmount"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:layout_toRightOf="@+id/tvAmount"
+                                android:text="$"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_normal"
+                                android:textStyle="normal"
+                                android:visibility="gone"/>
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/imgPlus"
+                                android:layout_width="@dimen/margin_25"
+                                android:layout_height="@dimen/margin_25"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/margin_15"
+                                android:src="@drawable/plus" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/margin_10"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <view.customview.CustomTextViewBold
+                                android:id="@+id/tvOne"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_marginHorizontal="@dimen/margin_5"
+                                android:layout_weight="1"
+                                android:background="@drawable/oval_gray"
+                                android:gravity="center"
+                                android:text="$ 100"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_normal"
+                                android:textStyle="normal" />
+
+                            <view.customview.CustomTextViewBold
+                                android:id="@+id/tvFive"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_weight="1"
+                                android:background="@drawable/oval_gray"
+                                android:gravity="center"
+                                android:text="$ 500"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_normal"
+                                android:textStyle="normal" />
+
+                            <view.customview.CustomTextViewBold
+                                android:id="@+id/tvTwo"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_marginHorizontal="@dimen/margin_5"
+                                android:layout_weight="1"
+                                android:background="@drawable/oval_gray"
+                                android:gravity="center"
+                                android:text="$ 2000"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_normal"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10">
+
+                <view.customview.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_toLeftOf="@+id/tvRate"
+                    android:padding="@dimen/margin_5"
+                    android:text="Current Exchange Rate : "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold" />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tvRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:padding="@dimen/margin_5"
+                    android:text="$1 To IDR 10182.05"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_150"
+                android:layout_marginHorizontal="@dimen/margin_15"
+                android:layout_marginVertical="@dimen/margin_10"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/pie_chart" />
+
+            <view.customview.CustomButton
+                android:id="@+id/btnProceed"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_40"
+                android:layout_gravity="center"
+                android:layout_marginVertical="@dimen/margin_10"
+                android:background="@drawable/round_button"
+                android:text="Proceed"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_150"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginHorizontal="@dimen/margin_15"
+                    android:layout_marginVertical="@dimen/margin_10"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/banner" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
