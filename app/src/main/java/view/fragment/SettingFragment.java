@@ -96,6 +96,7 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
        }
 
         prepareData();
+
     }
 
     private void prepareData() {

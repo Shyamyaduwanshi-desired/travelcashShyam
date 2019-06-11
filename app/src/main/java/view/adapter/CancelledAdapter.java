@@ -6,36 +6,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
 import java.util.List;
 
-import model.History;
+import model.HistoryModel;
 import view.activity.TransactionDetail;
 import view.customview.CustomTextView;
 
 public class CancelledAdapter extends RecyclerView.Adapter<CancelledAdapter.MyViewHolder> {
-    private List<History> mList;
+    private List<HistoryModel> mList;
     private Activity activity;
 
-    public CancelledAdapter(Activity activity, List<History> mList) {
+    public CancelledAdapter(Activity activity, List<HistoryModel> mList) {
         this.activity = activity;
         this.mList = mList;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_completed, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_history, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final History history = mList.get(position);
+        final HistoryModel history = mList.get(position);
 
         if(position >0 && position < mList.size()){
             String currentDate = mList.get(position).getDate();

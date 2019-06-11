@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,8 +44,9 @@ public class HistoryFragment extends Fragment {
         tabLayout =  view.findViewById(R.id.tabs);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new DynamicFragment(), "Completed");
-        adapter.addFragment(new DynamicFragment(), "Cancelled");
+        adapter.addFragment(DynamicFragment.newInstance(), "Completed");
+        adapter.addFragment(DynamicFragment.newInstance(), "Ongoing");
+        adapter.addFragment(DynamicFragment.newInstance(), "Cancelled");
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -56,6 +58,7 @@ public class HistoryFragment extends Fragment {
                 super.onTabSelected(tab);
             }
         });
+
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

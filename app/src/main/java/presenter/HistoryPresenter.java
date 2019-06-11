@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import constant.AppData;
-import model.History;
+import model.HistoryModel;
 
 public class HistoryPresenter {
     private Context context;
@@ -36,7 +36,7 @@ public class HistoryPresenter {
     }
 
     public interface History {
-        void success(ArrayList<model.History> response);
+        void success(ArrayList<HistoryModel> response);
 
         void error(String response);
 
@@ -48,7 +48,7 @@ public class HistoryPresenter {
         progress.setMessage("Get Transaction Please Wait..");
         progress.setCancelable(false);
         progress.show();
-        final ArrayList<model.History> list = new ArrayList<>();
+        final ArrayList<HistoryModel> list = new ArrayList<>();
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "userHistory", new Response.Listener<String>() {
             @Override
@@ -67,7 +67,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("withdraw_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_withdraw_id"),output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"),output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"));
                             list.add(his);
                         }
 
@@ -79,7 +79,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_bank_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"));
                             list.add(his);
                         }
 
@@ -91,7 +91,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_friends_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"));
                             list.add(his);
                         }
 
@@ -103,7 +103,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("donated_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"));
                             list.add(his);
                         }
 
@@ -140,12 +140,69 @@ public class HistoryPresenter {
         queue.add(postRequest);
     }
 
+    public void getOngoingHistory() {
+        final ProgressDialog progress = new ProgressDialog(context);
+        progress.setMessage("Get Transaction Please Wait..");
+        progress.setCancelable(false);
+        progress.show();
+        final ArrayList<HistoryModel> list = new ArrayList<>();
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "getUserInProgessRequests", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progress.dismiss();
+                try {
+                    JSONObject reader = new JSONObject(response);
+                    int status = reader.getInt("status");
+                    if (status == 1) {
+                        list.clear();
+                        JSONArray withdrawTransactions = reader.getJSONArray("userInProgessRequest");
+                        for (int count = 0; count < withdrawTransactions.length(); count++) {
+                            JSONObject object = withdrawTransactions.getJSONObject(count);
+                            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy");
+                            SimpleDateFormat time = new SimpleDateFormat("hh:mm");
+                            String date = object.getString("request_date");
+                            Date date_change = input.parse(date);
+                            HistoryModel his = new HistoryModel("",output.format(date_change), object.getString("agent_fname"), time.format(date_change), object.getString("user_request_amount"));
+                            list.add(his);
+                        }
+
+                        history.success(list);
+                    } else if (status == 0) {
+                        history.error(reader.getString("message"));
+                    }
+                }catch (Exception e) {
+                    history.fail("Something went wrong. Please try after some time.");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progress.dismiss();
+                history.fail("Server Error.\n Please try after some time.");
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", appData.getUserID());
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(postRequest);
+    }
+
     public void getCanceledHistory() {
         final ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage("Get Transaction Please Wait..");
         progress.setCancelable(false);
         progress.show();
-        final ArrayList<model.History> list = new ArrayList<>();
+        final ArrayList<HistoryModel> list = new ArrayList<>();
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "userHistoryCancelled", new Response.Listener<String>() {
             @Override
@@ -164,7 +221,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("withdraw_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_withdraw_id"), output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"), output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"));
                             list.add(his);
                         }
 
@@ -176,7 +233,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_bank_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"));
                             list.add(his);
                         }
 
@@ -188,7 +245,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_friends_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"));
                             list.add(his);
                         }
 
@@ -200,7 +257,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("donated_date_time");
                             Date date_change = input.parse(date);
-                            model.History his = new model.History(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"));
+                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"));
                             list.add(his);
                         }
 

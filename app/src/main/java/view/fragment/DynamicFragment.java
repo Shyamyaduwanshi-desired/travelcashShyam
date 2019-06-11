@@ -14,17 +14,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.travelcash.R;
+
 import java.util.ArrayList;
-import model.History;
+
+import model.HistoryModel;
 import presenter.HistoryPresenter;
 import view.adapter.CancelledAdapter;
 import view.adapter.CompletedAdapter;
+import view.adapter.OngoingAdapter;
 
 public class DynamicFragment extends Fragment implements HistoryPresenter.History {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private HistoryPresenter presenter;
+    private static DynamicFragment tabFragment;
+    private static int count;
+
+    public static DynamicFragment newInstance() {
+        tabFragment = new DynamicFragment();
+        return tabFragment;
+    }
 
     @Nullable
     @Override
@@ -42,11 +53,14 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        count = 1;
 
         if (isNetworkConnected()) {
             if (HistoryFragment.position == 0)
                 presenter.getCompletedHistory();
             else if (HistoryFragment.position == 1)
+                presenter.getOngoingHistory();
+            else if (HistoryFragment.position == 2)
                 presenter.getCanceledHistory();
         } else {
             showDialog("Please connect to internet.");
@@ -62,10 +76,12 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     }
 
     @Override
-    public void success(ArrayList<History> response) {
+    public void success(ArrayList<HistoryModel> response) {
         if (HistoryFragment.position == 0)
             mAdapter = new CompletedAdapter(getActivity(), response);
         else if (HistoryFragment.position == 1)
+            mAdapter = new OngoingAdapter(response);
+        else if (HistoryFragment.position == 2)
             mAdapter = new CancelledAdapter(getActivity(), response);
 
         recyclerView.setAdapter(mAdapter);
@@ -74,12 +90,18 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
 
     @Override
     public void error(String response) {
-        showDialog(response);
+        if (count == 1) {
+            showDialog(response);
+            count++;
+        }
     }
 
     @Override
     public void fail(String response) {
-        showDialog(response);
+        if (count == 1) {
+            showDialog(response);
+            count++;
+        }
     }
 
     private void showDialog(String message) {
