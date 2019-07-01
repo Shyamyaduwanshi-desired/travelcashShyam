@@ -28,6 +28,36 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name="view.activity.AddMoneyTransactionDetail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name="view.activity.ActLineGraphDemo"
+            android:screenOrientation="portrait">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name="view.activity.ActLineGraphDemo1"
+            android:screenOrientation="portrait">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+
         <activity
             android:name="view.activity.WelcomeActivity"
             android:screenOrientation="portrait" />
@@ -104,6 +134,10 @@
             android:name="view.activity.ProfileActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name="view.activity.ShowWalletTransactionDetail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <activity
             android:name="view.activity.ViewReview"
@@ -133,6 +167,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
+
         <activity
             android:name="view.activity.QRActivity"
             android:screenOrientation="portrait" />
@@ -143,7 +178,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg" />
+            android:value="@string/google_api_key" />
 
         <!--  <meta-data
               android:name="com.facebook.sdk.ApplicationId"

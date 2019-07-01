@@ -21,11 +21,16 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -63,6 +68,8 @@ import java.util.Locale;
 import constant.AppData;
 import constant.OrderData;
 import de.hdodenhof.circleimageview.CircleImageView;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Vendor;
 import presenter.VendorListPresenter;
 import view.activity.AddMoney;
@@ -109,11 +116,21 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         orderData = new OrderData(getContext());
         orderData.clearData();
 
-        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
+//        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
+        Places.initialize(getContext(), getString(R.string.google_api_key));
 
         initView();
-
+        SetPredata();
         return view;
+    }
+
+    private void SetPredata() {
+        tvWalletBalance.setText(appData.getWalletAmount());
+//        if (isNetworkConnected())
+//            presenter.getVendorWithPromo(latitude, longitude);
+//        else
+//            showDialog("Please connect to internet");
+
     }
 
     private boolean checkLocationPermission() {
@@ -268,19 +285,24 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 break;
 
             case R.id.imgPlus:
-                add();
+//                add();
+                Myadd();
                 break;
 
             case R.id.tvOne:
-                add(100000);
+//                add(100000);
+                Myadd(100000);
+
                 break;
 
             case R.id.tvFive:
-                add(500000);
+//                add(500000);
+                Myadd(500000);
                 break;
 
             case R.id.tvTwo:
-                add(2000000);
+//                add(2000000);
+                Myadd(2000000);
                 break;
 
             case R.id.edtSearchLocation:
@@ -316,63 +338,8 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         }
     }
 
-    private void add(int value) {
-        String amount = tvAmount.getText().toString().trim();
-        String walletBalance = tvWalletBalance.getText().toString().trim();
-        amount = amount.replaceAll(",", "");
-        walletBalance = walletBalance.replaceAll(",", "");
-        int amt = Integer.parseInt(amount);
-        int wb = Integer.parseInt(walletBalance);
-        if (amt < 10000000) {
-            int val = amt + value;
-            if (val <= 10000000 ) {
-                if( val <= wb){
-                    DecimalFormat df = new DecimalFormat("#,###,###,###");
-                    double dd = Double.parseDouble("" + val);
-                    tvAmount.setText("" + df.format(dd));
-                }else
-                    showDialog("Your wallet balance is less than transaction amount. Please Add money to Wallet and continue with transaction");
-            } else
-                showDialog("Please enter an amount lower than maximum transaction of 5M IDR.");
-        } else {
-            showDialog("Please enter an amount lower than maximum transaction of 5M IDR.");
-        }
-    }
 
-    private void add() {
-        String amount = tvAmount.getText().toString().trim();
-        String walletBalance = tvWalletBalance.getText().toString().trim();
-        amount = amount.replaceAll(",", "");
-        walletBalance = walletBalance.replaceAll(",", "");
-        int amt = Integer.parseInt(amount);
-        int wb = Integer.parseInt(walletBalance);
-        if (amt < 10000000) {
-            int val = amt + 50000;
-            if (val <= 10000000 ) {
-                if( val <= wb){
-                    DecimalFormat df = new DecimalFormat("#,###,###,###");
-                    double dd = Double.parseDouble("" + val);
-                    tvAmount.setText("" + df.format(dd));
-                }else
-                    showDialog("Your wallet balance is less than transaction amount. Please Add money to Wallet and continue with transaction");
-            } else
-                showDialog("Please enter an amount lower than maximum transaction of 5M IDR.");
-        } else {
-            showDialog("Please enter an amount lower than maximum transaction of 5M IDR.");
-        }
-    }
 
-    private void minus() {
-        String amount = tvAmount.getText().toString().trim();
-        amount = amount.replaceAll(",", "");
-        int amt = Integer.parseInt(amount);
-        if (amt > 50000) {
-            int val = amt - 50000;
-            DecimalFormat df = new DecimalFormat("#,###,###,###");
-            double dd = Double.parseDouble("" + val);
-            tvAmount.setText("" + df.format(dd));
-        }
-    }
 
     private void showDialog(String message) {
         new AlertDialog.Builder(getContext())
@@ -438,7 +405,6 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                     showDialog(e.getMessage());
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 showDialog(status.getStatusMessage());
             }
@@ -487,7 +453,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
 
             if (isNetworkConnected()) {
                 presenter.getVendor("" + location.getLatitude(), "" + location.getLongitude());
-                apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&APPID=" + AppData.API_KEY + "&units=metric";
+                apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&APPID=" + AppData.API_KEY + "&units=metric&sensor=false";
                 makeJsonObject(apiUrl);
             } else {
                 showDialog("Please connect to internet.");
@@ -510,7 +476,9 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         this.response = response;
         cashPointerAdapter = new CashPointAdapter(getActivity(), response, HomeFragment.this);
         recyclerView.setAdapter(cashPointerAdapter);
-        cashPointerAdapter.notifyDataSetChanged();
+//        cashPointerAdapter.notifyDataSetChanged();
+        runLayoutAnimation(recyclerView);
+
     }
 
     @Override
@@ -520,14 +488,17 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         cashPointerAdapter = new CashPointAdapter(getActivity(), response, HomeFragment.this);
         recyclerView.setAdapter(cashPointerAdapter);
 
+        runLayoutAnimation(recyclerView);
+
         DecimalFormat df = new DecimalFormat("#,###,###,###");
         double dd = Double.parseDouble(amount);
-        tvWalletBalance.setText("" + df.format(dd));
+        tvWalletBalance.setText("" + df.format(dd));//1
     }
 
     @Override
     public void error(String response) {
-        showDialog(response);
+//        showDialog(response);
+        ShowNewAlert(response);//shyam 26/06/2019
     }
 
     @Override
@@ -552,6 +523,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     }
 
     public void makeJsonObject(final String apiUrl) {
+        Log.e("","apiUrl= "+apiUrl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -582,4 +554,88 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
+    PrettyDialog prettyDialog=null;
+    private void ShowNewAlert(String message) {
+        if(prettyDialog!=null)
+        {
+            prettyDialog.dismiss();
+        }
+         prettyDialog = new PrettyDialog(getContext());
+        prettyDialog.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        prettyDialog.setIconTint(R.color.colorPrimary);
+        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+        prettyDialog.setTitle("");
+        prettyDialog.setMessage(message);
+        prettyDialog.setAnimationEnabled(false);
+        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+            }
+        }).show();
+
+        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                if (isNetworkConnected()) {
+                    presenter.getVendorWithPromo(latitude, longitude);
+                }
+                else {
+                    showDialog("Please connect to internet");
+                }
+            }
+        }).show();
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        Context context = recyclerView.getContext();
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
+    int sAmount=0;
+    private void Myadd(int value) {
+        String amount = tvAmount.getText().toString().trim();
+        amount = amount.replaceAll(",", "");
+        int amt = Integer.parseInt(amount);
+        sAmount=value;
+        int val = amt + value;
+        DecimalFormat df = new DecimalFormat("#,###,###,###");
+        double dd = Double.parseDouble("" + val);
+        tvAmount.setText("" + df.format(dd));
+    }
+    private void Myadd() {
+        String amount = tvAmount.getText().toString().trim();
+        amount = amount.replaceAll(",", "");
+        int amt = Integer.parseInt(amount);
+       if(sAmount==0)
+       {
+           sAmount=100000;
+       }
+        int val = amt + sAmount;
+        DecimalFormat df = new DecimalFormat("#,###,###,###");
+        double dd = Double.parseDouble("" + val);
+        tvAmount.setText("" + df.format(dd));
+    }
+
+    private void minus() {
+        String amount = tvAmount.getText().toString().trim();
+        amount = amount.replaceAll(",", "");
+        int amt = Integer.parseInt(amount);
+
+        if (amt > sAmount) {
+            int val = amt - sAmount;
+            DecimalFormat df = new DecimalFormat("#,###,###,###");
+            double dd = Double.parseDouble("" + val);
+            tvAmount.setText("" + df.format(dd));
+        }
+    }
+
 }

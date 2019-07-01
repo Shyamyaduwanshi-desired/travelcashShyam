@@ -56,6 +56,7 @@ public class LoginPresenter {
                         appData.setEmail(reader.getString("user_email_id"));
                         appData.setPin(reader.getString("user_pin"));
                         appData.setProfile(reader.getString("profile"));
+                        appData.setWalletAmount(reader.getString("wallet_amount"));
                     }else if(status == 0){
                        login.error(reader.getString("message"));
                     }

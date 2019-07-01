@@ -52,4 +52,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.GoodieBag:Pinview:v1.3'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
+//    for google autosearch
+//    implementation 'com.google.android.gms:play-services-location:16.0.1'
+//    implementation 'com.google.android.gms:play-services-places:16.0.1'
+//    implementation 'com.google.android.gms:play-services-places:11.8.0'
+
+//    implementation 'com.google.android.gms:play-services-location:9.6.1'
+//    implementation 'com.google.android.gms:play-services-places:9.6.1'
+//    play-services-places
 }

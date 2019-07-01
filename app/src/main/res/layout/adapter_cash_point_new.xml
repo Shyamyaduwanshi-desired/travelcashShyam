@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/margin_5"
+        app:cardBackgroundColor="@color/white"
+        android:layout_centerInParent="true"
+        app:cardElevation="3dp"
+        app:cardMaxElevation="@dimen/margin_5"
+        app:cardUseCompatPadding="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/margin_5"
+            android:paddingBottom="@dimen/margin_5"
+            android:background="@color/white">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_pic"
+                    android:layout_width="@dimen/margin_70"
+                    android:layout_height="@dimen/margin_70"
+                    android:src="@drawable/persion"
+                    app:civ_border_color="@color/select_back"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    app:civ_border_width="2dp" />
+
+                <!--#FF000000-->
+                <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imgShop"
+                android:layout_width="@dimen/margin_70"
+                android:layout_height="@dimen/margin_70"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/img_pic"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    >
+
+                  <view.customview.CustomTextView
+        android:id="@+id/tvName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_normal"
+        android:textStyle="bold"
+
+        />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5"
+                        >
+
+                        <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_icon"
+                            android:layout_width="@dimen/margin_25"
+                            android:layout_height="@dimen/margin_25"
+                            android:adjustViewBounds="true"
+                           android:src="@mipmap/ic_flag"
+                            android:layout_centerVertical="true"
+                            />
+
+                        <view.customview.CustomTextView
+                            android:id="@+id/tvLocation"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                           android:layout_toRightOf="@+id/iv_icon"
+                           android:paddingLeft="@dimen/margin_5"
+                            android:text="location"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_normal"
+                            android:textStyle="normal"
+                            android:layout_centerVertical="true"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5"
+                        >
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/iv_add_icon"
+                            android:layout_width="@dimen/margin_20"
+                            android:layout_height="@dimen/margin_20"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/ic_location_new"
+                            android:layout_centerVertical="true"
+                            />
+                        <!--ic_pin,ic_place_50dp-->
+                        <view.customview.CustomTextView
+                            android:id="@+id/tvAddress"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="address"
+                            android:paddingLeft="@dimen/margin_5"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_normal"
+                            android:textStyle="normal"
+                            android:layout_toRightOf="@+id/iv_add_icon"
+                            android:layout_centerVertical="true"
+                            />
+                    </RelativeLayout>
+
+    <view.customview.CustomTextView
+        android:id="@+id/tvPromotion"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_35"
+        android:text="Promotions"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_normal"
+        android:background="@drawable/oval_white"
+        android:paddingHorizontal="@dimen/margin_10"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_10"
+        android:visibility="gone"
+       />
+
+
+   <!-- android:visibility="gone"-->
+</LinearLayout>
+            </RelativeLayout>
+
+
+            <view.customview.CustomTextView
+                android:id="@+id/tvPurchase"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_35"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/oval_white"
+                android:gravity="center"
+                android:text="With Purchase"
+                android:paddingHorizontal="@dimen/margin_10"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintWidth_default="wrap"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/margin_5"
+                />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imgBanner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_150"
+               android:layout_marginTop="5dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/banner"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

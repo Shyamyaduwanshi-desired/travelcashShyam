@@ -1,15 +1,8 @@
 package presenter;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +10,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.travelcash.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,32 +19,32 @@ import java.util.Map;
 
 import constant.AppData;
 import model.AddMoneyModel;
-import view.activity.AddMoney;
+import model.SubmitTopup;
 
-public class AddMoneyPresenter {
+public class SubmitTopupPresenter {
     private Context context;
-    private Money money;
+    private SubmitTopup topup;
     private AppData appData;
 
-    public AddMoneyPresenter(Context context, Money money) {
+    public SubmitTopupPresenter(Context context, SubmitTopup topup) {
         this.context = context;
-        this.money = money;
+        this.topup = topup;
         appData = new AppData(context);
     }
 
-    public interface Money{
+    public interface SubmitTopup{
         void success(String response);
         void error(String response);
         void fail(String response);
     }
 
-    public void proceedPayment(final AddMoneyModel model) {
+    public void SubmitTopupRequest(final model.SubmitTopup model) {
         final ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
-
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "userTopUp", new Response.Listener<String>() {
+//        https://omsoftware.org/cashapp/api/submitTopUpRequest
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "submitTopUpRequest", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();
@@ -60,20 +52,20 @@ public class AddMoneyPresenter {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
                     if(status == 1){
-                        money.success(reader.getString("message"));
+                        topup.success(reader.getString("message")+"\r\n"+reader.getString("transaction_id"));
                     }else if(status == 0){
-                        money.error(reader.getString("message"));
+                        topup.error(reader.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    money.fail("Something went wrong. Please try after some time.");
+                    topup.fail("Something went wrong. Please try after some time.");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                money.fail("Server Error.\n Please try after some time.");
+                topup.fail("Server Error.\n Please try after some time.");
             }
         }
         ) {
@@ -81,13 +73,19 @@ public class AddMoneyPresenter {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", appData.getUserID());
-                params.put("topUpAmount", model.getAmount());
-                params.put("bank_name", model.getBank_name());
-                params.put("ac_no", model.getAcc_num());
-                params.put("bank_transaction_id", model.getBank_txnID());
-                params.put("payment_transaction_id", model.getPayment_tnxID());
-                params.put("transaction_status", model.getPayment_status());
-                params.put("dateTime", model.getDate_time());
+                params.put("amount", model.getAmount());
+                params.put("extension", model.getExtentionfile());
+
+                if(model.getExtentionfile().equals("pdf")||model.getExtentionfile().equals("PDF"))
+                {
+                    params.put("pdf", model.getPdfExtenstion());
+                }
+                else {
+                    params.put("proof_file", model.getFileurl());
+                }
+
+
+
                 Log.e("",""+params.toString());
 
                 return params;

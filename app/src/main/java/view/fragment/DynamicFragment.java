@@ -14,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.travelcash.R;
 
@@ -41,9 +43,7 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dynamic, container, false);
-
         initView(view);
-
         return view;
     }
 
@@ -85,7 +85,8 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
             mAdapter = new CancelledAdapter(getActivity(), response);
 
         recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
+        runLayoutAnimation(recyclerView);
     }
 
     @Override
@@ -119,5 +120,14 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+         Context context = recyclerView.getContext();
+         LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 }

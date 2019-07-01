@@ -17,6 +17,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
@@ -27,17 +29,24 @@ import java.util.List;
 
 import constant.AppData;
 import model.RecentActivity;
+import model.ShowWalletInfoModel;
 import presenter.RecentActivityPresenter;
+import presenter.ShowWalletInfoPresenter;
 import view.activity.AddMoney;
 import view.adapter.RecentActivityAdapter;
+import view.adapter.ShowWalletInfoAdapter;
 import view.customview.CustomTextViewBold;
 
-public class WalletFragment extends Fragment implements RecentActivityPresenter.Wallet {
+public class WalletFragment extends Fragment implements ShowWalletInfoPresenter.WalletInfo {
     private static WalletFragment walletFragment;
     private CustomTextViewBold tvTopUp, tvAmount;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecentActivityPresenter presenter;
+//    private RecyclerView.Adapter mAdapter;
+//    private RecentActivityPresenter presenter;
+
+    private ShowWalletInfoPresenter showwalletPresenter;
+
     private AppData appData;
 
     public static WalletFragment getInstance(){
@@ -51,7 +60,8 @@ public class WalletFragment extends Fragment implements RecentActivityPresenter.
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
-        presenter = new RecentActivityPresenter(getContext(), WalletFragment.this);
+//        presenter = new RecentActivityPresenter(getContext(), WalletFragment.this);
+        showwalletPresenter=new ShowWalletInfoPresenter(getContext(), WalletFragment.this);
         appData = new AppData(getContext());
         initView(view);
 
@@ -76,7 +86,8 @@ public class WalletFragment extends Fragment implements RecentActivityPresenter.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         if(isNetworkConnected()){
-            presenter.recentActivity(appData.getUserID());
+//            presenter.recentActivity(appData.getUserID());
+            showwalletPresenter.ShowWalletInfo(appData.getUserID());
         }else {
             showDialog("Please connect to internet");
         }
@@ -84,13 +95,17 @@ public class WalletFragment extends Fragment implements RecentActivityPresenter.
     }
 
     @Override
-    public void success(ArrayList<RecentActivity> arrayList, String walletAmount) {
+    public void success(ArrayList<ShowWalletInfoModel> arrayList, String walletAmount) {
         DecimalFormat df = new DecimalFormat( "#,###,###,###" );
         double dd = Double.parseDouble(walletAmount);
         tvAmount.setText("" + df.format(dd));
-        mAdapter = new RecentActivityAdapter(getActivity(), arrayList);
+
+//        mAdapter = new RecentActivityAdapter(getActivity(), arrayList);
+        mAdapter = new ShowWalletInfoAdapter(getActivity(), arrayList);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
+        runLayoutAnimation(recyclerView);
+
     }
 
     @Override
@@ -107,7 +122,8 @@ public class WalletFragment extends Fragment implements RecentActivityPresenter.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100) {
             if (resultCode == Activity.RESULT_OK) {
-               presenter.recentActivity(appData.getUserID());
+//               presenter.recentActivity(appData.getUserID());
+                showwalletPresenter.ShowWalletInfo(appData.getUserID());
             }else {
                 showDialog("Failed to add money to wallet.");
             }
@@ -129,6 +145,14 @@ public class WalletFragment extends Fragment implements RecentActivityPresenter.
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        Context context = recyclerView.getContext();
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 }
 

@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -46,6 +47,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Vendor;
 import presenter.VendorListPresenter;
 import view.activity.ViewVendorReview;
@@ -79,7 +82,8 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_discover, container, false);
 
-        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
+//        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
+        Places.initialize(getContext(), getString(R.string.google_api_key));
         initView();
 
         return view;
@@ -284,8 +288,10 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     }
 
     @Override
-    public void error(String response) {
+    public void error(String response)
+    {
         showDialog(response);
+//        ShowNewAlert(response);//shyam 26/06/2019
     }
 
     @Override
@@ -345,5 +351,61 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    PrettyDialog prettyDialog=null;
+    private void ShowNewAlert(String message) {
+        if(prettyDialog!=null)
+        {
+            prettyDialog.dismiss();
+        }
+        prettyDialog = new PrettyDialog(getContext());
+        prettyDialog.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        prettyDialog.setIconTint(R.color.colorPrimary);
+        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+        prettyDialog.setTitle("");
+        prettyDialog.setMessage(message);
+        prettyDialog.setAnimationEnabled(false);
+        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+
+//                if(isNetworkConnected()){
+//                    progress.show();
+//                    logout();
+//                }else {
+//                    new AlertDialog.Builder(getContext())
+//                            .setTitle("")
+//                            .setMessage("Please connect to internet.")
+//                            .setCancelable(false)
+//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.dismiss();
+//                                }
+//                            }).show();
+//                }
+
+
+            }
+        }).show();
+
+        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                if (isNetworkConnected()) {
+                    presenter.getVendorWithPromo(latitude, longitude);
+                }
+                else {
+                    showDialog("Please connect to internet");
+                }
+            }
+        }).show();
     }
 }

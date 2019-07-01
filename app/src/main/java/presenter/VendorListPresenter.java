@@ -2,6 +2,7 @@ package presenter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -99,6 +100,7 @@ public class VendorListPresenter {
                 params.put("latitude", latitude);
                 params.put("longitude", longitude);
                 params.put("user_id", appData.getUserID());
+                Log.e("","latitude= "+latitude+" longitude= "+longitude+" appData.getUserID()= "+appData.getUserID());
 
                 return params;
             }

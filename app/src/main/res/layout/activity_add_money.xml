@@ -221,8 +221,26 @@
                 android:layout_marginVertical="@dimen/margin_10"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:visibility="gone"
                 android:src="@drawable/pie_chart" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_200"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:focusableInTouchMode="false"
+                >
 
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+
+
+
+                />
+            </RelativeLayout>
             <view.customview.CustomButton
                 android:id="@+id/btnProceed"
                 android:layout_width="wrap_content"
