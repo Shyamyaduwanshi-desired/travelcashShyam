@@ -19,7 +19,7 @@
             android:layout_margin="@dimen/margin_10">
 
             <view.customview.CustomTextView
-                android:id="@+id/tvDate"
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="date"
@@ -27,27 +27,27 @@
                 android:textSize="@dimen/text_size_normal" />
 
             <view.customview.CustomTextView
-                android:id="@+id/tvPaymentMode"
+                android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sdfsf"
+                android:text="status"
                 android:textColor="@android:color/black"
-                android:layout_below="@+id/tvDate"
+                android:layout_below="@+id/tv_date"
                 android:layout_marginTop="@dimen/margin_5"
                 android:textSize="@dimen/text_size_normal" />
 
             <view.customview.CustomTextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvPaymentMode"
+                android:layout_below="@+id/tv_status"
                 android:layout_marginTop="@dimen/margin_5"
-                android:text="sdfs"
-                android:textColor="@android:color/holo_green_dark"
+                android:text="time"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/text_size_normal" />
 
             <view.customview.CustomTextView
-                android:id="@+id/tvAmount"
+                android:id="@+id/tv_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_5">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_10"
+        card_view:cardCornerRadius="@dimen/margin_5"
+        card_view:cardElevation="@dimen/margin_5">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_10">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+
+    >
+            <view.customview.CustomTextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_normal" />
+
+            <view.customview.CustomTextView
+                android:id="@+id/tv_nm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_date"
+                android:layout_marginTop="@dimen/margin_5"
+                android:text="name"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_normal" />
+
+            <view.customview.CustomTextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_nm"
+                android:layout_marginTop="@dimen/margin_5"
+                android:text="time"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_normal" />
+
+            <view.customview.CustomTextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="status"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/tv_time"
+                android:layout_marginTop="@dimen/margin_5"
+                android:textSize="@dimen/text_size_normal" />
+</RelativeLayout>
+
+           <!-- android:layout_toLeftOf="@+id/rl_amount"-->
+<RelativeLayout
+    android:id="@+id/rl_amount"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:gravity="right"
+    >
+
+    <view.customview.CustomTextView
+        android:id="@+id/tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentRight="true"
+        android:text="sdfsfsdf"
+        android:textColor="#13acbe"
+        android:textSize="@dimen/text_size_normal"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_15"
+        android:textStyle="bold" />
+            <view.customview.CustomTextViewBold
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_amount"
+                android:gravity="center"
+                android:text="Cancel Order"
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingRight="@dimen/margin_8"
+          android:layout_alignParentRight="true"
+                android:background="@drawable/oval_white"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
+
+    <view.customview.CustomTextViewBold
+                android:id="@+id/tv_proceed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_cancel"
+                android:gravity="center"
+                android:text="Proceed"
+        android:visibility="gone"
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingRight="@dimen/margin_8"
+          android:layout_alignParentRight="true"
+                android:background="@drawable/round_button"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_normal"
+        android:layout_marginTop="@dimen/margin_15"
+                android:textStyle="bold"
+        android:layout_marginRight="@dimen/margin_10"
+        />
+</RelativeLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

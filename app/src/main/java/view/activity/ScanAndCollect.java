@@ -62,9 +62,10 @@ public class ScanAndCollect extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ScanAndCollect.this, ScanActivity.class));
-                finish();
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+//                startActivity(new Intent(ScanAndCollect.this, ScanActivity.class).putExtra("amount","").putExtra("agent_recieved_request_id",""));
+////                intent.putExtra("amount", history.getAmount());
+//                finish();
+//                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
     }

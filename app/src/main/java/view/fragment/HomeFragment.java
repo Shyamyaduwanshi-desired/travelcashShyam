@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
@@ -48,8 +49,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.johnnylambada.location.LocationObserver;
 import com.johnnylambada.location.LocationProvider;
@@ -72,6 +76,7 @@ import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Vendor;
 import presenter.VendorListPresenter;
+import view.activity.ActNotification;
 import view.activity.AddMoney;
 import view.activity.ProfileActivity;
 import view.activity.ViewVendorReview;
@@ -101,6 +106,9 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     private OrderData orderData;
     private ArrayList<Vendor> response;
     private String apiUrl;
+    PlacesClient placesClient;
+//    AutocompleteSupportFragment frag_pick;
+    AppCompatImageView ivNoti;
 
     public static HomeFragment getInstance() {
         fragment = new HomeFragment();
@@ -117,19 +125,21 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         orderData.clearData();
 
 //        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
-        Places.initialize(getContext(), getString(R.string.google_api_key));
-
+        Places.initialize(getActivity(),getString(R.string.google_api_key));
+         placesClient = Places.createClient(getActivity());
         initView();
         SetPredata();
         return view;
     }
 
     private void SetPredata() {
-        tvWalletBalance.setText(appData.getWalletAmount());
-//        if (isNetworkConnected())
-//            presenter.getVendorWithPromo(latitude, longitude);
-//        else
-//            showDialog("Please connect to internet");
+        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+//        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+        double dd = Double.parseDouble(appData.getWalletAmount());
+//        tvAmount.setText("" + df.format(dd));
+        tvWalletBalance.setText("" + df.format(dd));
+        String walletamount=appData.getWalletAmount();
+        Log.e("","wallet amount= "+walletamount+" latitude= "+latitude+" longitude= "+longitude);
 
     }
 
@@ -160,6 +170,9 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         btnAll = view.findViewById(R.id.btnAll);
         tv_temp = view.findViewById(R.id.temp);
         tv_city = view.findViewById(R.id.tv_city);
+        ivNoti = view.findViewById(R.id.imgNotification);
+
+
         edtSearchLocation.setOnClickListener(this);
         imgProfile.setOnClickListener(this);
         imgPlus.setOnClickListener(this);
@@ -171,6 +184,9 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         btnWithPurchase.setOnClickListener(this);
         btnTopUp.setOnClickListener(this);
         btnAll.setOnClickListener(this);
+        ivNoti.setOnClickListener(this);
+
+
         appData = new AppData(getContext());
         RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(cLayoutManager);
@@ -233,7 +249,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     }
 
     private void startAutocompleteActivity() {
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.RATING, Place.Field.ADDRESS,
+                Place.Field.TYPES, Place.Field.OPENING_HOURS, Place.Field.USER_RATINGS_TOTAL,
+                Place.Field.LAT_LNG, Place.Field.PLUS_CODE, Place.Field.WEBSITE_URI);
+//        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
         // Start the autocomplete intent.
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .build(getContext());
@@ -328,6 +347,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 startActivityForResult(new Intent(getContext(), AddMoney.class), 102);
                 Animatoo.animateSlideRight(getContext());
                 break;
+            case R.id.imgNotification:
+                startActivity(new Intent(getContext(), ActNotification.class));
+                Animatoo.animateSlideRight(getContext());
+                break;
 
             case R.id.btnAll:
                 if (isNetworkConnected())
@@ -385,6 +408,18 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         } else if (requestCode == 103) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
+                String addressname="";
+                if(TextUtils.isEmpty(place.getAddress()))
+                {
+                    addressname=place.getName();
+                }
+                else
+                {
+                    addressname=place.getAddress()+","+place.getName();
+                }
+
+                edtSearchLocation.setText(addressname);
+                tvLocation.setText(addressname);
                 LatLng latLng = place.getLatLng();
                 latitude = "" + latLng.latitude;
                 longitude = "" + latLng.longitude;
@@ -393,17 +428,17 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 } else {
                     showDialog("Please connect to internet.");
                 }
-                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+              /*  Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     Address obj = addresses.get(0);
                     String add = obj.getSubLocality();
-                    edtSearchLocation.setText(add);
-                    tvLocation.setText(add);
+                   // edtSearchLocation.setText(add);
+                    //tvLocation.setText(add);
                 } catch (IOException e) {
                     e.printStackTrace();
                     showDialog(e.getMessage());
-                }
+                }*/
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 showDialog(status.getStatusMessage());
@@ -451,10 +486,14 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
             latitude = "" + location.getLatitude();
             longitude = "" + location.getLongitude();
 
+
             if (isNetworkConnected()) {
                 presenter.getVendor("" + location.getLatitude(), "" + location.getLongitude());
                 apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&APPID=" + AppData.API_KEY + "&units=metric&sensor=false";
                 makeJsonObject(apiUrl);
+
+//                presenter.getVendorWithPromo(latitude, longitude);//shyam
+
             } else {
                 showDialog("Please connect to internet.");
             }
@@ -490,9 +529,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
 
         runLayoutAnimation(recyclerView);
 
-        DecimalFormat df = new DecimalFormat("#,###,###,###");
-        double dd = Double.parseDouble(amount);
-        tvWalletBalance.setText("" + df.format(dd));//1
+//        DecimalFormat df = new DecimalFormat("#,###,###,###");
+//        DecimalFormat df = new DecimalFormat("#,###,###,###.00");
+//        double dd = Double.parseDouble(amount);
+//        tvWalletBalance.setText("" + df.format(dd));//1
     }
 
     @Override
@@ -556,41 +596,47 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     }
     PrettyDialog prettyDialog=null;
     private void ShowNewAlert(String message) {
-        if(prettyDialog!=null)
-        {
-            prettyDialog.dismiss();
-        }
-         prettyDialog = new PrettyDialog(getContext());
-        prettyDialog.setCanceledOnTouchOutside(false);
-        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
-        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
-        title.setTextSize(15);
-        tvmessage.setTextSize(15);
-        prettyDialog.setIconTint(R.color.colorPrimary);
-        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
-        prettyDialog.setTitle("");
-        prettyDialog.setMessage(message);
-        prettyDialog.setAnimationEnabled(false);
-        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
-            @Override
-            public void onClick() {
+        try {
+            if(prettyDialog!=null)
+            {
                 prettyDialog.dismiss();
             }
-        }).show();
+            prettyDialog = new PrettyDialog(getContext());
+            prettyDialog.setCanceledOnTouchOutside(false);
+            TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+            TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+            title.setTextSize(15);
+            tvmessage.setTextSize(15);
+            prettyDialog.setIconTint(R.color.colorPrimary);
+            prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+            prettyDialog.setTitle("");
+            prettyDialog.setMessage(message);
+            prettyDialog.setAnimationEnabled(false);
+            prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
+                @Override
+                public void onClick() {
+                    prettyDialog.dismiss();
+                }
+            }).show();
 
-        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
-            @Override
-            public void onClick() {
-                prettyDialog.dismiss();
-                if (isNetworkConnected()) {
-                    presenter.getVendorWithPromo(latitude, longitude);
+            prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
+                @Override
+                public void onClick() {
+                    prettyDialog.dismiss();
+                    locationProvider.stopTrackingLocation();
+                    startAutocompleteActivity();
+//                    if (isNetworkConnected()) {
+//                        presenter.getVendorWithPromo(latitude, longitude);
+//                    }
+//                    else {
+//                        showDialog("Please connect to internet");
+//                    }
                 }
-                else {
-                    showDialog("Please connect to internet");
-                }
-            }
-        }).show();
+            }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void runLayoutAnimation(final RecyclerView recyclerView) {
         Context context = recyclerView.getContext();
@@ -637,5 +683,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
             tvAmount.setText("" + df.format(dd));
         }
     }
+
+
 
 }

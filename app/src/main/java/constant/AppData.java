@@ -6,6 +6,12 @@ import android.widget.TextView;
 
 import com.travelcash.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
@@ -147,4 +153,103 @@ public class AppData {
             }
         }).show();
     }
+//2019-06-18 11:17:55 to 18 jun 2019 11:17:55
+    public String ConvertDate(String indate)
+    {
+        String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("dd MMMM yyyy hh:mm:ss aa");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+//    //2019-06-18 11:17:55 to 18/06/2019
+    public String ConvertDate1(String indate)
+    {
+        String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+    //2019-06-18 11:17:55 to June 18 2019
+    public String ConvertDate2(String indate)
+    {
+        String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("MMMM dd  yyyy");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+    //    //2019-06-18  to  18 June
+    public String ConvertDate3(String indate)
+    {
+        String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("dd MMMM");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+    //    //2019-06-18  to  18 June 2019
+    public String ConvertDate4(String indate)
+    {
+        String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("dd MMMM yyyy");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+//   2019-06-18 11:17:55 to 11:17
+    public String ConvertTime(String indate)
+    {
+        String shortTimeStr="";
+        try {
+            SimpleDateFormat toFullDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date fullDate = toFullDate.parse(indate);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+             shortTimeStr = sdf.format(fullDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        /*String formattedDate = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//            DateFormat targetFormat = new SimpleDateFormat("hh:mm:ss aa");
+            DateFormat targetFormat = new SimpleDateFormat("HH:mm");
+//            DateFormat targetFormat = new SimpleDateFormat("hh:mm:ss");
+            Date date = originalFormat.parse(indate);
+            formattedDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }*/
+        return shortTimeStr;
+    }
+
 }

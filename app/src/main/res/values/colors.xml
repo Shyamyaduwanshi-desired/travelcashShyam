@@ -7,9 +7,11 @@
     <color name="black">#0f0f0f</color>
     <color name="green">#008F00</color>
     <color name="dark_gray">#e0e0e0</color>
+    <color name="dark_gray1">#9E9696</color>
     <color name="light_green">#0dc581</color>
     <color name="light_red">#ff1414</color>
     <color name="select_back">#13acbe</color>
     <color name="blue">#0039cb</color>
     <color name="bluenew">#19b4c8</color>
+    <color name="noti_time_colo">#E91E63</color>
 </resources>

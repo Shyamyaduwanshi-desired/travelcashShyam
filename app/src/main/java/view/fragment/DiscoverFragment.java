@@ -22,6 +22,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -71,6 +73,7 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     private CustomButton btnWithPurchase, btnWithPromo, btnAll;
     private String latitude = "", longitude = "";
     private ArrayList<Vendor> response;
+    PlacesClient placesClient;
 
     public static DiscoverFragment getInstance() {
         discoverFragment = new DiscoverFragment();
@@ -83,7 +86,9 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         view = inflater.inflate(R.layout.fragment_discover, container, false);
 
 //        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
-        Places.initialize(getContext(), getString(R.string.google_api_key));
+//        Places.initialize(getContext(), getString(R.string.google_api_key));
+        Places.initialize(getActivity(),getString(R.string.google_api_key));
+        placesClient = Places.createClient(getActivity());
         initView();
 
         return view;
@@ -187,6 +192,20 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         } else if (requestCode == 103) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
+
+                String addressname="";
+                if(TextUtils.isEmpty(place.getAddress()))
+                {
+                    addressname=place.getName();
+                }
+                else
+                {
+                    addressname=place.getAddress()+","+place.getName();
+                }
+//                String addressname=place.getAddress()+","+place.getName();
+                edtSearchLocation.setText(addressname);
+                tvLocation.setText(addressname);
+
                 LatLng latLng = place.getLatLng();
                 latitude = "" + latLng.latitude;
                 longitude = "" + latLng.longitude;
@@ -195,17 +214,17 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
                 } else {
                     showDialog("Please connect to internet.");
                 }
-                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    Address obj = addresses.get(0);
-                    String add = obj.getSubLocality();
-                    edtSearchLocation.setText(add);
-                    tvLocation.setText(add);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    showDialog(e.getMessage());
-                }
+//                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+//                try {
+//                    List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+//                    Address obj = addresses.get(0);
+//                    String add = obj.getSubLocality();
+//                    edtSearchLocation.setText(add);
+//                    tvLocation.setText(add);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    showDialog(e.getMessage());
+//                }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -286,12 +305,12 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         cashPointerAdapter = new CashPointAdapter(getActivity(), response, DiscoverFragment.this);
         recyclerView.setAdapter(cashPointerAdapter);
     }
-
+//search success
     @Override
     public void error(String response)
     {
-        showDialog(response);
-//        ShowNewAlert(response);//shyam 26/06/2019
+//        showDialog(response);
+        ShowNewAlert(response);//shyam 26/06/2019
     }
 
     @Override
@@ -375,21 +394,8 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
             @Override
             public void onClick() {
                 prettyDialog.dismiss();
-
-//                if(isNetworkConnected()){
-//                    progress.show();
-//                    logout();
-//                }else {
-//                    new AlertDialog.Builder(getContext())
-//                            .setTitle("")
-//                            .setMessage("Please connect to internet.")
-//                            .setCancelable(false)
-//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    dialog.dismiss();
-//                                }
-//                            }).show();
-//                }
+                locationProvider.stopTrackingLocation();
+                startAutocompleteActivity();
 
 
             }

@@ -9,37 +9,34 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
-import libs.mjn.prettydialog.PrettyDialog;
-import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.TransactionModel;
 import presenter.TransactionDetailPresenter;
 import view.customview.CustomButton;
 import view.customview.CustomTextView;
 
-public class TransactionDetail extends AppCompatActivity implements View.OnClickListener, TransactionDetailPresenter.Transaction {
+public class TransactionDetailNew extends AppCompatActivity implements View.OnClickListener , TransactionDetailPresenter.Transaction{
     private Toolbar toolbar;
     private AppCompatImageView imageView;
     private FloatingActionButton fab;
     private CustomTextView tvReview, transactionID, bankTransactionID, refundID, tvDate, amountRequested, amountDebited, tvAddress;
     private CustomButton btnRepeat;
-    private String flag, transactionId, mode, agentID;
+    private String  transactionId,date, status,amount, agentID;
     private TransactionDetailPresenter detailPresenter;
+    LinearLayout lyLoc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transection_detail);
+        setContentView(R.layout.transection_detail_new);
 
         detailPresenter = new TransactionDetailPresenter(this, this);
         initView();
@@ -47,14 +44,14 @@ public class TransactionDetail extends AppCompatActivity implements View.OnClick
 
     private void initView() {
         try {
-            flag = getIntent().getStringExtra("flagPurchase");
+            date = getIntent().getStringExtra("date");
             transactionId = getIntent().getStringExtra("transactionId");
-            mode = getIntent().getStringExtra("mode");
+            status = getIntent().getStringExtra("status");
+            amount = getIntent().getStringExtra("amount");
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             showDialog("something went wrong ");
         }
-        Log.e("",""+flag+" transactionId= " +transactionId+" mode= "+mode);
 
         toolbar = findViewById(R.id.toolbar);
         fab = findViewById(R.id.fab);
@@ -67,36 +64,47 @@ public class TransactionDetail extends AppCompatActivity implements View.OnClick
         tvDate = findViewById(R.id.tvDate);
         amountRequested = findViewById(R.id.amountRequested);
         amountDebited = findViewById(R.id.amountDebited);
+        lyLoc = findViewById(R.id.ly_location);
         tvAddress = findViewById(R.id.tvAddress);
         imageView.setOnClickListener(this);
         fab.setOnClickListener(this);
 //        fab.setVisibility(View.GONE);
         tvReview.setOnClickListener(this);
         btnRepeat.setOnClickListener(this);
+      if(TextUtils.isEmpty(transactionId))
+      {
+          transactionID.setText("N/A");
+          tvDate.setText(date);
+          amountRequested.setText("IDR " +amount);
+          amountDebited.setText("IDR "+amount);
+          tvAddress.setText("N/A");
+          lyLoc.setVisibility(View.GONE);
+      }
+      else
+      {
+          if (isNetworkConnected()) {
+              getCall(status);
+          } else {
+              showDialog("Please connect to internet");
+          }
+      }
 
-        if (flag.equals("1")) {//for complete histroy
-            btnRepeat.setText("Cancel");
-//            btnRepeat.setText("Repeat Payment");
-        } else if (flag.equals("0")) {
-            btnRepeat.setText("Retry Payment");
-        }
+//        tvDate.setText(date);
+//        amountRequested.setText("IDR " +amount);
+//        amountDebited.setText("IDR "+amount);
+//        tvAddress.setText("N/A");
 
-        if (isNetworkConnected()) {
-            getCall(mode);
-        } else {
-            showDialog("Please connect to internet");
-        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvReview:
-                Intent intent = new Intent(TransactionDetail.this, WriteReview.class);
+                Intent intent = new Intent(TransactionDetailNew.this, WriteReview.class);
                 intent.putExtra("agentID", agentID);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                Animatoo.animateSlideRight(TransactionDetail.this);
+                Animatoo.animateSlideRight(TransactionDetailNew.this);
                 break;
 
             case R.id.fab:
@@ -109,12 +117,12 @@ public class TransactionDetail extends AppCompatActivity implements View.OnClick
 
             case R.id.btnRepeat:
                 finish();
-                Animatoo.animateSlideRight(TransactionDetail.this);
+                Animatoo.animateSlideRight(TransactionDetailNew.this);
                 break;
 
             case R.id.imgBack:
                 finish();
-                Animatoo.animateSlideRight(TransactionDetail.this);
+                Animatoo.animateSlideRight(TransactionDetailNew.this);
                 break;
         }
     }
@@ -204,12 +212,11 @@ public class TransactionDetail extends AppCompatActivity implements View.OnClick
     @Override
     public void onBackPressed() {
         finish();
-        Animatoo.animateSlideRight(TransactionDetail.this);
+        Animatoo.animateSlideRight(TransactionDetailNew.this);
     }
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
-
 }

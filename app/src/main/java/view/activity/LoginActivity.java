@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.travelcash.R;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -103,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void success(String response) {
+        GetFCMToken();
         Toast toast = Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
@@ -135,5 +140,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    public void GetFCMToken()
+    {
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+////To do//
+//                            return;
+//                        }
+//
+//// Get the Instance ID token//
+//                        String token = task.getResult().getToken();
+//                        String msg = getString(R.string.fcm_token, token);
+//                        Log.d("Token ", "shyam fcm token= "+token);
+//                    }
+//                });
+
     }
 }

@@ -201,7 +201,7 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
     @Override
     public void itemClick(int position) {
         switch (position) {
-            case 0:
+            case 0://refer to friend
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my dummy text to send.");
@@ -209,7 +209,7 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
                 startActivity(sendIntent);
                 break;
 
-            case 2:
+            case 2://refer to friend
                 final BottomDialog dialog = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
                 dialog.show(getFragmentManager(), "dialog");
                 dialog.setCancelable(false);

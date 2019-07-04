@@ -33,7 +33,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-
+        position=0;
         setupViewPager(view);
 
         return  view;
@@ -44,8 +44,8 @@ public class HistoryFragment extends Fragment {
         tabLayout =  view.findViewById(R.id.tabs);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(DynamicFragment.newInstance(), "Completed");
         adapter.addFragment(DynamicFragment.newInstance(), "Ongoing");
+        adapter.addFragment(DynamicFragment.newInstance(), "Completed");
         adapter.addFragment(DynamicFragment.newInstance(), "Cancelled");
         viewPager.setAdapter(adapter);
 

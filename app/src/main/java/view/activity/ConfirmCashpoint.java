@@ -1,5 +1,6 @@
 package view.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import constant.OrderData;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 import presenter.ConfirmCashpointPresenter;
 import view.customview.CustomButton;
 import view.fragment.CollectFragment;
@@ -101,16 +105,17 @@ public class ConfirmCashpoint extends AppCompatActivity implements ConfirmCashpo
 
     @Override
     public void success(String response) {
-        String amount  = orderData.requestAmount();
+//        String amount  = orderData.requestAmount();
         orderData.clearData();
-        Toast toast = Toast.makeText(this, response, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-        Intent intent = new Intent(ConfirmCashpoint.this, ScanActivity.class);
-        intent.putExtra("amount", amount);
-        startActivity(intent);
-        finish();
-        Animatoo.animateFade(ConfirmCashpoint.this);
+//        Toast toast = Toast.makeText(this, response, Toast.LENGTH_SHORT);
+//        toast.setGravity(Gravity.CENTER, 0, 0);
+//        toast.show();
+        ShowNewAlert(ConfirmCashpoint.this,response);
+//        Intent intent = new Intent(ConfirmCashpoint.this, ScanActivity.class);
+//        intent.putExtra("amount", amount);
+//        startActivity(intent);
+//        finish();
+//        Animatoo.animateFade(ConfirmCashpoint.this);
     }
 
     @Override
@@ -174,5 +179,46 @@ public class ConfirmCashpoint extends AppCompatActivity implements ConfirmCashpo
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    PrettyDialog prettyDialog=null;
+    private void ShowNewAlert(Context context,String message) {
+        if(prettyDialog!=null)
+        {
+            prettyDialog.dismiss();
+        }
+        prettyDialog = new PrettyDialog(context);
+        prettyDialog.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        prettyDialog.setIconTint(R.color.colorPrimary);
+        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+        prettyDialog.setTitle("");
+        prettyDialog.setMessage(message);
+        prettyDialog.setAnimationEnabled(false);
+        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        prettyDialog.addButton("OK", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                Intent intent = new Intent(ConfirmCashpoint.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                Animatoo.animateFade(ConfirmCashpoint.this);
+
+
+            }
+        }).show();
+
+//        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
+//            @Override
+//            public void onClick() {
+//                prettyDialog.dismiss();
+//
+//            }
+//        }).show();
     }
 }

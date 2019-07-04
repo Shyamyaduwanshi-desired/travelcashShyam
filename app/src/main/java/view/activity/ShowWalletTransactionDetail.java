@@ -30,7 +30,7 @@ public class ShowWalletTransactionDetail extends AppCompatActivity implements Vi
     private CustomButton btnRepeat;
     private TransactionDetailPresenter presenter;
     private CustomTextView transactionID, bankTransactionID, refundID, tvDate, amountRequested, amountDebited;
-//    private String flag, transactionId;
+    private String transactionId="",date="",amount="",status="";
     String ObjectData="";
 
     @Override
@@ -44,9 +44,12 @@ public class ShowWalletTransactionDetail extends AppCompatActivity implements Vi
 
     private void initView() {
         try {
-            ObjectData = getIntent().getStringExtra("object");
-            Log.e("","ObjectData= "+ObjectData.toString());
-//            transactionId = getIntent().getStringExtra("transactionId");
+//            ObjectData = getIntent().getStringExtra("object");
+//            Log.e("","ObjectData= "+ObjectData.toString());
+            transactionId = getIntent().getStringExtra("tran_id");
+            date = getIntent().getStringExtra("tran_date");
+            amount = getIntent().getStringExtra("tran_amount");
+            status = getIntent().getStringExtra("request_status");
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             showDialog("something went wrong ");
@@ -64,6 +67,11 @@ public class ShowWalletTransactionDetail extends AppCompatActivity implements Vi
         imageView.setOnClickListener(this);
         btnRepeat.setOnClickListener(this);
 
+        transactionID.setText(transactionId);
+        tvDate.setText(date);
+        amountRequested.setText("$"+amount);
+        amountDebited.setText(status);
+
 //        if (flag.equals("1")) {
 //            btnRepeat.setText("Repeat Payment");
 //        } else if (flag.equals("0")) {
@@ -76,7 +84,7 @@ public class ShowWalletTransactionDetail extends AppCompatActivity implements Vi
 //            showDialog("Please connect to internet");
 //        }
 
-        SetData();
+//        SetData();
     }
 
     public void SetData()

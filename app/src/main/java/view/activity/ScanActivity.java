@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,28 +39,35 @@ import java.util.List;
 import java.util.Map;
 
 import constant.AppData;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.AddMoneyModel;
+import presenter.CancelOrderPresenter;
 import presenter.ScanActivityPresenter;
 import view.customview.CustomButton;
+import view.fragment.DynamicFragment;
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever;
 
 
-public class ScanActivity extends AppCompatActivity implements View.OnClickListener, BarcodeRetriever, ScanActivityPresenter.Scan {
+public class ScanActivity extends AppCompatActivity implements View.OnClickListener, BarcodeRetriever, ScanActivityPresenter.Scan, CancelOrderPresenter.CancelInfo {
     private Toolbar toolbar;
     private AppCompatImageView imageView;
     private CustomButton btnCancel;
     private BarcodeCapture barcodeCapture;
     private AppCompatTextView tvRN, tvAddress;
     private ScanActivityPresenter scanActivityPresenter;
-    private String amount = "", request_id = "";
+    private String amount = "", request_id = "", agent_request_id = "";
+    private CancelOrderPresenter cancelOrderPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
+        cancelOrderPresenter = new CancelOrderPresenter(this, this);
         scanActivityPresenter = new ScanActivityPresenter(this, this);
         amount = getIntent().getStringExtra("amount");
+        agent_request_id = getIntent().getStringExtra("agent_recieved_request_id");
         initView();
     }
 
@@ -89,8 +98,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == btnCancel) {
-            finish();
-            Animatoo.animateSlideRight(ScanActivity.this);
+            ShowNewAlert(this,"Do you want to proceed cancel order?",agent_request_id);
+//            finish();
+//            Animatoo.animateSlideRight(ScanActivity.this);
         } else if (v == imageView) {
             finish();
             Animatoo.animateSlideRight(ScanActivity.this);
@@ -216,6 +226,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         Animatoo.animateSplit(ScanActivity.this);
     }
 
+
     @Override
     public void error(String response) {
         showDialog(response);
@@ -237,4 +248,54 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
+
+    //for cancelorder
+    @Override
+    public void success(String response) {
+        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+        DynamicFragment.refreshCancle=1;
+             finish();
+            Animatoo.animateSlideRight(ScanActivity.this);
+    }
+    PrettyDialog prettyDialog=null;
+    private void ShowNewAlert(Context context,String message,String requstid) {
+        if(prettyDialog!=null)
+        {
+            prettyDialog.dismiss();
+        }
+        prettyDialog = new PrettyDialog(context);
+        prettyDialog.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        prettyDialog.setIconTint(R.color.colorPrimary);
+        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+        prettyDialog.setTitle("");
+        prettyDialog.setMessage(message);
+        prettyDialog.setAnimationEnabled(false);
+        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        prettyDialog.addButton("No", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                finish();
+                Animatoo.animateSlideRight(ScanActivity.this);
+            }
+        }).show();
+        prettyDialog.addButton("Yes", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                if (isNetworkConnected()) {
+
+                    cancelOrderPresenter.CancelOrderMethod(requstid);
+                }
+                else {
+                    showDialog("Please connect to internet");
+                }
+            }
+        }).show();
+    }
+
 }

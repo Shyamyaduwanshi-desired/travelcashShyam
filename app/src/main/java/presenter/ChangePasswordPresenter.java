@@ -35,7 +35,7 @@ public class ChangePasswordPresenter {
 
     public void sentRequest(final String userID, final String oldPass, final String newPass) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Change Password Please Wait..");
+        progress.setMessage("Change Password Please Wait..");//Change Password
         progress.setCancelable(false);
         progress.show();
 

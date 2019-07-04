@@ -1,6 +1,7 @@
 package view.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import constant.AppData;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
@@ -48,40 +52,47 @@ import lecho.lib.hellocharts.view.LineChartView;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.AddMoneyModel;
+import model.GraphModel;
+import model.Vendor;
 import presenter.AddMoneyPresenter;
 import presenter.GetBankDetailsPresenter;
+import presenter.GraphPresenter;
 import view.customview.CustomButton;
+import view.customview.CustomTextView;
 import view.customview.CustomTextViewBold;
 
-public class AddMoney extends AppCompatActivity implements View.OnClickListener, GetBankDetailsPresenter.BankDetals {
+public class AddMoney extends AppCompatActivity implements View.OnClickListener, GetBankDetailsPresenter.BankDetals, GraphPresenter.GraphInfo {
     private Toolbar toolbar;
     private AppCompatImageView imageView, imgPlus, imgMinus;
     private CustomButton btnProceed;
     private CustomTextViewBold tvAmount, tvOne, tvFive, tvTwo;
 //    private AddMoneyPresenter moneyPresenter;
     private GetBankDetailsPresenter bankDetailsPresenter;
-
+    private GraphPresenter graphPresenter;
+    AppData appData;
     LineChartView lineChartView;
-    String[] axisData = { "Apr", "May", "June", "July"};
-    int[] yAxisData = {50, 20, 15, 30};
-
-
-//    String[] axisData = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept","Oct", "Nov", "Dec"};
-//    int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+    CustomTextView tvRate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_money);
-
+        appData=new AppData(this);
+        arGraphData=new ArrayList<>();
 //        moneyPresenter = new AddMoneyPresenter(this, this);
+
+        graphPresenter = new GraphPresenter(this, this);
         bankDetailsPresenter = new GetBankDetailsPresenter(this, this);
-                    if (isNetworkConnected())
+                    if (isNetworkConnected()) {
+                        getCurrentExchangeRate();
                         bankDetailsPresenter.GetBankDetail();
-            else
-                showDialog("Please connect to internet");
+                        graphPresenter.getGraphInfo();
+                    }
+               else {
+                        showDialog("Please connect to internet");
+                    }
         initView();
-        ShowChart();
+//        ShowChart();
     }
 
     private void initView() {
@@ -93,6 +104,7 @@ public class AddMoney extends AppCompatActivity implements View.OnClickListener,
         tvOne = findViewById(R.id.tvOne);
         tvFive = findViewById(R.id.tvFive);
         tvTwo = findViewById(R.id.tvTwo);
+        tvRate = findViewById(R.id.tv_rate);
         imageView = toolbar.findViewById(R.id.imgBack);
         imgPlus.setOnClickListener(this);
         imageView.setOnClickListener(this);
@@ -266,6 +278,14 @@ String sBankdetail="";
 
 
     }
+    private ArrayList<GraphModel> arGraphData=new ArrayList<>();
+//for graph data
+    @Override
+    public void success(ArrayList<GraphModel> response) {
+        this.arGraphData.clear();
+        this.arGraphData = response;
+        ShowChart();
+    }
 
     @Override
     public void error(String response) {
@@ -365,20 +385,23 @@ String sBankdetail="";
         });
         bankDetailDlg.show();
     }
+
+//        String[] axisData = { "Apr", "May", "June", "July"};//date
+//        int[] yAxisData = {50, 20, 15, 30};//rate
 public void ShowChart()
 {
     List yAxisValues = new ArrayList();
     List axisValues = new ArrayList();
-
-
     Line line = new Line(yAxisValues).setColor(Color.parseColor("#13acbe"));
-
-    for (int i = 0; i < axisData.length; i++) {
-        axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
+    for (int i = 0; i < arGraphData.size(); i++) {
+        axisValues.add(i, new AxisValue(i).setLabel(appData.ConvertDate3(arGraphData.get(i).getDate())));
     }
 
-    for (int i = 0; i < yAxisData.length; i++) {
-        yAxisValues.add(new PointValue(i, yAxisData[i]));
+    for (int i = 0; i < arGraphData.size(); i++) {
+        float value=Float.parseFloat(arGraphData.get(i).getRate());
+        int value1=Math.round(Math.round(value));
+        Log.e("","value= "+value+" value1= "+value1);
+        yAxisValues.add(new PointValue(i, value1));
     }
 
     List lines = new ArrayList();
@@ -390,47 +413,104 @@ public void ShowChart()
     Axis axis = new Axis();
     axis.setValues(axisValues);
     axis.setTextSize(12);
-    axis.setName("Months");//Sales in millions
+    axis.setTextColor(Color.parseColor("#000000"));
+
+
+    Axis yAxis = new Axis();
+    yAxis.setTextSize(12);
+    yAxis.setTextColor(Color.parseColor("#000000"));
+
+    data.setAxisXBottom(axis);
+    data.setAxisYLeft(yAxis);
+    lineChartView.setLineChartData(data);
+
+}
+public void ShowChart11()
+{
+    List yAxisValues = new ArrayList();
+    List axisValues = new ArrayList();
+//    List yAxisValues1 = new ArrayList();
+    Line line = new Line(yAxisValues).setColor(Color.parseColor("#13acbe"));
+    for (int i = 0; i < arGraphData.size(); i++) {
+        axisValues.add(i, new AxisValue(i).setLabel(appData.ConvertDate3(arGraphData.get(i).getDate())));
+//        yAxisValues1.add(i, new AxisValue(i).setLabel(arGraphData.get(i).getRate()));
+    }
+
+    for (int i = 0; i < arGraphData.size(); i++) {
+        float value=Float.parseFloat(arGraphData.get(i).getRate());
+        int value1=Math.round(Math.round(value));
+//        double value=Double.parseDouble(arGraphData.get(i).getRate());
+        Log.e("","value= "+value+" value1= "+value1);
+        yAxisValues.add(new PointValue(i, value1));
+    }
+
+    List lines = new ArrayList();
+    lines.add(line);
+
+    LineChartData data = new LineChartData();
+    data.setLines(lines);
+
+    Axis axis = new Axis();
+    axis.setValues(axisValues);
+    axis.setTextSize(12);
+//    axis.setName("date");//date
     axis.setTextColor(Color.parseColor("#000000"));
     data.setAxisXBottom(axis);
 
     Axis yAxis = new Axis();
-    yAxis.setName("Currency rate");//Sales in millions
-    yAxis.setTextColor(Color.parseColor("#000000"));
+
+//    yAxis.setValues(yAxisValues1);
     yAxis.setTextSize(12);
+//    yAxis.setName("");//Currency rate
+    yAxis.setTextColor(Color.parseColor("#000000"));
+
     data.setAxisYLeft(yAxis);
 
+    //    axis.setValues();
+//    mChart.getAxisLeft().setLabelCount(3);
+//    yAxis.setLabelCount(5);
+//    chart.setYRange(0, 30, true);
+
+
+
     lineChartView.setLineChartData(data);
+
     Viewport viewport = new Viewport(lineChartView.getMaximumViewport());
 //    viewport.top = 110;
-    lineChartView.setMaximumViewport(viewport);
-    lineChartView.setCurrentViewport(viewport);
+//    lineChartView.setMaximumViewport(viewport);
+//    lineChartView.setCurrentViewport(viewport);
+
+//    YAxis yAxis = chart.getAxis(YAxis.AxisDependency.LEFT);
 }
 
-//    public void makeJsonObject(final String apiUrl) {
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response);
-//                    JSONObject mainObject = jsonObject.getJSONObject("main");
-//                    String temp = mainObject.getString("temp");
-//                    Long tempVal = Math.round(Math.floor(Double.parseDouble(temp)));
-//                    String weatherTemp = String.valueOf(tempVal) + "°C,";
-//                    tv_temp.setText(weatherTemp);
-//                    tv_city.setText(jsonObject.getString("name"));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//
-//        RequestQueue queue = Volley.newRequestQueue(getContext());
-//        queue.add(stringRequest);
-//    }
+
+    public void getCurrentExchangeRate() {
+//        final ProgressDialog progress = new ProgressDialog(AddMoney.this);
+//        progress.setMessage("Please Wait..");
+//        progress.setCancelable(false);
+//        progress.show();
+
+
+        StringRequest postRequest = new StringRequest(Request.Method.GET, AppData.url + "getCurrentExchangeRate", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                progress.dismiss();
+                try {
+                    JSONObject reader = new JSONObject(response);
+                            String rate_data = reader.getString("IDR");
+                    tvRate.setText("$1 To IDR "+rate_data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                progress.dismiss();
+            }
+        }
+        );
+        RequestQueue queue = Volley.newRequestQueue(AddMoney.this);
+        queue.add(postRequest);
+    }
 }

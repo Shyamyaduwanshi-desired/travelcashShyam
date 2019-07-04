@@ -16,23 +16,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
 import java.util.ArrayList;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
+import model.GetCancelOrderBean;
 import model.HistoryModel;
+import presenter.CancelOrderPresenter;
+import presenter.GetCancelOrderDataPresenter;
 import presenter.HistoryPresenter;
+import view.activity.WriteReview;
 import view.adapter.CancelledAdapter;
+import view.adapter.CancelledAdapterNew;
 import view.adapter.CompletedAdapter;
+import view.adapter.CompletedAdapterNew;
 import view.adapter.OngoingAdapter;
+import view.adapter.OngoingAdapterNew;
 
-public class DynamicFragment extends Fragment implements HistoryPresenter.History {
+public class DynamicFragment extends Fragment implements HistoryPresenter.History,OngoingAdapterNew.Clickable, CancelOrderPresenter.CancelInfo {
+    //, GetCancelOrderDataPresenter.CancelHistoryInfo
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private HistoryPresenter presenter;
+    private CancelOrderPresenter cancelOrderPresenter;
     private static DynamicFragment tabFragment;
     private static int count;
+    public static int  refreshCancle=0;
 
     public static DynamicFragment newInstance() {
         tabFragment = new DynamicFragment();
@@ -49,19 +64,41 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
 
     private void initView(View view) {
         presenter = new HistoryPresenter(getContext(), DynamicFragment.this);
+        cancelOrderPresenter = new CancelOrderPresenter(getContext(), DynamicFragment.this);
         recyclerView = view.findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         count = 1;
+        refreshCancle=0;
+//        CallAPI();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(refreshCancle==1)
+        {
+            presenter.getCanceledHistoryNew();
+            refreshCancle=0;
+        }
+        CallAPI();
+    }
+
+    public  void CallAPI()
+    {
         if (isNetworkConnected()) {
-            if (HistoryFragment.position == 0)
-                presenter.getCompletedHistory();
-            else if (HistoryFragment.position == 1)
+            if (HistoryFragment.position == 0) {
                 presenter.getOngoingHistory();
+            }
+            else if (HistoryFragment.position == 1)
+                presenter.getCompletedHistory();
             else if (HistoryFragment.position == 2)
-                presenter.getCanceledHistory();
+//                presenter.getCanceledHistory();
+                presenter.getCanceledHistoryNew();
+
+//            presenter.getCanceledHistoryNew(); //for refresh
+
         } else {
             showDialog("Please connect to internet.");
         }
@@ -78,16 +115,30 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     @Override
     public void success(ArrayList<HistoryModel> response) {
         if (HistoryFragment.position == 0)
-            mAdapter = new CompletedAdapter(getActivity(), response);
+            mAdapter = new OngoingAdapterNew(getActivity(),response,DynamicFragment.this);
+//            mAdapter = new OngoingAdapter(response);
         else if (HistoryFragment.position == 1)
-            mAdapter = new OngoingAdapter(response);
+
+        mAdapter = new CompletedAdapterNew(getActivity(), response);
+//            mAdapter = new CompletedAdapter(getActivity(), response);
         else if (HistoryFragment.position == 2)
-            mAdapter = new CancelledAdapter(getActivity(), response);
+            mAdapter = new CancelledAdapterNew(getActivity(), response);
 
         recyclerView.setAdapter(mAdapter);
 //        mAdapter.notifyDataSetChanged();
         runLayoutAnimation(recyclerView);
     }
+
+////for  cancelled tab
+//    @Override
+//    public void successCancelled(ArrayList<GetCancelOrderBean> response) {
+////         if (HistoryFragment.position == 2)
+////            mAdapter = new CancelledAdapterNew(getActivity(), response);
+////
+////           recyclerView.setAdapter(mAdapter);
+//////        mAdapter.notifyDataSetChanged();
+////        runLayoutAnimation(recyclerView);
+//    }
 
     @Override
     public void error(String response) {
@@ -130,4 +181,58 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
         recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
+
+//for ongoingadapter click
+    @Override
+    public void onClick(String  requstid) {
+//        Toast.makeText(getActivity(), ""+requstid, Toast.LENGTH_SHORT).show();
+        ShowNewAlert(getActivity(),"Do you want to proceed cancel order?",requstid);
+
+    }
+    //for cancel order at ongoing
+    @Override
+    public void success(String response) {
+        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+        presenter.getCanceledHistoryNew();
+        CallAPI();
+
+    }
+    PrettyDialog prettyDialog=null;
+    private void ShowNewAlert(Context context,String message,String requstid) {
+        if(prettyDialog!=null)
+        {
+            prettyDialog.dismiss();
+        }
+        prettyDialog = new PrettyDialog(context);
+        prettyDialog.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        prettyDialog.setIconTint(R.color.colorPrimary);
+        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+        prettyDialog.setTitle("");
+        prettyDialog.setMessage(message);
+        prettyDialog.setAnimationEnabled(false);
+        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        prettyDialog.addButton("No", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+            }
+        }).show();
+        prettyDialog.addButton("Yes", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                prettyDialog.dismiss();
+                if (isNetworkConnected()) {
+                    cancelOrderPresenter.CancelOrderMethod(requstid);
+                }
+                else {
+                    showDialog("Please connect to internet");
+                }
+            }
+        }).show();
+    }
+
 }

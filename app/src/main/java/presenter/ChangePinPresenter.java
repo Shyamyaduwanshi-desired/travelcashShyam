@@ -37,7 +37,7 @@ public class ChangePinPresenter {
 
     public void changePin(final String oldPin, final String newPin) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Change Pin Please Wait..");
+        progress.setMessage("Change Pin Please Wait..");//Change Pin
         progress.setCancelable(false);
         progress.show();
 

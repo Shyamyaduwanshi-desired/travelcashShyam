@@ -19,32 +19,31 @@ import java.util.Map;
 
 import constant.AppData;
 import model.AddMoneyModel;
-import model.SubmitTopup;
 
-public class SubmitTopupPresenter {
+public class CancelOrderPresenter {
     private Context context;
-    private SubmitTopup topup;
+    private CancelInfo money;
     private AppData appData;
 
-    public SubmitTopupPresenter(Context context, SubmitTopup topup) {
+    public CancelOrderPresenter(Context context, CancelInfo money) {
         this.context = context;
-        this.topup = topup;
+        this.money = money;
         appData = new AppData(context);
     }
 
-    public interface SubmitTopup{
+    public interface CancelInfo{
         void success(String response);
         void error(String response);
         void fail(String response);
     }
 
-    public void SubmitTopupRequest(final model.SubmitTopup model) {
+    public void CancelOrderMethod(String requestId) {
         final ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
-//        https://omsoftware.org/cashapp/api/submitTopUpRequest
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "submitTopUpRequest", new Response.Listener<String>() {
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "cancelRequestByUser", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();
@@ -52,20 +51,20 @@ public class SubmitTopupPresenter {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
                     if(status == 1){
-                        topup.success(reader.getString("message")+"\r\n"+reader.getString("transaction_id"));
+                        money.success(reader.getString("message"));
                     }else if(status == 0){
-                        topup.error(reader.getString("message"));
+                        money.error(reader.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    topup.fail("Something went wrong. Please try after some time.");
+                    money.fail("Something went wrong. Please try after some time.");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                topup.fail("Server Error.\n Please try after some time.");
+                money.fail("Server Error.\n Please try after some time.");
             }
         }
         ) {
@@ -73,17 +72,7 @@ public class SubmitTopupPresenter {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", appData.getUserID());
-                params.put("amount", model.getAmount());
-                params.put("extension", model.getExtentionfile());
-
-                if(model.getExtentionfile().equals("pdf")||model.getExtentionfile().equals("PDF"))
-                {
-                    params.put("pdf",  model.getFileurl());
-                }
-                else {
-                    params.put("proof_file", model.getFileurl());
-                }
-
+                params.put("agent_recieved_request_id", requestId);
                 Log.e("",""+params.toString());
 
                 return params;

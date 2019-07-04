@@ -96,7 +96,8 @@ public class WalletFragment extends Fragment implements ShowWalletInfoPresenter.
 
     @Override
     public void success(ArrayList<ShowWalletInfoModel> arrayList, String walletAmount) {
-        DecimalFormat df = new DecimalFormat( "#,###,###,###" );
+        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+//        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
         double dd = Double.parseDouble(walletAmount);
         tvAmount.setText("" + df.format(dd));
 
@@ -131,15 +132,19 @@ public class WalletFragment extends Fragment implements ShowWalletInfoPresenter.
     }
 
     private void showDialog(String message) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("")
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                }).show();
+        try {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("")
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isNetworkConnected() {

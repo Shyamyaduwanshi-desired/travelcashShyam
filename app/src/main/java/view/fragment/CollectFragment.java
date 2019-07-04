@@ -25,7 +25,7 @@ public class CollectFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_collectby, container, false);
+        View view = inflater.inflate(R.layout.fragment_collectby_new, container, false);
 
         orderData = new OrderData(getContext());
         tvShopName = view.findViewById(R.id.tvShopName);

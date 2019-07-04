@@ -43,7 +43,7 @@ public class VendorReviewPresenter {
 
     public void getReview(final String agent_id) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Gating Please Wait..");
+        progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
 

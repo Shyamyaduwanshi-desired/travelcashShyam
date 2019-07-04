@@ -12,6 +12,8 @@
     <string name="sorry">We are sorry this didn\'t work out. Let us know how we can make your experience better at.</string>
     <string name="register">Enter your mobile number we will send you OTP to register account.</string>
     <string name="api_key">c26b952cf256107329b42f97bd9af382</string>
-   <!-- <string name="google_api_key">AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg</string>-->
-    <string name="google_api_key">AIzaSyDzdTN8o1eYFEnCOF080AA7LN6GxaH-VLc</string>
+    <string name="google_api_key">AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg</string>
+  <!--  <string name="google_api_key">AIzaSyDzdTN8o1eYFEnCOF080AA7LN6GxaH-VLc</string>-->
+   <!-- <string name="google_api_key">AIzaSyCq2tTilruSUlnLs3x9sT306ZT836p-br8</string>-->
+    <!--<string name="google_api_key">AIzaSyAk0F19ipyE42spLIPx3zfTpfxR-VNUOew</string>-->
 </resources>

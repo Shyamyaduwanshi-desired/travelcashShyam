@@ -126,6 +126,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String password = edtPassword.getText().toString();
                 String value = edtConfirmPass.getText().toString();
                 if (!password.equals(value)) {
+//                    edtConfirmPass.setError("Password and Confirm Password Do Not Match");
                     edtConfirmPass.setError("Please enter same password and confirm password");
                 }
             }
@@ -147,7 +148,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
                 String value = edtMobile.getText().toString();
-                if (!isValidMobile(value) || value.length() < 6) {
+//                if (!isValidMobile(value) || value.length() < 6)
+                if (!isValidMobile(value) )
+                {
                     edtMobile.setError("Please enter valid mobile number");
                 }
             }
@@ -230,7 +233,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             showDialog("Please enter same password and confirm password");
         } else if (TextUtils.isEmpty(mobile)) {
             edtMobile.setError("Please enter mobile number");
-        } else if (!isValidMobile(mobile) || mobile.length() < 6) {
+        }
+//        else if (!isValidMobile(mobile) || mobile.length() < 6)
+        else if (!isValidMobile(mobile))
+        {
             edtMobile.setError("Please enter valid mobile number");
         } else if (TextUtils.isEmpty(email)) {
             edtEmail.setError("Please enter email id");

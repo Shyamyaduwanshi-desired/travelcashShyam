@@ -78,11 +78,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_5"
-                            android:text="via DBS/POSB"
+                            android:text="Current Balance"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size_normal"
                             android:textStyle="normal" />
-
+                       <!-- via DBS/POSB-->
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_toLeftOf="@+id/tvRate"
+                    android:layout_toLeftOf="@+id/tv_rate"
                     android:padding="@dimen/margin_5"
                     android:text="Current Exchange Rate : "
                     android:textColor="@color/black"
@@ -201,7 +201,7 @@
                     android:textStyle="bold" />
 
                 <view.customview.CustomTextView
-                    android:id="@+id/tvRate"
+                    android:id="@+id/tv_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -226,8 +226,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_200"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+
                 android:focusableInTouchMode="false"
                 >
 
@@ -236,8 +235,8 @@
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-
-
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp"
 
                 />
             </RelativeLayout>

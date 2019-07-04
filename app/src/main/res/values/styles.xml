@@ -54,7 +54,7 @@
     <style name="MyRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:minHeight">@dimen/margin_15</item>
         <item name="android:maxHeight">@dimen/margin_15</item>
-        <item name="colorControlNormal">@color/dark_gray</item>
+        <item name="colorControlNormal">@color/dark_gray1</item>
         <item name="colorControlActivated">@android:color/holo_orange_light</item>
     </style>
 
