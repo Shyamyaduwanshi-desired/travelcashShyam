@@ -101,30 +101,81 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
 
     private void prepareData() {
         mList.clear();
-        Setting setting = new Setting(R.drawable.ic_refer, "Refer a Friend");
+        Setting setting = new Setting(R.drawable.ic_refer, "Refer a Friend");//0
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_bank, "Transfer to Bank");
+        setting = new Setting(R.drawable.ic_bank, "Transfer to Bank");//1
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_people, "Transfer to Friend");
+        setting = new Setting(R.drawable.ic_people, "Transfer to Friend");//2
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_donate, "Donate");
+        setting = new Setting(R.drawable.ic_donate, "Donate");//3
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_promotions, "Promotion");
+        setting = new Setting(R.drawable.ic_promotions, "Promotion");//4
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_about, "About");
+        setting = new Setting(R.drawable.ic_about, "About");//5
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_format, "Help");
+        setting = new Setting(R.drawable.ic_format, "Help");//6
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_lock, "Privacy Policy");
+        setting = new Setting(R.drawable.ic_lock, "Privacy Policy");//7
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_kay, "Change Password");
+        setting = new Setting(R.drawable.ic_kay, "Change Password");//8
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_eye, "Change Pin");
+        setting = new Setting(R.drawable.ic_eye, "Change Pin");//9
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_exit, "Logout");
+        setting = new Setting(R.drawable.ic_exit, "Logout");//10
         mList.add(setting);
 
         mAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void itemClick(int position) {
+        switch (position) {
+            case 0://refer to friend
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my dummy text to send.");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                break;
+
+            case 2://Transfer to Friend
+                final BottomDialog dialog = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
+                dialog.show(getFragmentManager(), "dialog");
+                dialog.setCancelable(false);
+                //add item click listener
+                dialog.setListener(new BottomDialog.OnClickListener() {
+                    @Override
+                    public void click(int position) {
+                        if (position == 0) {
+                            Intent intent = new Intent(getContext(), TransferToFriend.class);
+                            intent.putExtra("flagPurchase", "qr");
+                            startActivity(intent);
+                            dialog.dismiss();
+                            Animatoo.animateSwipeRight(getContext());
+                        } else {
+                            Intent intent = new Intent(getContext(), TransferToFriend.class);
+                            intent.putExtra("flagPurchase", "username");
+                            startActivity(intent);
+                            dialog.dismiss();
+                            Animatoo.animateSwipeRight(getContext());
+                        }
+                    }
+                });
+                break;
+
+            case 8://Change Password
+                startActivity(new Intent(getContext(), ChangePassword.class));
+                Animatoo.animateSwipeRight(getContext());
+                break;
+
+            case 9://Change Pin
+                startActivity(new Intent(getContext(), ChangePin.class));
+                Animatoo.animateSplit(getContext());
+                break;
+
+            case 10://Logout
+                showAlert("Are you sure want to logout?");
+                break;
+        }
     }
 
     private void showAlert(String message) {
@@ -198,57 +249,7 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
         }, 3000);
     }
 
-    @Override
-    public void itemClick(int position) {
-        switch (position) {
-            case 0://refer to friend
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my dummy text to send.");
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
-                break;
 
-            case 2://refer to friend
-                final BottomDialog dialog = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
-                dialog.show(getFragmentManager(), "dialog");
-                dialog.setCancelable(false);
-                //add item click listener
-                dialog.setListener(new BottomDialog.OnClickListener() {
-                    @Override
-                    public void click(int position) {
-                        if (position == 0) {
-                            Intent intent = new Intent(getContext(), TransferToFriend.class);
-                            intent.putExtra("flagPurchase", "qr");
-                            startActivity(intent);
-                            dialog.dismiss();
-                            Animatoo.animateSwipeRight(getContext());
-                        } else {
-                            Intent intent = new Intent(getContext(), TransferToFriend.class);
-                            intent.putExtra("flagPurchase", "username");
-                            startActivity(intent);
-                            dialog.dismiss();
-                            Animatoo.animateSwipeRight(getContext());
-                        }
-                    }
-                });
-                break;
-
-            case 8:
-                startActivity(new Intent(getContext(), ChangePassword.class));
-                Animatoo.animateSwipeRight(getContext());
-                break;
-
-            case 9:
-                startActivity(new Intent(getContext(), ChangePin.class));
-                Animatoo.animateSplit(getContext());
-                break;
-
-            case 10:
-                showAlert("Are you sure want to logout?");
-                break;
-        }
-    }
 
     @Override
     public void onClick(View v) {

@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 import android.view.View;
@@ -56,7 +57,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     private BarcodeCapture barcodeCapture;
     private AppCompatTextView tvRN, tvAddress;
     private ScanActivityPresenter scanActivityPresenter;
-    private String amount = "", request_id = "", agent_request_id = "";
+    private String amount = "", request_id = "", agent_request_id = "", agentId = "";
     private CancelOrderPresenter cancelOrderPresenter;
 
     @Override
@@ -68,6 +69,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         scanActivityPresenter = new ScanActivityPresenter(this, this);
         amount = getIntent().getStringExtra("amount");
         agent_request_id = getIntent().getStringExtra("agent_recieved_request_id");
+        agentId = getIntent().getStringExtra("agent_id");
         initView();
     }
 
@@ -79,6 +81,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         btnCancel = findViewById(R.id.btnCancel);
         imageView.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+
         barcodeCapture = (BarcodeCapture) getSupportFragmentManager().findFragmentById(R.id.barcode);
         barcodeCapture.setRetrieval(this);
         barcodeCapture.setShowDrawRect(true);
@@ -109,30 +112,25 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onRetrieved(final Barcode barcode) {
-        //barcodeCapture.stopScanning();
+        barcodeCapture.stopScanning();
         amount = amount.replaceAll(",", "");
-        scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id);
+        Log.e("","amount= "+amount+" request_id= "+request_id+" barcode.displayValue= "+barcode.displayValue);
+//        if (isNetworkConnected())
+//            scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id);
+//        else
+//            showDialog("Please connect to internet");
+        if (isNetworkConnected()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-     /*
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this)
-                        .setTitle("Code Retrieved")
-                        .setMessage(barcode.displayValue)
-                        //.setMessage("Transaction Successful.")
-                        .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                    scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
 
-                            }
-                        });
-                builder.show();
-            }
-        });
-       */
+                }
+            });
+        }
+        else
+            showDialog("Please connect to internet");
 
     }
 
@@ -205,7 +203,8 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("agent_id", AppData.agentID);
+                params.put("agent_id", agentId);
+//                params.put("agent_id", AppData.agentID);
 
                 return params;
             }
@@ -217,6 +216,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void success(String response, String user_withdraw_id) {
+
+        Log.e("","user_withdraw_id= "+user_withdraw_id+" response= "+response);
+
         Intent intent = new Intent(getApplicationContext(), TransactionDetail.class);
         intent.putExtra("flagPurchase", "1");
         intent.putExtra("transactionId", user_withdraw_id);
@@ -229,11 +231,13 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void error(String response) {
+
         showDialog(response);
     }
 
     @Override
     public void fail(String response) {
+
         showDialog(response);
     }
 
@@ -252,6 +256,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     //for cancelorder
     @Override
     public void success(String response) {
+
         Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
         DynamicFragment.refreshCancle=1;
              finish();

@@ -66,7 +66,7 @@
                             android:id="@+id/tv_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="name"
+                            android:text="time"
                             android:textColor="@color/noti_time_colo"
                             android:textSize="@dimen/text_size_normal"
                             android:textStyle="bold"
@@ -76,11 +76,11 @@ android:layout_alignParentRight="true"
                     </RelativeLayout>
 
                     <view.customview.CustomTextView
-                        android:id="@+id/tv_location"
+                        android:id="@+id/tv_msg"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
 android:padding="@dimen/margin_5"
-                        android:text="location"
+                        android:text="msg"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_normal"
                         android:textStyle="normal"

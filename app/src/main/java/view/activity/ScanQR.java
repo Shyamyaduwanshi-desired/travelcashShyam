@@ -52,6 +52,7 @@ public class ScanQR extends AppCompatActivity implements View.OnClickListener, B
         barcodeCapture = (BarcodeCapture) getSupportFragmentManager().findFragmentById(R.id.barcode);
         barcodeCapture.setRetrieval(this);
         barcodeCapture.setShowDrawRect(true);
+
         tvAmount.setText("Amount to transfer : " + getIntent().getStringExtra("amount") + " IDR");
     }
 

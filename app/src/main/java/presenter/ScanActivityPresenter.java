@@ -2,6 +2,7 @@ package presenter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +36,7 @@ public class ScanActivityPresenter {
         void fail(String response);
     }
 
-    public void verifyAgentQrCode(final String qr, final String amount, final String requestID) {
+    public void verifyAgentQrCode(final String qr, final String amount, final String requestID, final String agentID) {
         final ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage("Please Wait..");
         progress.setCancelable(false);
@@ -47,6 +48,7 @@ public class ScanActivityPresenter {
                 progress.dismiss();
                 try {
                     JSONObject reader = new JSONObject(response);
+                    Log.e("","json ="+reader.toString());
                     int status = reader.getInt("status");
                     if(status == 1){
                         scan.success(reader.getString("message"), reader.getString("user_withdraw_id"));
@@ -70,11 +72,12 @@ public class ScanActivityPresenter {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", appData.getUserID());
-                params.put("agent_id", AppData.agentID);
+                params.put("agent_id", agentID);
                 params.put("qrCodeInfo", qr);
                 params.put("request_amount", amount);
                 params.put("request_id", requestID);
-
+                Log.e("","enput data verify QRcode= "+params.toString());
+//                agent_id,user_id,qrCodeInfo,request_amount,request_id
                 return params;
             }
         };

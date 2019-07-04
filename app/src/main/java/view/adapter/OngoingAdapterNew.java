@@ -77,6 +77,7 @@ public class OngoingAdapterNew extends RecyclerView.Adapter<OngoingAdapterNew.My
                 Intent intent = new Intent(activity, ScanActivity.class);
                 intent.putExtra("amount", history.getAmount());
                 intent.putExtra("agent_recieved_request_id", history.getID());
+                intent.putExtra("agent_id", history.getAgentId());
                 activity.startActivity(intent);
 //        finish();
 //        Animatoo.animateFade(ConfirmCashpoint.this);

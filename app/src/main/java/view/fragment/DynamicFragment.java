@@ -157,15 +157,19 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     }
 
     private void showDialog(String message) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("")
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                }).show();
+        try {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("")
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isNetworkConnected() {

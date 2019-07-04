@@ -20,28 +20,28 @@ import constant.AppData;
 
 public class DeviceTokenPresenter {
     private Context context;
-    private Login login;
+    private SaveDeviceToken saveToken;
     private AppData appData;
 
-    public DeviceTokenPresenter(Context context, Login login) {
+    public DeviceTokenPresenter(Context context, SaveDeviceToken saveToken) {
         this.context = context;
-        this.login = login;
+        this.saveToken = saveToken;
         appData = new AppData(context);
     }
 
-    public interface Login{
+    public interface SaveDeviceToken{
         void success(String response);
         void error(String response);
         void fail(String response);
     }
 
-    public void sentRequest(final String mobile, final String password) {
+    public void SaveToken(final String devicetoken) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Login Please Wait..");
+        progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "userLogIn", new Response.Listener<String>() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "saveUserDeviceToken", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();
@@ -49,35 +49,29 @@ public class DeviceTokenPresenter {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
                     if(status == 1){
-                        login.success(reader.getString("message"));
-                        appData.setUserID(reader.getString("user_id"));
-                        appData.setUsername(reader.getString("user_fname"));
-                        appData.setMobile(reader.getString("user_mobile_number"));
-                        appData.setEmail(reader.getString("user_email_id"));
-                        appData.setPin(reader.getString("user_pin"));
-                        appData.setProfile(reader.getString("profile"));
-                        appData.setWalletAmount(reader.getString("wallet_amount"));
+                        saveToken.success(reader.getString("message"));
                     }else if(status == 0){
-                       login.error(reader.getString("message"));
+                       saveToken.error(reader.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    login.fail("Something went wrong. Please try after some time.");
+                    saveToken.fail("Something went wrong. Please try after some time.");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                login.fail("Server Error.\n Please try after some time.");
+                saveToken.fail("Server Error.\n Please try after some time.");
             }
         }
         ) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", mobile);
-                params.put("password", password);
+                params.put("user_id", appData.getUserID());
+                params.put("device_token", devicetoken);
+                params.put("device_type", "android");
 
                 return params;
             }
@@ -87,9 +81,9 @@ public class DeviceTokenPresenter {
         queue.add(postRequest);
     }
 
-    public void signInThroughSocialMedia(final String username, final String email, final String token) {
+ /*   public void signInThroughSocialMedia(final String username, final String email, final String token) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Login Please Wait..");
+        progress.setMessage("saveToken Please Wait..");
         progress.setCancelable(false);
         progress.show();
 
@@ -102,20 +96,20 @@ public class DeviceTokenPresenter {
                     int status = reader.getInt("status");
                     if(status == 1){
                         appData.setUserID(reader.getString("user_id"));
-                        login.success(reader.getString("message"));
+                        saveToken.success(reader.getString("message"));
                     }else if(status == 0){
-                       login.error(reader.getString("message"));
+                       saveToken.error(reader.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    login.fail("Something went wrong. Please try after some time.");
+                    saveToken.fail("Something went wrong. Please try after some time.");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                login.fail("Server Error.\n Please try after some time.");
+                saveToken.fail("Server Error.\n Please try after some time.");
             }
         }
         ) {
@@ -132,5 +126,5 @@ public class DeviceTokenPresenter {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(postRequest);
-    }
+    }*/
 }

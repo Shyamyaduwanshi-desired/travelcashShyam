@@ -6,6 +6,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,12 +65,18 @@ public class CashPointAdapter extends RecyclerView.Adapter<CashPointAdapter.MyVi
 //                .skipMemoryCache(true)
 //                .error(R.drawable.persion)*/
 //                .into(holder.imgShop);
-       Glide.with(activity).load(mList.get(position).getShopImage()).thumbnail(0.5f)
-               /* .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .error(R.drawable.persion)*/
-                .into(holder.ivShopPic);
+        if(TextUtils.isEmpty(mList.get(position).getShopImage()))
+        {
+            holder.ivShopPic.setImageResource(R.drawable.persion);
+        }
+        else {
+            Glide.with(activity).load(mList.get(position).getShopImage()).thumbnail(0.5f)
+                    /* .crossFade()
+                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                     .skipMemoryCache(true)
+                     .error(R.drawable.persion)*/
+                    .into(holder.ivShopPic);
+        }
 
 //        holder.imgBanner.setVisibility(View.VISIBLE);
         if (position != 0 && position % 3 == 0) {

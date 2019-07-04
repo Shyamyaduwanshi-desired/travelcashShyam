@@ -258,7 +258,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 .build(getContext());
         startActivityForResult(intent, 103);
     }
-
+//cashpoint adpter click listener
     @Override
     public void onClick(int position) {
         if (!tvAmount.getText().toString().equals("0")) {
@@ -360,10 +360,6 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 break;
         }
     }
-
-
-
-
     private void showDialog(String message) {
         new AlertDialog.Builder(getContext())
                 .setMessage(message)

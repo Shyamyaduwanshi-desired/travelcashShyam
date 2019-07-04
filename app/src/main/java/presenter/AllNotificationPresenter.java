@@ -48,7 +48,7 @@ public class AllNotificationPresenter {
         progress.show();
         final ArrayList<NotificationBean> list = new ArrayList<>();
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "getCancelledAndRejectedRequest", new Response.Listener<String>() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "getUserNotification", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();

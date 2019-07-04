@@ -13,17 +13,26 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
-import constant.AppData;
+import java.util.ArrayList;
 
-public class ActNotification extends AppCompatActivity implements View.OnClickListener/*, SubmitTopupPresenter.SubmitTopup*/ {
+import constant.AppData;
+import model.NotificationBean;
+import model.Vendor;
+import presenter.AllNotificationPresenter;
+import view.adapter.CashPointAdapter;
+import view.adapter.NotiAdapter;
+import view.fragment.HomeFragment;
+
+public class ActNotification extends AppCompatActivity implements View.OnClickListener, AllNotificationPresenter.NotificationInfo {
     private Toolbar toolbar;
     private AppCompatImageView imageView;
-
-//    private SubmitTopupPresenter Submittopup;
+    private AllNotificationPresenter notiPresenter;
 private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private AppData appData;
@@ -32,11 +41,20 @@ private RecyclerView recyclerView;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_notification);
-//        Submittopup = new SubmitTopupPresenter(this, this);
+        notiPresenter = new AllNotificationPresenter(this, this);
         appData = new AppData(this);
-
+        response=new ArrayList<>();
         initView();
         Listener();
+        GetData();
+
+    }
+
+    private void GetData() {
+        if (isNetworkConnected())
+            notiPresenter.GetAllNotification();
+        else
+            showDialog("Please connect to internet");
     }
 
     private void Listener() {
@@ -81,7 +99,7 @@ private RecyclerView recyclerView;
 //
 //                       String exten= filePath.substring(filePath.lastIndexOf(".") + 1);
 //
-//                        SubmitTopup bean = new SubmitTopup();
+//                        notiPresenter bean = new notiPresenter();
 //                        bean.setAmount(sAmount);
 //                        bean.setFileurl(filePath);
 //                        bean.setExtentionfile(exten);
@@ -93,7 +111,7 @@ private RecyclerView recyclerView;
 //                            bean.setPdfExtenstion("");
 //                        }
 //
-////                        Submittopup.SubmitTopupRequest(bean);
+////                        notiPresenter.SubmitTopupRequest(bean);
 //
 //
 //                    } else {
@@ -154,5 +172,34 @@ private RecyclerView recyclerView;
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
+    private ArrayList<NotificationBean> response;
+    private RecyclerView.Adapter notiAdapter;
+//for getall notification
+    @Override
+    public void success(ArrayList<NotificationBean> response) {
+        this.response.clear();
+        this.response = response;
+        notiAdapter = new NotiAdapter(this, response);
+        recyclerView.setAdapter(notiAdapter);
 
+        runLayoutAnimation(recyclerView);
+    }
+ //for getall notification
+    @Override
+    public void error(String response) {
+
+    }
+ //for getall notification
+    @Override
+    public void fail(String response) {
+
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        Context context = recyclerView.getContext();
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
 }
