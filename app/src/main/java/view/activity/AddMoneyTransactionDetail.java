@@ -259,13 +259,6 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //                    startActivityForResult(intent, 2);
 
                     try {
-//                        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-//                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                        startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
-
-//                        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                        startActivityForResult(i, 1);
-
                         Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(intent, 1);
                     } catch (Exception e) {
