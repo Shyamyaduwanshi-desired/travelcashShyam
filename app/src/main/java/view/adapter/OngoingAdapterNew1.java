@@ -2,12 +2,14 @@ package view.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
 import java.util.List;
@@ -18,12 +20,12 @@ import view.activity.ScanActivity;
 import view.customview.CustomTextView;
 import view.customview.CustomTextViewBold;
 
-public class OngoingAdapterNew extends RecyclerView.Adapter<OngoingAdapterNew.MyViewHolder> {
+public class OngoingAdapterNew1 extends RecyclerView.Adapter<OngoingAdapterNew1.MyViewHolder> {
     private List<HistoryModel> mList;
     private Activity activity;
     AppData appData;
-    private OngoingAdapterNew.Clickable clickable;
-    public OngoingAdapterNew(Activity activity, List<HistoryModel> mList, OngoingAdapterNew.Clickable clickable) {
+    private OngoingAdapterNew1.Clickable clickable;
+    public OngoingAdapterNew1(Activity activity, List<HistoryModel> mList, OngoingAdapterNew1.Clickable clickable) {
         this.activity = activity;
         this.mList = mList;
         appData=new AppData(activity);
@@ -32,7 +34,7 @@ public class OngoingAdapterNew extends RecyclerView.Adapter<OngoingAdapterNew.My
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_ongoing_history, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_ongoing_history_new, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -41,37 +43,32 @@ public class OngoingAdapterNew extends RecyclerView.Adapter<OngoingAdapterNew.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final HistoryModel history = mList.get(position);
 
-//        if (position > 0 && position < mList.size()) {
-//            String currentDate = mList.get(position).getDate();
-//            String prevDate = mList.get(position - 1).getDate();
-//            if (currentDate.equals(prevDate)) {
-//                holder.tvDate.setVisibility(View.GONE);
-//            } else {
-//                holder.tvDate.setVisibility(View.VISIBLE);
-//            }
-//        }
         if(history.getTime().equals("Pending")||history.getTime()=="Pending")
         {
-            holder.tvProceed.setVisibility(View.GONE);
+            holder.lyProceed.setVisibility(View.INVISIBLE);
         }
         else
         {
-            holder.tvProceed.setVisibility(View.VISIBLE);
+            holder.lyProceed.setVisibility(View.VISIBLE);
         }
 
-        holder.tvDate.setText(appData.ConvertDate4(history.getDate())+","+appData.ConvertTime(history.getDate()));
+        holder.tvDate.setText(appData.ConvertDate4(history.getDate())+", "+appData.ConvertTime(history.getDate()));
         holder.tvNm.setText(history.getMode());
-        holder.tvStatus.setText("Status:"+history.getTime());
+        holder.tvStatus.setText(history.getTime());
         holder.tvAmount.setText("IDR " + history.getAmount());
+
+        holder.tvStatus.setTypeface(null, Typeface.ITALIC);
+
 //        holder.tvTime.setText(history.getDate());
-        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
-        holder.tvCancel.setOnClickListener(new View.OnClickListener() {
+//        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
+
+        holder.lyCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clickable.onClick(history.getID());
             }
         });
-        holder.tvProceed.setOnClickListener(new View.OnClickListener() {
+        holder.lyProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, ScanActivity.class);
@@ -91,22 +88,27 @@ public class OngoingAdapterNew extends RecyclerView.Adapter<OngoingAdapterNew.My
     }
 
     protected class MyViewHolder extends RecyclerView.ViewHolder {
-        public CustomTextView tvAmount, tvDate, tvStatus, tvTime;
-        CustomTextViewBold tvCancel, tvProceed, tvNm;
-
+        public TextView tvAmount, tvDate, tvStatus, tvNm;//, tvTime
+//        CustomTextViewBold tvCancel, tvProceed;
+LinearLayout lyProceed,lyCancel,lyNavigate;
         public MyViewHolder(View view) {
             super(view);
-            tvDate = (CustomTextView) view.findViewById(R.id.tv_date);
-            tvNm = (CustomTextViewBold) view.findViewById(R.id.tv_nm);
-            tvStatus = (CustomTextView) view.findViewById(R.id.tv_status);
-            tvTime = (CustomTextView) view.findViewById(R.id.tv_time);
-            tvAmount = (CustomTextView) view.findViewById(R.id.tv_amount);
-            tvCancel = (CustomTextViewBold) view.findViewById(R.id.tv_cancel);
-            tvProceed = (CustomTextViewBold) view.findViewById(R.id.tv_proceed);
+            tvDate = (TextView) view.findViewById(R.id.tv_date);
+            tvAmount = (TextView) view.findViewById(R.id.tv_amount);
+            tvNm = (TextView) view.findViewById(R.id.tv_agent_nm);
+            tvStatus = (TextView) view.findViewById(R.id.tv_status);
+
+            lyProceed = (LinearLayout) view.findViewById(R.id.ly_proceed);
+            lyCancel = (LinearLayout) view.findViewById(R.id.ly_cancel);
+            lyNavigate = (LinearLayout) view.findViewById(R.id.ly_navigate);
+
+//            tvTime = (CustomTextView) view.findViewById(R.id.tv_time);
+//            tvCancel = (CustomTextViewBold) view.findViewById(R.id.tv_cancel);
+//            tvProceed = (CustomTextViewBold) view.findViewById(R.id.tv_proceed);
         }
     }
 
     public interface Clickable {
-        void onClick(String  position);
+        void onClick(String position);
     }
 }

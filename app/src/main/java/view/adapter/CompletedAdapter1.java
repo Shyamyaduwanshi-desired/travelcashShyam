@@ -2,10 +2,12 @@ package view.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
@@ -15,15 +17,13 @@ import java.util.List;
 
 import constant.AppData;
 import model.HistoryModel;
-import view.activity.TransactionDetail;
 import view.activity.TransactionDetailNew;
-import view.customview.CustomTextView;
 
-public class CompletedAdapterNew extends RecyclerView.Adapter<CompletedAdapterNew.MyViewHolder> {
+public class CompletedAdapter1 extends RecyclerView.Adapter<CompletedAdapter1.MyViewHolder> {
     private List<HistoryModel> mList;
     private Activity activity;
     AppData appData;
-    public CompletedAdapterNew(Activity activity, List<HistoryModel> mList) {
+    public CompletedAdapter1(Activity activity, List<HistoryModel> mList) {
         this.activity = activity;
         this.mList = mList;
         appData=new AppData(activity);
@@ -31,7 +31,7 @@ public class CompletedAdapterNew extends RecyclerView.Adapter<CompletedAdapterNe
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_complete_history, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_complete_history_01, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -40,19 +40,9 @@ public class CompletedAdapterNew extends RecyclerView.Adapter<CompletedAdapterNe
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final HistoryModel history = mList.get(position);
 
-//        if(position >0 && position < mList.size()){
-//            String currentDate = mList.get(position).getDate();
-//            String prevDate = mList.get(position-1).getDate();
-//            if(currentDate.equals(prevDate)){
-//               holder.tvDate.setVisibility(View.GONE);
-//            }else {
-//                holder.tvDate.setVisibility(View.VISIBLE);
-//            }
-//        }
-
-        holder.tvDate.setText(appData.ConvertDate4(history.getDate()));
-        holder.tvStatus.setText(history.getMode());
-        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
+        holder.tvDate.setText(appData.ConvertDate4(history.getDate())+", "+appData.ConvertTime(history.getDate()));
+        holder.tvNm.setText(history.getMode());
+        holder.tvStatus.setText("Completed");
         if(history.getAmount().contains(",")) {
             holder.tvAmount.setText("IDR " + history.getAmount());
         }
@@ -63,6 +53,8 @@ public class CompletedAdapterNew extends RecyclerView.Adapter<CompletedAdapterNe
 //            tvRate.setText("$1 To IDR "+df.format(dd));
             holder.tvAmount.setText("IDR " + df.format(dd));
         }
+//        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
+        holder.tvStatus.setTypeface(null, Typeface.ITALIC);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,14 +85,15 @@ public class CompletedAdapterNew extends RecyclerView.Adapter<CompletedAdapterNe
     }
 
     protected class MyViewHolder extends RecyclerView.ViewHolder {
-        public CustomTextView tvAmount, tvDate, tvStatus, tvTime;
+        public TextView tvAmount, tvDate, tvStatus/*, tvTime*/,tvNm;
 
         public MyViewHolder(View view) {
             super(view);
-            tvDate = (CustomTextView) view.findViewById(R.id.tv_date);
-            tvStatus = (CustomTextView) view.findViewById(R.id.tv_status);
-            tvTime = (CustomTextView) view.findViewById(R.id.tv_time);
-            tvAmount = (CustomTextView) view.findViewById(R.id.tv_amount);
+            tvDate =  view.findViewById(R.id.tv_date);
+            tvNm =  view.findViewById(R.id.tv_agent_nm);
+            tvStatus =  view.findViewById(R.id.tv_status);
+//            tvTime =view.findViewById(R.id.tv_time);
+            tvAmount =  view.findViewById(R.id.tv_amount);
         }
     }
 }

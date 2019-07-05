@@ -19,27 +19,20 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
 import java.util.ArrayList;
 
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
-import model.GetCancelOrderBean;
 import model.HistoryModel;
 import presenter.CancelOrderPresenter;
-import presenter.GetCancelOrderDataPresenter;
 import presenter.HistoryPresenter;
-import view.activity.WriteReview;
-import view.adapter.CancelledAdapter;
-import view.adapter.CancelledAdapterNew;
-import view.adapter.CompletedAdapter;
-import view.adapter.CompletedAdapterNew;
-import view.adapter.OngoingAdapter;
-import view.adapter.OngoingAdapterNew;
+import view.adapter.CancelledAdapter1;
+import view.adapter.CompletedAdapter1;
+import view.adapter.OngoingAdapterNew1;
 
-public class DynamicFragment extends Fragment implements HistoryPresenter.History,OngoingAdapterNew.Clickable, CancelOrderPresenter.CancelInfo {
+public class DynamicFragment extends Fragment implements HistoryPresenter.History,OngoingAdapterNew1.Clickable, CancelOrderPresenter.CancelInfo {
     //, GetCancelOrderDataPresenter.CancelHistoryInfo
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -115,14 +108,16 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     @Override
     public void success(ArrayList<HistoryModel> response) {
         if (HistoryFragment.position == 0)
-            mAdapter = new OngoingAdapterNew(getActivity(),response,DynamicFragment.this);
+            mAdapter = new OngoingAdapterNew1(getActivity(),response,DynamicFragment.this);
 //            mAdapter = new OngoingAdapter(response);
         else if (HistoryFragment.position == 1)
 
-        mAdapter = new CompletedAdapterNew(getActivity(), response);
+        mAdapter = new CompletedAdapter1(getActivity(), response);
+//        mAdapter = new CompletedAdapterNew(getActivity(), response);
 //            mAdapter = new CompletedAdapter(getActivity(), response);
         else if (HistoryFragment.position == 2)
-            mAdapter = new CancelledAdapterNew(getActivity(), response);
+            mAdapter = new CancelledAdapter1(getActivity(), response);
+//            mAdapter = new CancelledAdapterNew(getActivity(), response);
 
         recyclerView.setAdapter(mAdapter);
 //        mAdapter.notifyDataSetChanged();

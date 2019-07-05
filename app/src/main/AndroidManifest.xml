@@ -17,16 +17,35 @@
 
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission-sdk-23 android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+
+    <!--for notificaiton-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication"
         tools:ignore="GoogleAppIndexingWarning"
-        >
+        android:name="android.support.multidex.MultiDexApplication"
 
+
+       >
+
+        <!--
+   tools:replace="android:appComponentFactory"
+        android:appComponentFactory="whateverString"
+
+        tools:ignore="GoogleAppIndexingWarning"
+        android:name="android.support.multidex.MultiDexApplication"
+        tools:replace="android:appComponentFactory"
+        -->
         <activity
             android:name="view.activity.SplashActivity"
             android:screenOrientation="portrait">
@@ -184,7 +203,22 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
+            android:value="@string/google_api_key1" />
+        <!-- Firebase Notifications -->
+        <service android:name="view.activity.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- ./Firebase Notifications -->
+
+
+        <!--<service android:name=".service.MyFirebaseInstanceIDService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
         <!--  <meta-data
               android:name="com.facebook.sdk.ApplicationId"

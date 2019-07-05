@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         orderData.clearData();
 
 //        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
-        Places.initialize(getActivity(),getString(R.string.google_api_key));
+        Places.initialize(getActivity(),getString(R.string.google_api_key1));
          placesClient = Places.createClient(getActivity());
         initView();
         SetPredata();
@@ -648,10 +648,16 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
         sAmount=value;
+        if(amt<=(10000000-sAmount))
+        {
         int val = amt + value;
         DecimalFormat df = new DecimalFormat("#,###,###,###");
         double dd = Double.parseDouble("" + val);
         tvAmount.setText("" + df.format(dd));
+        }
+        else {
+            showDialog("Please enter an amount lower than maximum transaction of 10,000,000.");
+        }
     }
     private void Myadd() {
         String amount = tvAmount.getText().toString().trim();
@@ -661,10 +667,16 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
        {
            sAmount=100000;
        }
-        int val = amt + sAmount;
-        DecimalFormat df = new DecimalFormat("#,###,###,###");
-        double dd = Double.parseDouble("" + val);
-        tvAmount.setText("" + df.format(dd));
+        if(amt<=(10000000-sAmount))
+        {
+           int val = amt + sAmount;
+           DecimalFormat df = new DecimalFormat("#,###,###,###");
+           double dd = Double.parseDouble("" + val);
+           tvAmount.setText("" + df.format(dd));
+       }
+       else {
+           showDialog("Please enter an amount lower than maximum transaction of 10,000,000.");
+       }
     }
 
     private void minus() {

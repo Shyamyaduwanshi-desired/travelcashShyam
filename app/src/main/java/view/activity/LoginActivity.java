@@ -15,27 +15,36 @@ import android.widget.Toast;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+/*import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;*/
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.travelcash.R;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
+import presenter.DeviceTokenPresenter;
 import presenter.LoginPresenter;
 import view.customview.CustomButton;
 import view.customview.CustomEditText;
 import view.customview.CustomTextViewBold;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginPresenter.Login {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginPresenter.Login, DeviceTokenPresenter.SaveDeviceToken {
     private CustomTextViewBold tvForgotPassword, tvSignUp;
     private CustomButton btnLogin;
     private CustomEditText edtUsername, edtPassword;
     private LoginPresenter presenter;
+    private DeviceTokenPresenter DeviceTokenPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        FirebaseApp.initializeApp(this);
         presenter = new LoginPresenter(LoginActivity.this, LoginActivity.this);
+        DeviceTokenPresenter = new DeviceTokenPresenter(LoginActivity.this, LoginActivity.this);
 
         initView();
     }
@@ -108,14 +117,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void success(String response) {
         GetFCMToken();
-        Toast toast = Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+//        Toast toast = Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT);
+//        toast.setGravity(Gravity.CENTER, 0, 0);
+//        toast.show();
+//
+//        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//        startActivity(intent);
+//        finish();
+//        Animatoo.animateSlideUp(LoginActivity.this);
+
+    }
+//for device token save success
+    @Override
+    public void success(String response, String check) {
+
+//        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
         Animatoo.animateSlideUp(LoginActivity.this);
+    }
+    //for device token error
+    @Override
+    public void error(String response, String check) {//optional
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+        Animatoo.animateSlideUp(LoginActivity.this);
+
+    }
+    //for device token fail
+    @Override
+    public void fail(String response, String check) {//optional
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+        Animatoo.animateSlideUp(LoginActivity.this);
+
     }
 
     @Override
@@ -144,21 +183,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void GetFCMToken()
     {
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if (!task.isSuccessful()) {
-////To do//
-//                            return;
-//                        }
-//
-//// Get the Instance ID token//
-//                        String token = task.getResult().getToken();
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+// Get the Instance ID token//
+                        String token = task.getResult().getToken();
 //                        String msg = getString(R.string.fcm_token, token);
-//                        Log.d("Token ", "shyam fcm token= "+token);
-//                    }
-//                });
+                        Log.d("shyam Token ", "shyam fcm token= "+token);
+
+                        DeviceTokenPresenter.SaveToken(token);
+
+                    }
+                });
 
     }
 }

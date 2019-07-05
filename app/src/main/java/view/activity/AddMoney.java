@@ -156,6 +156,10 @@ public class AddMoney extends AppCompatActivity implements View.OnClickListener,
                 break;
         }
     }
+
+
+
+
     public void ProceedDetails()
     {
         String amount = tvAmount.getText().toString().trim();
@@ -380,6 +384,7 @@ String sBankdetail="";
                 startActivity(new Intent(AddMoney.this, AddMoneyTransactionDetail.class).putExtra("amount",tvAmount.getText().toString()));
                 Animatoo.animateSlideRight(AddMoney.this);
                 bankDetailDlg.dismiss();
+                tvAmount.setText("0");
 
             }
         });
@@ -485,20 +490,20 @@ public void ShowChart11()
 
 
     public void getCurrentExchangeRate() {
-//        final ProgressDialog progress = new ProgressDialog(AddMoney.this);
-//        progress.setMessage("Please Wait..");
-//        progress.setCancelable(false);
-//        progress.show();
-
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, AppData.url + "getCurrentExchangeRate", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                progress.dismiss();
                 try {
                     JSONObject reader = new JSONObject(response);
                             String rate_data = reader.getString("IDR");
-                    tvRate.setText("$1 To IDR "+rate_data);
+//                    tvRate.setText("$1 To IDR "+rate_data);
+                    rate_data = rate_data.replaceAll(",", "");
+                    DecimalFormat df = new DecimalFormat("#,###,###,###.00");
+                    double dd = Double.parseDouble(rate_data);
+                    tvRate.setText("$1 To IDR "+df.format(dd));
+
+//                    tvRate.setText("$1 To IDR "+String.format("%.2f", rate_data));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -506,11 +511,11 @@ public void ShowChart11()
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                progress.dismiss();
             }
         }
         );
         RequestQueue queue = Volley.newRequestQueue(AddMoney.this);
         queue.add(postRequest);
     }
+
 }

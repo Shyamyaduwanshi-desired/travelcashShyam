@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +27,7 @@ import android.widget.Toast;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.travelcash.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import libs.mjn.prettydialog.PrettyDialog;
@@ -128,7 +136,8 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                 break;
 
             case R.id.tv_upload_file:
-                GetFile();
+//                GetFile();
+                selectImage();
                 break;
 
             case R.id.imgBack:
@@ -210,32 +219,140 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //        startActivityForResult(intent, 7);//not working
 
 
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        startActivityForResult(intent,7);
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("file/*");
+//        startActivityForResult(intent,7);
+
+        //only for image
+        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, 7);
+    }
+
+
+    private void selectImage() {
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Photo");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Take Photo"))
+                {
+//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//                    startActivityForResult(intent, 1);
+
+                    try {
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePicture, 0);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+                else if (options[item].equals("Choose from Gallery"))
+                {
+//                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                    startActivityForResult(intent, 2);
+
+                    try {
+//                        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+//                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                        startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+
+//                        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                        startActivityForResult(i, 1);
+
+                        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("","shyam error= "+e);
+//                        try {
+//                            Intent intent = new Intent();
+//                            intent.setType("image/*");
+//                            intent.setAction(Intent.ACTION_GET_CONTENT);
+//                            startActivityForResult(intent, 1);
+//                        } catch (Exception e1) {
+//                            e1.printStackTrace();
+//                            Log.e("","shyam error1111= "+e);
+//                        }
+                    }
+                }
+                else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
     String filePath="",fileNm="";
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch (requestCode) {
-            case 7:
-                if (resultCode == RESULT_OK) {
-                    filePath = data.getData().getPath();
-                    File f = new File(filePath);
-                    fileNm = f.getName();
-//                    Toast.makeText(AddMoneyTransactionDetail.this, PathHolder+" filename= "+filename, Toast.LENGTH_LONG).show();
-                    tvFileNm.setText(fileNm);
+//            case 7:
+//                if (resultCode == RESULT_OK) {
+////                    filePath = data.getData().getPath();
+////                    File f = new File(filePath);
+////                    fileNm = f.getName();
+//////                    Toast.makeText(AddMoneyTransactionDetail.this, PathHolder+" filename= "+filename, Toast.LENGTH_LONG).show();
+////                    tvFileNm.setText(fileNm);
+//
+//                   //image pickup
+//                    Uri selectedImageUri = data.getData();
+//                    filePath = getPath(selectedImageUri);
+//                    File f = new File(filePath);
+//                    fileNm = f.getName();
+//                    tvFileNm.setText(fileNm);
+//
+//                }
+//                break;
 
-//                    if(PathHolder.length()>60) {
-//                        tvFileNm.setText(PathHolder.substring(0,60)+"...");
-//                    }
-//                    else
-//                    {
-//                        tvFileNm.setText(PathHolder);
-//                    }
+            case 0://camera
+                if(resultCode == RESULT_OK){
+                  Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
+                    Uri selectedImage = getImageUri(getApplicationContext(), photo);
+
+                      //  Uri selectedImage = imageReturnedIntent.getData();
+                        filePath = getPath(selectedImage);
+                        File f = new File(filePath);
+                        fileNm = f.getName();
+                        tvFileNm.setText(fileNm);
+
                 }
                 break;
+            case 1://gallery
+                if(resultCode == RESULT_OK&& null != imageReturnedIntent){
+                    Uri selectedImage = imageReturnedIntent.getData();
+
+                    filePath = getPath(selectedImage);
+                    File f = new File(filePath);
+                    fileNm = f.getName();
+                    tvFileNm.setText(fileNm);
+
+                }
+
+
+                break;
         }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
     PrettyDialog prettyDialog=null;
     private void ShowNewAlert(Context context,String message) {
@@ -276,4 +393,60 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //            }
 //        }).show();
     }
+
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                File f = new File(Environment.getExternalStorageDirectory().toString());
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
+                    }
+                }
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                            bitmapOptions);
+//                    viewImage.setImageBitmap(bitmap);
+                    String path = android.os.Environment
+                            .getExternalStorageDirectory()
+                            + File.separator
+                            + "Phoenix" + File.separator + "default";
+                    f.delete();
+                    OutputStream outFile = null;
+                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    try {
+                        outFile = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
+                        outFile.flush();
+                        outFile.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == 2) {
+                Uri selectedImage = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                String picturePath = c.getString(columnIndex);
+                c.close();
+                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                Log.w("path of image from gallery......******************.........", picturePath+"");
+                viewImage.setImageBitmap(thumbnail);
+            }
+        }
+    }*/
 }

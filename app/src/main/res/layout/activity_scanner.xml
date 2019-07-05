@@ -56,10 +56,73 @@
                 android:textStyle="bold"
                 tool:ignore="MissingConstraints"/>
 
-            <view.customview.CustomTextView
+            <RelativeLayout
+                android:id="@+id/rl_tn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_5"
+                app:layout_constraintTop_toBottomOf="@+id/tvQR"
+
+
+                >
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="@dimen/margin_25"
+                    android:layout_height="@dimen/margin_25"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_persion"
+                    android:layout_centerVertical="true"
+                    />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tvRN"
+                    android:layout_width="fill_parent"
+                    android:layout_height="17dp"
+
+                    android:text="rn"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:layout_toRightOf="@+id/iv_icon"
+                    android:textStyle="normal"
+                    android:paddingLeft="@dimen/margin_10" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_nm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_5"
+                app:layout_constraintTop_toBottomOf="@+id/rl_tn"
+                >
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_name"
+                    android:layout_width="@dimen/margin_25"
+                    android:layout_height="@dimen/margin_25"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_persion"
+                    android:layout_centerVertical="true"
+                    />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="17dp"
+
+                    android:text="name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:layout_toRightOf="@+id/iv_name"
+                    android:textStyle="normal"
+                    android:paddingLeft="@dimen/margin_10" />
+            </RelativeLayout>
+
+
+<!--
+ <view.customview.CustomTextView
                 android:id="@+id/tvRN"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="17dp"
                 android:layout_marginTop="@dimen/margin_5"
                 android:drawableLeft="@drawable/ic_persion"
                 android:drawablePadding="@dimen/margin_10"
@@ -67,8 +130,9 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_normal"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@+id/tvQR"
-                tool:ignore="MissingConstraints"/>
+
+                tool:ignore="MissingConstraints"
+                tool:layout_editor_absoluteX="10dp" />-->
 
             <view.customview.CustomTextView
                 android:id="@+id/tvAddress"
@@ -77,12 +141,43 @@
                 android:layout_marginTop="@dimen/margin_5"
                 android:drawableLeft="@drawable/ic_location"
                 android:drawablePadding="@dimen/margin_10"
-                android:text=""
+                android:text="address"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_normal"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@+id/tvRN"
+                app:layout_constraintTop_toBottomOf="@+id/rl_nm"
                 tool:ignore="MissingConstraints"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_5"
+                app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+                >
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_phone"
+                    android:layout_width="@dimen/margin_25"
+                    android:layout_height="@dimen/margin_25"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_persion"
+                    android:layout_centerVertical="true"
+                    />
+
+                <view.customview.CustomTextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="17dp"
+
+                    android:text="phone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:layout_toRightOf="@+id/iv_phone"
+                    android:textStyle="normal"
+                    android:paddingLeft="@dimen/margin_10" />
+            </RelativeLayout>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
@@ -97,25 +192,54 @@
         app:gvb_code_format="all_format"
         app:gvb_flash="false"
         app:gvb_rect_colors="@array/rect_color"
-        app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+        app:layout_constraintBottom_toTopOf="@+id/rl_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/margin_20"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        >
+
     <view.customview.CustomButton
         android:id="@+id/btnCancel"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/margin_40"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginEnd="@dimen/margin_20"
-        android:layout_marginBottom="@dimen/margin_20"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="@drawable/round_button"
-        android:text="Cancel"
+        android:text="Back"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_normal"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_toLeftOf="@+id/view"
+       />
+        <View
+            android:id="@+id/view"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+        <view.customview.CustomButton
+            android:id="@+id/btnNavi"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/round_button"
+            android:text="Navigate"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="normal"
+            android:layout_toRightOf="@+id/view"
+            android:layout_marginLeft="10dp"
+            />
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package presenter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,9 +31,9 @@ public class DeviceTokenPresenter {
     }
 
     public interface SaveDeviceToken{
-        void success(String response);
-        void error(String response);
-        void fail(String response);
+        void success(String response,String check);
+        void error(String response,String check);
+        void fail(String response,String check);
     }
 
     public void SaveToken(final String devicetoken) {
@@ -49,20 +50,21 @@ public class DeviceTokenPresenter {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
                     if(status == 1){
-                        saveToken.success(reader.getString("message"));
+                        Log.e("","shyam token message= "+reader.getString("message"));
+                        saveToken.success(reader.getString("message"),"token");
                     }else if(status == 0){
-                       saveToken.error(reader.getString("message"));
+                       saveToken.error(reader.getString("message"),"token");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    saveToken.fail("Something went wrong. Please try after some time.");
+                    saveToken.fail("Something went wrong. Please try after some time.","token");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                saveToken.fail("Server Error.\n Please try after some time.");
+                saveToken.fail("Server Error.\n Please try after some time.","token");
             }
         }
         ) {

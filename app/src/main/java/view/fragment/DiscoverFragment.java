@@ -87,7 +87,7 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
 
 //        Places.initialize(getContext(), "AIzaSyCVBn21qaBTnSmxNUYDE3obEKqalu2NeEg");
 //        Places.initialize(getContext(), getString(R.string.google_api_key));
-        Places.initialize(getActivity(),getString(R.string.google_api_key));
+        Places.initialize(getActivity(),getString(R.string.google_api_key1));
         placesClient = Places.createClient(getActivity());
         initView();
 

@@ -8,6 +8,51 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:911296867357:android:a56c47f497ca379d",
+        "android_client_info": {
+          "package_name": "com.oms.travelcashagent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911296867357-olenltq5h2bf11nugn41579ed5ka71t5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oms.travelcashagent",
+            "certificate_hash": "f1e5eb6f5190c7fc931ec84f13003e6bc5a74ab9"
+          }
+        },
+        {
+          "client_id": "911296867357-1ft89t0k8kruio5ttm05nqq5o6sba30k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oms.travelcashagent",
+            "certificate_hash": "a19a5a0e7736f8210487398a209932e346ddd789"
+          }
+        },
+        {
+          "client_id": "911296867357-m5pr6qkbriefios7p74t3s170opalk6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApwC4dO_O88k5qcetnFzDzXPovISnQnWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911296867357-m5pr6qkbriefios7p74t3s170opalk6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:911296867357:android:882a35808dfc5a56",
         "android_client_info": {
           "package_name": "com.travelcash"
@@ -15,24 +60,36 @@
       },
       "oauth_client": [
         {
-          "client_id": "911296867357-0tqjs8mh1epcsouogh7t65p6el2d4rim.apps.googleusercontent.com",
+          "client_id": "911296867357-ocqva8o06koso78rp7mpf9bd2jpnal1c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.travelcash",
-            "certificate_hash": "beb52f5558e6fe5098c357141d57dee9c4ecf930"
+            "certificate_hash": "f1e5eb6f5190c7fc931ec84f13003e6bc5a74ab9"
           }
+        },
+        {
+          "client_id": "911296867357-vq2l76hn5jdr0le80mbs5m4gggrfvf2v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travelcash",
+            "certificate_hash": "a19a5a0e7736f8210487398a209932e346ddd789"
+          }
+        },
+        {
+          "client_id": "911296867357-m5pr6qkbriefios7p74t3s170opalk6e.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDsqTAlspygMwlA2DgJ4BAjptECOWdO1Vc"
+          "current_key": "AIzaSyApwC4dO_O88k5qcetnFzDzXPovISnQnWA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "911296867357-umkr29aird6seaoqj0pvlpju5rmlstoa.apps.googleusercontent.com",
+              "client_id": "911296867357-m5pr6qkbriefios7p74t3s170opalk6e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

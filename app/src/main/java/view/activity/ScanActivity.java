@@ -55,7 +55,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     private AppCompatImageView imageView;
     private CustomButton btnCancel;
     private BarcodeCapture barcodeCapture;
-    private AppCompatTextView tvRN, tvAddress;
+    private AppCompatTextView tvRN, tvAddress,tvName,tvPhone;
     private ScanActivityPresenter scanActivityPresenter;
     private String amount = "", request_id = "", agent_request_id = "", agentId = "";
     private CancelOrderPresenter cancelOrderPresenter;
@@ -77,6 +77,10 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         toolbar = findViewById(R.id.toolbar);
         tvRN = findViewById(R.id.tvRN);
         tvAddress = findViewById(R.id.tvAddress);
+        tvName = findViewById(R.id.tv_name);
+        tvPhone = findViewById(R.id.tv_phone);
+
+
         imageView = toolbar.findViewById(R.id.imgBack);
         btnCancel = findViewById(R.id.btnCancel);
         imageView.setOnClickListener(this);
@@ -101,9 +105,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == btnCancel) {
-            ShowNewAlert(this,"Do you want to proceed cancel order?",agent_request_id);
-//            finish();
-//            Animatoo.animateSlideRight(ScanActivity.this);
+//            ShowNewAlert(this,"Do you want to proceed cancel order?",agent_request_id);
+            finish();
+            Animatoo.animateSlideRight(ScanActivity.this);
         } else if (v == imageView) {
             finish();
             Animatoo.animateSlideRight(ScanActivity.this);
@@ -184,6 +188,11 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
                         request_id = jsonObject.getString("request_id");
                         tvRN.setText("Request Number : " + jsonObject.getString("request_id"));
                         tvAddress.setText(jsonObject.getString("agent_address"));
+
+                        tvName.setText(jsonObject.getString("agent_name"));
+                        tvPhone.setText(jsonObject.getString("agent_mobile_number"));
+
+
                     } else if (status == 0) {
                         showDialog(reader.getString("message"));
                     }
@@ -213,19 +222,22 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         RequestQueue queue = Volley.newRequestQueue(ScanActivity.this);
         queue.add(postRequest);
     }
-
+//
     @Override
     public void success(String response, String user_withdraw_id) {
 
         Log.e("","user_withdraw_id= "+user_withdraw_id+" response= "+response);
 
-        Intent intent = new Intent(getApplicationContext(), TransactionDetail.class);
-        intent.putExtra("flagPurchase", "1");
-        intent.putExtra("transactionId", user_withdraw_id);
-        intent.putExtra("mode", "Total Cash Withdraw");
-        startActivity(intent);
-        finish();
-        Animatoo.animateSplit(ScanActivity.this);
+//        Intent intent = new Intent(getApplicationContext(), TransactionDetail.class);
+//        intent.putExtra("flagPurchase", "1");
+//        intent.putExtra("transactionId", user_withdraw_id);
+//        intent.putExtra("mode", "Total Cash Withdraw");
+//        startActivity(intent);
+//
+//        finish();
+//        Animatoo.animateSplit(ScanActivity.this);
+
+        SuccessMsgAlert(this,response);
     }
 
 
@@ -301,6 +313,35 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }).show();
+    }
+
+    PrettyDialog SuccessMsgDlg=null;
+    private void SuccessMsgAlert(Context context,String message) {
+        if(SuccessMsgDlg!=null)
+        {
+            SuccessMsgDlg.dismiss();
+        }
+        SuccessMsgDlg = new PrettyDialog(context);
+        SuccessMsgDlg.setCanceledOnTouchOutside(false);
+        TextView title = (TextView) SuccessMsgDlg.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+        TextView tvmessage = (TextView) SuccessMsgDlg.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+        title.setTextSize(15);
+        tvmessage.setTextSize(15);
+        SuccessMsgDlg.setIconTint(R.color.colorPrimary);
+        SuccessMsgDlg.setIcon(R.drawable.pdlg_icon_info);
+        SuccessMsgDlg.setTitle("");
+        SuccessMsgDlg.setMessage(message);
+        SuccessMsgDlg.setAnimationEnabled(false);
+        SuccessMsgDlg.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        SuccessMsgDlg.addButton("Ok", R.color.black, R.color.white, new PrettyDialogCallback() {
+            @Override
+            public void onClick() {
+                SuccessMsgDlg.dismiss();
+                finish();
+                Animatoo.animateSlideRight(ScanActivity.this);
+            }
+        }).show();
+
     }
 
 }

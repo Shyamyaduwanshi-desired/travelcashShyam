@@ -24,6 +24,7 @@
 
 
     >
+
             <view.customview.CustomTextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_size_normal" />
 
-            <view.customview.CustomTextView
+            <view.customview.CustomTextViewBold
                 android:id="@+id/tv_nm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
