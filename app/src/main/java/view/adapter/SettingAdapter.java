@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.travelcash.R;
@@ -35,6 +36,16 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.imageView.setImageResource(mList.get(position).getImage());
         holder.tvTitle.setText(mList.get(position).getName());
+//        if(position==3||position==4)
+//        {
+//            holder.rlMain.setVisibility(View.GONE);
+//        }
+//        else
+//        {
+//            holder.rlMain.setVisibility(View.VISIBLE);
+//        }
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,11 +62,13 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.MyViewHo
     protected class MyViewHolder extends RecyclerView.ViewHolder {
         public CustomTextViewBold tvTitle;
         private AppCompatImageView imageView;
+        RelativeLayout rlMain;
 
         public MyViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.imageView);
             tvTitle = view.findViewById(R.id.tvTitle);
+            rlMain = view.findViewById(R.id.rl_main);
         }
     }
 

@@ -334,7 +334,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
 
             case R.id.tvTwo:
 //                add(2000000);
-                Myadd(2000000);
+                Myadd(2000000);//2000000
                 break;
 
             case R.id.edtSearchLocation:
@@ -704,7 +704,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
         sAmount=value;
-        if(amt<=(10000000-sAmount))
+        if(amt<=(2000000-sAmount))//200000 ,10000000
         {
         int val = amt + value;
         DecimalFormat df = new DecimalFormat("#,###,###,###");
@@ -712,7 +712,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         tvAmount.setText("" + df.format(dd));
         }
         else {
-            showDialog("Please enter an amount lower than maximum transaction of 10,000,000.");
+            showDialog("Please enter an amount lower than maximum transaction of 2,000,000.");//10,000,000.
         }
     }
     private void Myadd() {
@@ -723,7 +723,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
        {
            sAmount=100000;
        }
-        if(amt<=(10000000-sAmount))
+        if(amt<=(2000000-sAmount))
         {
            int val = amt + sAmount;
            DecimalFormat df = new DecimalFormat("#,###,###,###");
@@ -731,7 +731,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
            tvAmount.setText("" + df.format(dd));
        }
        else {
-           showDialog("Please enter an amount lower than maximum transaction of 10,000,000.");
+           showDialog("Please enter an amount lower than maximum transaction of 2,000,000.");
        }
     }
 

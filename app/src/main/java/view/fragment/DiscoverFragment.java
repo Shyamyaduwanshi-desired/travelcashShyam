@@ -395,46 +395,51 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
 
     PrettyDialog prettyDialog=null;
     private void ShowNewAlert(String message) {
-        if(prettyDialog!=null)
-        {
-            prettyDialog.dismiss();
+
+        try {
+            if(prettyDialog!=null)
+            {
+                prettyDialog.dismiss();
+            }
+            prettyDialog = new PrettyDialog(getContext());
+            prettyDialog.setCanceledOnTouchOutside(false);
+            TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
+            TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
+            title.setTextSize(15);
+            tvmessage.setTextSize(15);
+            prettyDialog.setIconTint(R.color.colorPrimary);
+            prettyDialog.setIcon(R.drawable.pdlg_icon_info);
+            prettyDialog.setTitle("");
+            prettyDialog.setMessage(message);
+            prettyDialog.setAnimationEnabled(false);
+            prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
+                @Override
+                public void onClick() {
+                    prettyDialog.dismiss();
+
+                }
+            }).show();
+
+            prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
+                @Override
+                public void onClick() {
+                    prettyDialog.dismiss();
+                    locationProvider.stopTrackingLocation();
+                    startAutocompleteActivity();
+
+
+    //                if (isNetworkConnected()) {
+    //                    presenter.getVendorWithPromo(latitude, longitude);
+    //                }
+    //                else {
+    //                    showDialog("Please connect to internet");
+    //                }
+                }
+            }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        prettyDialog = new PrettyDialog(getContext());
-        prettyDialog.setCanceledOnTouchOutside(false);
-        TextView title = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_title);
-        TextView tvmessage = (TextView) prettyDialog.findViewById(libs.mjn.prettydialog.R.id.tv_message);
-        title.setTextSize(15);
-        tvmessage.setTextSize(15);
-        prettyDialog.setIconTint(R.color.colorPrimary);
-        prettyDialog.setIcon(R.drawable.pdlg_icon_info);
-        prettyDialog.setTitle("");
-        prettyDialog.setMessage(message);
-        prettyDialog.setAnimationEnabled(false);
-        prettyDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        prettyDialog.addButton("Cancel", R.color.black, R.color.white, new PrettyDialogCallback() {
-            @Override
-            public void onClick() {
-                prettyDialog.dismiss();
-
-            }
-        }).show();
-
-        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
-            @Override
-            public void onClick() {
-                prettyDialog.dismiss();
-                locationProvider.stopTrackingLocation();
-                startAutocompleteActivity();
-
-
-//                if (isNetworkConnected()) {
-//                    presenter.getVendorWithPromo(latitude, longitude);
-//                }
-//                else {
-//                    showDialog("Please connect to internet");
-//                }
-            }
-        }).show();
     }
     public void setCurLoc()
     {

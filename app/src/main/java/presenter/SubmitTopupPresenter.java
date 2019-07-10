@@ -59,14 +59,14 @@ public class SubmitTopupPresenter {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    topup.fail("Something went wrong. Please try after some time.");
+                    topup.fail("Please upload file type: pdf, JPEG, jpg and png");//Something went wrong. Please try after some time111.
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                topup.fail("Server Error.\n Please try after some time.");
+                topup.fail("Server Error.\n Please try after some time.22");
             }
         }
         ) {

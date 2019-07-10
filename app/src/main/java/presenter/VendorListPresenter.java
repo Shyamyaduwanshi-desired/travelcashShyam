@@ -52,7 +52,9 @@ public class VendorListPresenter {
         StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "agentSortedList", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progress.dismiss();
+                if(progress!=null) {
+                    progress.dismiss();
+                }
                 try {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
@@ -89,7 +91,9 @@ public class VendorListPresenter {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismiss();
+                if(progress!=null) {
+                    progress.dismiss();
+                }
                 agent.fail("Server Error.\n Please try after some time.");
             }
         }

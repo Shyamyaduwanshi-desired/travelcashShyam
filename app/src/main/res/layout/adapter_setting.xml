@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/margin_10">
+    android:padding="@dimen/margin_10"
+    android:id="@+id/rl_main"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="@dimen/margin_180"

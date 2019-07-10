@@ -141,7 +141,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void run() {
                     if (isNetworkConnected())
-                        scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
+                        scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId,agent_request_id);
                     else
                         showDialog("Please connect to internet");
 //                    scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
@@ -194,7 +194,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "giveRequestNumber", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progress.dismiss();
+                if(progress!=null) {
+                    progress.dismiss();
+                }
                 try {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
@@ -219,7 +221,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismiss();
+                if(progress!=null) {
+                    progress.dismiss();
+                }
                 showDialog("Server Error.\n Please try after some time.");
             }
         }

@@ -37,12 +37,15 @@ import constant.AppData;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Setting;
+import view.activity.ActAbout;
+import view.activity.ActAboutWeb;
 import view.activity.ActDonate;
 import view.activity.ActReferal;
 import view.activity.ChangePassword;
 import view.activity.ChangePin;
 import view.activity.LoginActivity;
 import view.activity.QRActivity;
+import view.activity.TransferToBank;
 import view.activity.TransferToFriend;
 import view.adapter.SettingAdapter;
 
@@ -108,25 +111,28 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
         mList.add(setting);
         setting = new Setting(R.drawable.ic_people, "Transfer to Friend");//2
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_donate, "Donate");//3
+
+//        setting = new Setting(R.drawable.ic_donate, "Donate");//3
+//        mList.add(setting);
+//        setting = new Setting(R.drawable.ic_promotions, "Promotion");//4
+//        mList.add(setting);
+
+        setting = new Setting(R.drawable.ic_about, "About");//3
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_promotions, "Promotion");//4
+        setting = new Setting(R.drawable.ic_format, "Help");//4
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_about, "About");//5
+        setting = new Setting(R.drawable.ic_lock, "Privacy Policy");//5
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_format, "Help");//6
+        setting = new Setting(R.drawable.ic_kay, "Change Password");//6
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_lock, "Privacy Policy");//7
+        setting = new Setting(R.drawable.ic_eye, "Change Pin");//7
         mList.add(setting);
-        setting = new Setting(R.drawable.ic_kay, "Change Password");//8
-        mList.add(setting);
-        setting = new Setting(R.drawable.ic_eye, "Change Pin");//9
-        mList.add(setting);
-        setting = new Setting(R.drawable.ic_exit, "Logout");//10
+        setting = new Setting(R.drawable.ic_exit, "Logout");//8
         mList.add(setting);
 
         mAdapter.notifyDataSetChanged();
     }
+    int diff=0;
     @Override
     public void itemClick(int position) {
         switch (position) {
@@ -136,7 +142,33 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
 
                 break;
 
-            case 2://Transfer to Friend
+            case 1://Transfer to Bank
+
+                final BottomDialog dialog1 = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
+                dialog1.show(getFragmentManager(), "dialog");
+                dialog1.setCancelable(false);
+                //add item click listener
+                dialog1.setListener(new BottomDialog.OnClickListener() {
+                    @Override
+                    public void click(int position) {
+                        if (position == 0) {
+                            Intent intent = new Intent(getContext(), TransferToBank.class);
+                            intent.putExtra("flagPurchase", "qr");
+                            startActivity(intent);
+                            dialog1.dismiss();
+                            Animatoo.animateSwipeRight(getContext());
+                        } else {
+                            Intent intent = new Intent(getContext(), TransferToBank.class);
+                            intent.putExtra("flagPurchase", "username");
+                            startActivity(intent);
+                            dialog1.dismiss();
+                            Animatoo.animateSwipeRight(getContext());
+                        }
+                    }
+                });
+                break;
+
+                case 2://Transfer to Friend
                 final BottomDialog dialog = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
                 dialog.show(getFragmentManager(), "dialog");
                 dialog.setCancelable(false);
@@ -161,25 +193,42 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
                 });
                 break;
 
-            case 3://donate
-                startActivity(new Intent(getContext(), ActDonate.class));
-
-                Animatoo.animateSwipeRight(getContext());
-                break;
-           case 8://Change Password
+//            case 3://donate
+//                startActivity(new Intent(getContext(), ActDonate.class));
+//
+//                Animatoo.animateSwipeRight(getContext());
+//                break;
+           case 3://about
+               diff=1;
+               NaviAbout(diff);
+               break;
+           case 4://Help
+               diff=2;
+               NaviAbout(diff);
+               break;
+           case 5://privacy policy
+               diff=3;
+               NaviAbout(diff);
+               break;
+          case 6://Change Password
                 startActivity(new Intent(getContext(), ChangePassword.class));
                 Animatoo.animateSwipeRight(getContext());
                 break;
 
-            case 9://Change Pin
+            case 7://Change Pin
                 startActivity(new Intent(getContext(), ChangePin.class));
                 Animatoo.animateSplit(getContext());
                 break;
 
-            case 10://Logout
+            case 8://Logout
                 showAlert("Are you sure want to logout?");
                 break;
         }
+    }
+    public void NaviAbout(int diff_1)
+    {
+        startActivity(new Intent(getContext(), ActAbout.class).putExtra("diff_",diff_1));
+        Animatoo.animateSwipeRight(getContext());
     }
 
     private void showAlert(String message) {

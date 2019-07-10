@@ -36,7 +36,7 @@ public class ScanActivityPresenter {
         void fail(String response);
     }
 
-    public void verifyAgentQrCode(final String qr, final String amount, final String requestID, final String agentID) {
+    public void verifyAgentQrCode(final String qr, final String amount, final String requestID, final String agentID, final String agent_received_request_id) {
         final ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage("Please Wait..");
         progress.setCancelable(false);
@@ -76,6 +76,7 @@ public class ScanActivityPresenter {
                 params.put("qrCodeInfo", qr);
                 params.put("request_amount", amount);
                 params.put("request_id", requestID);
+                params.put("agent_recieved_request_id", agent_received_request_id);
                 Log.e("","enput data verify QRcode= "+params.toString());
 //                agent_id,user_id,qrCodeInfo,request_amount,request_id
                 return params;

@@ -104,6 +104,18 @@
             android:name="view.activity.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name="view.activity.ActAboutWeb"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name="view.activity.ActAbout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name="view.activity.TransferToBank"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
 
         <activity
             android:name="view.activity.ConfirmCashpoint"
