@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +75,7 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     private String latitude = "", longitude = "";
     private ArrayList<Vendor> response;
     PlacesClient placesClient;
+    RelativeLayout rlCurLoc;
 
     public static DiscoverFragment getInstance() {
         discoverFragment = new DiscoverFragment();
@@ -111,10 +113,13 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         btnWithPurchase = view.findViewById(R.id.btnWithPurchase);
         btnWithPromo = view.findViewById(R.id.btnWithPromo);
         btnAll = view.findViewById(R.id.btnAll);
+        rlCurLoc = view.findViewById(R.id.rl_location);
+
         edtSearchLocation.setOnClickListener(this);
         btnWithPurchase.setOnClickListener(this);
         btnWithPromo.setOnClickListener(this);
         btnAll.setOnClickListener(this);
+        rlCurLoc.setOnClickListener(this);
 
         RecyclerView.LayoutManager cLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(cLayoutManager);
@@ -349,7 +354,23 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         if (v == edtSearchLocation) {
             locationProvider.stopTrackingLocation();
             startAutocompleteActivity();
-        } else if (v == btnWithPromo) {
+        } else if (v == rlCurLoc) {
+            latitude="0.0";
+            longitude="0.0";
+            tvLocation.setText("");
+            setCurLoc();
+
+//            if(locationProvider!=null)
+//                locationProvider.startTrackingLocation();
+////                Toast.makeText(getActivity(), "latitude= "+latitude+" longitude= "+longitude, Toast.LENGTH_SHORT).show();
+//
+//            if (isNetworkConnected()) {
+//                presenter.getVendor(latitude, longitude);
+//            } else {
+//                showDialog("Please connect to internet.");
+//            }
+        }
+        else if (v == btnWithPromo) {
             if (isNetworkConnected())
                 presenter.getVendorWithPromo(latitude, longitude);
             else
@@ -394,9 +415,6 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
             @Override
             public void onClick() {
                 prettyDialog.dismiss();
-                locationProvider.stopTrackingLocation();
-                startAutocompleteActivity();
-
 
             }
         }).show();
@@ -405,13 +423,41 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
             @Override
             public void onClick() {
                 prettyDialog.dismiss();
-                if (isNetworkConnected()) {
-                    presenter.getVendorWithPromo(latitude, longitude);
-                }
-                else {
-                    showDialog("Please connect to internet");
-                }
+                locationProvider.stopTrackingLocation();
+                startAutocompleteActivity();
+
+
+//                if (isNetworkConnected()) {
+//                    presenter.getVendorWithPromo(latitude, longitude);
+//                }
+//                else {
+//                    showDialog("Please connect to internet");
+//                }
             }
         }).show();
+    }
+    public void setCurLoc()
+    {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkLocationPermission()) {
+                LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivityForResult(intent, 101);
+                } else {
+                    initLocation();
+                }
+            } else {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+            }
+        } else {
+            LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, 101);
+            } else {
+                initLocation();
+            }
+        }
     }
 }

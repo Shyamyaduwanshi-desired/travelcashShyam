@@ -1,10 +1,12 @@
 package view.activity;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +15,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
@@ -43,6 +46,7 @@ import constant.AppData;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.AddMoneyModel;
+import presenter.AgentLocPresenter;
 import presenter.CancelOrderPresenter;
 import presenter.ScanActivityPresenter;
 import view.customview.CustomButton;
@@ -50,15 +54,16 @@ import view.fragment.DynamicFragment;
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever;
 
 
-public class ScanActivity extends AppCompatActivity implements View.OnClickListener, BarcodeRetriever, ScanActivityPresenter.Scan, CancelOrderPresenter.CancelInfo {
+public class ScanActivity extends AppCompatActivity implements View.OnClickListener, BarcodeRetriever, ScanActivityPresenter.Scan, CancelOrderPresenter.CancelInfo, AgentLocPresenter.ShowAgentLoc {
     private Toolbar toolbar;
     private AppCompatImageView imageView;
-    private CustomButton btnCancel;
+    private CustomButton btnCancel,btnNavi;
     private BarcodeCapture barcodeCapture;
     private AppCompatTextView tvRN, tvAddress,tvName,tvPhone;
     private ScanActivityPresenter scanActivityPresenter;
     private String amount = "", request_id = "", agent_request_id = "", agentId = "";
     private CancelOrderPresenter cancelOrderPresenter;
+    private AgentLocPresenter agenlocPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +72,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
         cancelOrderPresenter = new CancelOrderPresenter(this, this);
         scanActivityPresenter = new ScanActivityPresenter(this, this);
+        agenlocPresenter = new AgentLocPresenter(this, this);
         amount = getIntent().getStringExtra("amount");
         agent_request_id = getIntent().getStringExtra("agent_recieved_request_id");
         agentId = getIntent().getStringExtra("agent_id");
@@ -83,8 +89,10 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
         imageView = toolbar.findViewById(R.id.imgBack);
         btnCancel = findViewById(R.id.btnCancel);
+        btnNavi = findViewById(R.id.btn_navi);
         imageView.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        btnNavi.setOnClickListener(this);
 
         barcodeCapture = (BarcodeCapture) getSupportFragmentManager().findFragmentById(R.id.barcode);
         barcodeCapture.setRetrieval(this);
@@ -108,7 +116,15 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 //            ShowNewAlert(this,"Do you want to proceed cancel order?",agent_request_id);
             finish();
             Animatoo.animateSlideRight(ScanActivity.this);
-        } else if (v == imageView) {
+        } else if (v == btnNavi) {
+
+            if (isNetworkConnected()) {//navigate
+                agenlocPresenter.GetAgentLoc(agentId);
+            }
+            else {
+                showDialog("Please connect to internet");
+            }
+        }else if (v == imageView) {
             finish();
             Animatoo.animateSlideRight(ScanActivity.this);
         }
@@ -119,17 +135,16 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         barcodeCapture.stopScanning();
         amount = amount.replaceAll(",", "");
         Log.e("","amount= "+amount+" request_id= "+request_id+" barcode.displayValue= "+barcode.displayValue);
-//        if (isNetworkConnected())
-//            scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id);
-//        else
-//            showDialog("Please connect to internet");
+
         if (isNetworkConnected()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
-
+                    if (isNetworkConnected())
+                        scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
+                    else
+                        showDialog("Please connect to internet");
+//                    scanActivityPresenter.verifyAgentQrCode(barcode.displayValue, amount, request_id, agentId);
                 }
             });
         }
@@ -343,5 +358,30 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         }).show();
 
     }
+    //for navigate presnter
+    @Override
+    public void success(String response, String lati, String longi) {
+        if(TextUtils.isEmpty(lati)||TextUtils.isEmpty(longi)) {
+            Toast.makeText(this, "not found latitude and longitude", Toast.LENGTH_SHORT).show();
+        }else
+        {
 
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=" + lati + "," + longi));
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(this, "Please install a maps application", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    //for navigate presnter
+    @Override
+    public void error(String response, String check) {
+
+    }
+    //for navigate presnter
+    @Override
+    public void fail(String response, String check) {
+
+    }
 }

@@ -73,8 +73,9 @@ public class ChangePassword extends AppCompatActivity implements ChangePasswordP
                     showAlert("Please enter old password.");
                 } else if (TextUtils.isEmpty(newPass)) {
                     showAlert("Please enter new password");
-                } else if (!isValidPassword(newPass) || newPass.length() < 8) {
-                    showAlert("Your wallet balance is less than transaction amount, Please Add money to Wallet and continue with transaction");
+                } else if (newPass.length() < 8) {//!isValidPassword(newPass) ||
+               showAlert("Your password length min 9 character");
+//                    showAlert("Your wallet balance is less than transaction amount, Please Add money to Wallet and continue with transaction");
                 } else if (TextUtils.isEmpty(confPass)) {
                     showAlert("Please enter confirm password");
                 } else if (!newPass.equals(confPass)) {

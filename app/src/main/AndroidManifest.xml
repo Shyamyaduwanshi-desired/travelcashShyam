@@ -89,6 +89,12 @@
         <activity
             android:name="view.activity.ScanActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="view.activity.ActDonate"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="view.activity.ActReferal"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="view.activity.TransactionDetail"

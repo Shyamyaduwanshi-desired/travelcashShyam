@@ -18,75 +18,61 @@ import java.util.HashMap;
 import java.util.Map;
 
 import constant.AppData;
-import model.AddMoneyModel;
-import model.SubmitTopup;
 
-public class SubmitTopupPresenter {
+public class AgentLocPresenter {
     private Context context;
-    private SubmitTopup topup;
+    private ShowAgentLoc saveToken;
     private AppData appData;
 
-    public SubmitTopupPresenter(Context context, SubmitTopup topup) {
+    public AgentLocPresenter(Context context, ShowAgentLoc saveToken) {
         this.context = context;
-        this.topup = topup;
+        this.saveToken = saveToken;
         appData = new AppData(context);
     }
 
-    public interface SubmitTopup{
-        void success(String response);
-        void error(String response);
-        void fail(String response);
+    public interface ShowAgentLoc{
+        void success(String response, String lati, String longi);
+        void error(String response, String check);
+        void fail(String response, String check);
     }
 
-    public void SubmitTopupRequest(final model.SubmitTopup model) {
+    public void GetAgentLoc(final String agentid) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Upload Data Please Wait..");
+        progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
-//        https://omsoftware.org/cashapp/api/submitTopUpRequest
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "submitTopUpRequest", new Response.Listener<String>() {
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "getAgentLatLong", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();
                 try {
                     JSONObject reader = new JSONObject(response);
                     int status = reader.getInt("status");
-                    Log.e("","upload topup json = "+reader.toString());
                     if(status == 1){
-                        topup.success(reader.getString("message")+"\r\n"+reader.getString("transaction_id"));
+                        Log.e("","agent loc lati= "+reader.getString("latitude")+"agent loc longi= "+reader.getString("longitude"));
+                        saveToken.success("success",reader.getString("latitude"),reader.getString("longitude"));
                     }else if(status == 0){
-                        topup.error(reader.getString("message"));
+                       saveToken.error(reader.getString("message"),"not found agent data");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    topup.fail("Something went wrong. Please try after some time.");
+                    saveToken.fail("Something went wrong. Please try after some time.","token");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                topup.fail("Server Error.\n Please try after some time.");
+                saveToken.fail("Server Error.\n Please try after some time.","token");
             }
         }
         ) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", appData.getUserID());
-                params.put("amount", model.getAmount());
-                params.put("extension", model.getExtentionfile());
-
-                if(model.getExtentionfile().equals("pdf")||model.getExtentionfile().equals("PDF"))
-                {
-                    params.put("pdf",  model.getFileurl());
-                }
-                else {
-                    params.put("proof_file", model.getFileurl());
-                }
-
+                params.put("agent_id", agentid);
                 Log.e("",""+params.toString());
-
                 return params;
             }
         };
@@ -94,6 +80,4 @@ public class SubmitTopupPresenter {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(postRequest);
     }
-
-
 }

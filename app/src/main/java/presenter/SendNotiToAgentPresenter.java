@@ -18,74 +18,64 @@ import java.util.HashMap;
 import java.util.Map;
 
 import constant.AppData;
-import model.AddMoneyModel;
-import model.SubmitTopup;
 
-public class SubmitTopupPresenter {
+public class SendNotiToAgentPresenter {
     private Context context;
-    private SubmitTopup topup;
+    private SendNoti sendNotification;
     private AppData appData;
 
-    public SubmitTopupPresenter(Context context, SubmitTopup topup) {
+    public SendNotiToAgentPresenter(Context context, SendNoti sendNotification) {
         this.context = context;
-        this.topup = topup;
+        this.sendNotification = sendNotification;
         appData = new AppData(context);
     }
 
-    public interface SubmitTopup{
-        void success(String response);
-        void error(String response);
-        void fail(String response);
+    public interface SendNoti{
+        void success(String response, String check);
+        void error(String response, String check);
+        void fail(String response, String check);
     }
 
-    public void SubmitTopupRequest(final model.SubmitTopup model) {
+    public void SendNotificationTOAgent(final String devicetoken) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Upload Data Please Wait..");
+        progress.setMessage("Please Wait..");
         progress.setCancelable(false);
         progress.show();
-//        https://omsoftware.org/cashapp/api/submitTopUpRequest
-        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.url + "submitTopUpRequest", new Response.Listener<String>() {
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, AppData.noti_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progress.dismiss();
                 try {
                     JSONObject reader = new JSONObject(response);
-                    int status = reader.getInt("status");
-                    Log.e("","upload topup json = "+reader.toString());
+                    int status = reader.getInt("success");
                     if(status == 1){
-                        topup.success(reader.getString("message")+"\r\n"+reader.getString("transaction_id"));
+                        String msg=reader.getJSONArray("results").getJSONObject(0).getString("message_id");
+                        Log.e("","shyam send noti= "+reader.getString("message"));
+                        sendNotification.success(reader.getString("success"),msg);
                     }else if(status == 0){
-                        topup.error(reader.getString("message"));
+                       sendNotification.error(reader.getString("message"),"no data");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    topup.fail("Something went wrong. Please try after some time.");
+                    sendNotification.fail("Something went wrong. Please try after some time.","token");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                topup.fail("Server Error.\n Please try after some time.");
+                sendNotification.fail("Server Error.\n Please try after some time.","token");
             }
-        }
-        ) {
+        })
+
+        {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", appData.getUserID());
-                params.put("amount", model.getAmount());
-                params.put("extension", model.getExtentionfile());
-
-                if(model.getExtentionfile().equals("pdf")||model.getExtentionfile().equals("PDF"))
-                {
-                    params.put("pdf",  model.getFileurl());
-                }
-                else {
-                    params.put("proof_file", model.getFileurl());
-                }
-
-                Log.e("",""+params.toString());
+                params.put("device_token", devicetoken);
+                params.put("device_type", "android");
 
                 return params;
             }
@@ -93,7 +83,9 @@ public class SubmitTopupPresenter {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(postRequest);
+
+//        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
-
-
 }

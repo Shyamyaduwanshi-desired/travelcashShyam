@@ -211,10 +211,11 @@ public class HistoryPresenter {
 
                             String status1 = object.getString("status");
                             String date = object.getString("request_date");
+                            String agentid = object.getString("user_request_agent_id");
 //                            Date date_change = input.parse(date);
 
 
-                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),"");
+                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),agentid);
 //                            String id, String date, String mode, String time, String amount
                             list.add(his);
                         }

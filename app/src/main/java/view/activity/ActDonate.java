@@ -1,0 +1,121 @@
+package view.activity;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Toast;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.travelcash.R;
+
+import presenter.TransferMoneyFriend;
+import view.customview.CustomButton;
+import view.customview.CustomEditText;
+
+public class ActDonate extends AppCompatActivity implements View.OnClickListener, TransferMoneyFriend.Transfer {
+    private Toolbar toolbar;
+    private AppCompatImageView imgBack;
+    private CustomButton btnContinue;
+    private TextInputLayout usernameLayout;
+    private CustomEditText edtUsername, edtAmount;
+//    private String flag;
+    private TransferMoneyFriend transferMoneyFriend;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.act_donate);
+
+        transferMoneyFriend = new TransferMoneyFriend(this, this);
+        initView();
+    }
+
+    private void initView() {
+        toolbar = findViewById(R.id.toolbar);
+        edtAmount = findViewById(R.id.edtAmount);
+        edtUsername = findViewById(R.id.edtUsername);
+        btnContinue = findViewById(R.id.btnContinue);
+
+        usernameLayout = findViewById(R.id.usernameLayout);
+        imgBack = toolbar.findViewById(R.id.imgBack);
+
+        imgBack.setOnClickListener(this);
+        btnContinue.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btnContinue) {
+            String username = edtUsername.getText().toString();
+            String amount = edtAmount.getText().toString();
+            if (username.isEmpty())
+                edtUsername.setError("Please enter username.");
+            else if (amount.isEmpty())
+                edtAmount.setError("Please enter amount to transfer.");
+            else if (isNetworkConnected()) {
+//                transferMoneyFriend.usingUsername(username, amount);
+//                showDialog("comming soon");
+                finish();
+                Animatoo.animateSlideRight(ActDonate.this);
+            }
+            else
+                showDialog("Please connect to internet.");
+
+        } else {
+            finish();
+            Animatoo.animateSlideRight(ActDonate.this);
+        }
+    }
+
+    private void showDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("")
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Animatoo.animateFade(ActDonate.this);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+    @Override
+    public void success(String response) {
+        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+        finish();
+        Animatoo.animateSlideRight(ActDonate.this);
+    }
+
+    @Override
+    public void error(String response) {
+        showDialog(response);
+    }
+
+    @Override
+    public void fail(String response) {
+        showDialog(response);
+    }
+}

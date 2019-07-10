@@ -17,6 +17,7 @@ import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class AppData {
     public static String url = "https://www.omsoftware.org/cashapp/api/";
+    public static String noti_url = "https://fcm.googleapis.com/fcm/send";
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     public static String image = "";
@@ -111,6 +112,14 @@ public class AppData {
 
     public String getWalletAmount() {
         return  sharedPref.getString("walletAmount", "0");
+    }
+    public void setReferalCode(String referalcode) {
+        editor.putString("referal_code", referalcode);
+        editor.commit();
+    }
+
+    public String getReferalCode() {
+        return  sharedPref.getString("referal_code", "0");
     }
 
 

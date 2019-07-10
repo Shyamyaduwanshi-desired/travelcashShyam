@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -81,6 +82,10 @@ public class DeviceTokenPresenter {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(postRequest);
+
+//        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
  /*   public void signInThroughSocialMedia(final String username, final String email, final String token) {

@@ -50,25 +50,15 @@ public class CompletedAdapter1 extends RecyclerView.Adapter<CompletedAdapter1.My
         {
             DecimalFormat df = new DecimalFormat("#,###,###,###");
             double dd = Double.parseDouble(history.getAmount());
-//            tvRate.setText("$1 To IDR "+df.format(dd));
             holder.tvAmount.setText("IDR " + df.format(dd));
         }
-//        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
+
         holder.tvStatus.setTypeface(null, Typeface.ITALIC);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(activity, TransactionDetail.class);
-//                intent.putExtra("flagPurchase", "1");
-//                intent.putExtra("transactionId", history.getID());
-//                intent.putExtra("mode", history.getMode());
-//                activity.startActivity(intent);
-//                Animatoo.animateCard(activity);
-
-
                 Intent intent = new Intent(activity, TransactionDetailNew.class);
-//                intent.putExtra("flagPurchase", "1");
                 intent.putExtra("transactionId", history.getID());
                 intent.putExtra("date", history.getDate());
                 intent.putExtra("amount", history.getAmount());

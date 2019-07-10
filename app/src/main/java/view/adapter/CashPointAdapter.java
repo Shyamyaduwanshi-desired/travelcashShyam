@@ -59,12 +59,7 @@ public class CashPointAdapter extends RecyclerView.Adapter<CashPointAdapter.MyVi
 //        holder.tvName.setText(mList.get(position).getShopName());
         holder.tvLocation.setText(mList.get(position).getDistance() + " KM");
         holder.tvAddress.setText(mList.get(position).getShopAddress());
-//        Glide.with(activity).load(mList.get(position).getShopImage()) .thumbnail(0.5f)
-//               /* .crossFade()
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .error(R.drawable.persion)*/
-//                .into(holder.imgShop);
+
         if(TextUtils.isEmpty(mList.get(position).getShopImage()))
         {
             holder.ivShopPic.setImageResource(R.drawable.persion);

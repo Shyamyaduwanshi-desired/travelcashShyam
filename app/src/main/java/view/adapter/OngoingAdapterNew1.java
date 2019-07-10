@@ -59,13 +59,16 @@ public class OngoingAdapterNew1 extends RecyclerView.Adapter<OngoingAdapterNew1.
 
         holder.tvStatus.setTypeface(null, Typeface.ITALIC);
 
-//        holder.tvTime.setText(history.getDate());
-//        holder.tvTime.setText(appData.ConvertTime(history.getDate()));
-
         holder.lyCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickable.onClick(history.getID());
+                clickable.onClick("cancel",history.getID());
+            }
+        });
+        holder.lyNavigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickable.onClick("navigate",history.getAgentId());
             }
         });
         holder.lyProceed.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +91,7 @@ public class OngoingAdapterNew1 extends RecyclerView.Adapter<OngoingAdapterNew1.
     }
 
     protected class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvAmount, tvDate, tvStatus, tvNm;//, tvTime
-//        CustomTextViewBold tvCancel, tvProceed;
+        public TextView tvAmount, tvDate, tvStatus, tvNm;
 LinearLayout lyProceed,lyCancel,lyNavigate;
         public MyViewHolder(View view) {
             super(view);
@@ -101,14 +103,10 @@ LinearLayout lyProceed,lyCancel,lyNavigate;
             lyProceed = (LinearLayout) view.findViewById(R.id.ly_proceed);
             lyCancel = (LinearLayout) view.findViewById(R.id.ly_cancel);
             lyNavigate = (LinearLayout) view.findViewById(R.id.ly_navigate);
-
-//            tvTime = (CustomTextView) view.findViewById(R.id.tv_time);
-//            tvCancel = (CustomTextViewBold) view.findViewById(R.id.tv_cancel);
-//            tvProceed = (CustomTextViewBold) view.findViewById(R.id.tv_proceed);
         }
     }
 
     public interface Clickable {
-        void onClick(String position);
+        void onClick(String diff, String position);
     }
 }

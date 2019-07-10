@@ -96,7 +96,8 @@ public class WalletFragment extends Fragment implements ShowWalletInfoPresenter.
 
     @Override
     public void success(ArrayList<ShowWalletInfoModel> arrayList, String walletAmount) {
-        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+//        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+        DecimalFormat df = new DecimalFormat( "#,###,###,###" );
 //        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
         double dd = Double.parseDouble(walletAmount);
         tvAmount.setText("" + df.format(dd));

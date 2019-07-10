@@ -1,8 +1,11 @@
 package view.fragment;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +30,20 @@ import java.util.ArrayList;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.HistoryModel;
+import presenter.AgentLocPresenter;
 import presenter.CancelOrderPresenter;
 import presenter.HistoryPresenter;
 import view.adapter.CancelledAdapter1;
 import view.adapter.CompletedAdapter1;
 import view.adapter.OngoingAdapterNew1;
 
-public class DynamicFragment extends Fragment implements HistoryPresenter.History,OngoingAdapterNew1.Clickable, CancelOrderPresenter.CancelInfo {
+public class DynamicFragment extends Fragment implements HistoryPresenter.History,OngoingAdapterNew1.Clickable, CancelOrderPresenter.CancelInfo, AgentLocPresenter.ShowAgentLoc {
     //, GetCancelOrderDataPresenter.CancelHistoryInfo
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private HistoryPresenter presenter;
     private CancelOrderPresenter cancelOrderPresenter;
+    private AgentLocPresenter agenlocPresenter;
     private static DynamicFragment tabFragment;
     private static int count;
     public static int  refreshCancle=0;
@@ -58,6 +64,8 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
     private void initView(View view) {
         presenter = new HistoryPresenter(getContext(), DynamicFragment.this);
         cancelOrderPresenter = new CancelOrderPresenter(getContext(), DynamicFragment.this);
+
+        agenlocPresenter = new AgentLocPresenter(getContext(), DynamicFragment.this);
         recyclerView = view.findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -183,9 +191,22 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
 
 //for ongoingadapter click
     @Override
-    public void onClick(String  requstid) {
+    public void onClick(String  diff,String  requstid) {
 //        Toast.makeText(getActivity(), ""+requstid, Toast.LENGTH_SHORT).show();
-        ShowNewAlert(getActivity(),"Do you want to proceed cancel order?",requstid);
+        if(diff.equals("cancel")||diff=="cancel")
+        {
+            ShowNewAlert(getActivity(),"Do you want to proceed cancel order?",requstid);
+        }
+
+        else
+        {
+            if (isNetworkConnected()) {//navigate
+                agenlocPresenter.GetAgentLoc(requstid);
+            }
+            else {
+                showDialog("Please connect to internet");
+            }
+        }
 
     }
     //for cancel order at ongoing
@@ -233,5 +254,33 @@ public class DynamicFragment extends Fragment implements HistoryPresenter.Histor
             }
         }).show();
     }
+//for navigate presnter
+    @Override
+    public void success(String response, String lati, String longi) {
+//        Toast.makeText(getActivity(), "lati= "+lati+" longi= "+longi, Toast.LENGTH_SHORT).show();
 
+        if(TextUtils.isEmpty(lati)||TextUtils.isEmpty(longi)) {
+            Toast.makeText(getActivity(), "not found latitude and longitude", Toast.LENGTH_SHORT).show();
+        }else
+        {
+
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=" + lati + "," + longi));
+            try {
+                getActivity().startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(getActivity(), "Please install a maps application", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+    //for navigate presnter
+    @Override
+    public void error(String response, String check) {
+
+    }
+    //for navigate presnter
+    @Override
+    public void fail(String response, String check) {
+
+    }
 }

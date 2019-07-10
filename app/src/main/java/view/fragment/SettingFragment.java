@@ -37,6 +37,8 @@ import constant.AppData;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Setting;
+import view.activity.ActDonate;
+import view.activity.ActReferal;
 import view.activity.ChangePassword;
 import view.activity.ChangePin;
 import view.activity.LoginActivity;
@@ -56,7 +58,6 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
 
     public static SettingFragment getInstance() {
         fragment = new SettingFragment();
-
         return fragment;
     }
 
@@ -130,11 +131,9 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
     public void itemClick(int position) {
         switch (position) {
             case 0://refer to friend
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my dummy text to send.");
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(new Intent(getContext(), ActReferal.class));
+                Animatoo.animateSwipeRight(getContext());
+
                 break;
 
             case 2://Transfer to Friend
@@ -162,7 +161,12 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
                 });
                 break;
 
-            case 8://Change Password
+            case 3://donate
+                startActivity(new Intent(getContext(), ActDonate.class));
+
+                Animatoo.animateSwipeRight(getContext());
+                break;
+           case 8://Change Password
                 startActivity(new Intent(getContext(), ChangePassword.class));
                 Animatoo.animateSwipeRight(getContext());
                 break;

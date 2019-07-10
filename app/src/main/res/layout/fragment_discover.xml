@@ -28,7 +28,37 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <view.customview.CustomTextView
+                    <RelativeLayout
+                        android:id="@+id/rl_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_10"
+                        >
+
+                        <view.customview.CustomTextView
+                            android:id="@+id/tv_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:text="Your Location "
+                            android:gravity="center"
+                            android:textColor="@color/select_back"
+                            android:textSize="@dimen/text_size_normal"
+                            android:textStyle="normal" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/iv_name"
+                            android:layout_width="@dimen/margin_20"
+                            android:layout_height="@dimen/margin_20"
+                            android:adjustViewBounds="true"
+                            android:src="@mipmap/cur_loc"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_toRightOf="@+id/tv_location"
+                            />
+                    </RelativeLayout>
+
+             <!--       <view.customview.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_10"
@@ -36,7 +66,7 @@
                         android:text="Your Location : "
                         android:textColor="@color/select_back"
                         android:textSize="@dimen/text_size_normal"
-                        android:textStyle="normal" />
+                        android:textStyle="normal" />-->
 
                     <view.customview.CustomTextView
                         android:id="@+id/tvLocation"

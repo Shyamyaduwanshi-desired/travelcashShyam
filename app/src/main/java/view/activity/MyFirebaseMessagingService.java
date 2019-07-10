@@ -14,6 +14,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.travelcash.R;
 
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
  String TAG=MyFirebaseMessagingService.class.getSimpleName();
  Context context;
@@ -27,7 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         context=this;
         Log.d(TAG, "From11: " + remoteMessage.getFrom());
         Log.d(TAG, "From111: " + remoteMessage.getData());
-
+     Map<String, String> data = remoteMessage.getData();
 //             Log.d(TAG, "From111111: " + remoteMessage.getNotification().getBody());
 //
 //             if(new LoginSession(context).IsLogin(context)) {
@@ -78,8 +80,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //             createNotification(getString(R.string.app_name),remoteMessage.getNotification().getBody());
 //         }
 
-     createNotification(getString(R.string.app_name),remoteMessage.getNotification().getBody());
-         
+//     createNotification(getString(R.string.app_name),remoteMessage.getNotification().getBody());//from FCM
+     createNotification(getString(R.string.app_name),data.get("title"));//From postman emoteMessage.getData()
+
     }
     
     private void createNotification(String title,String messageBody) {

@@ -1,34 +1,47 @@
 package view.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Base64OutputStream;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.travelcash.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -43,7 +56,6 @@ import view.customview.CustomTextViewBold;
 public class AddMoneyTransactionDetail extends AppCompatActivity implements View.OnClickListener, SubmitTopupPresenter.SubmitTopup {
     private Toolbar toolbar;
     private AppCompatImageView imageView;
-//    private FloatingActionButton fab;
     private CustomTextViewBold tvAmount, tvUploadFile,tvFileNm;
     private CustomButton btnSubmit;
     private String sAmount, mode, agentID;
@@ -88,20 +100,8 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.tvAmount:
-//                Intent intent = new Intent(AddMoneyTransactionDetail.this, WriteReview.class);
-//                intent.putExtra("agentID", agentID);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//                Animatoo.animateSlideRight(AddMoneyTransactionDetail.this);
-//                break;
-//
+
             case R.id.btn_submit:
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-//                sendIntent.setType("text/plain");
-//                startActivity(sendIntent);
                 if(TextUtils.isEmpty(filePath)||!filePath.contains("."))
                 {
                     Toast.makeText(this, "Please select proof id", Toast.LENGTH_SHORT).show();
@@ -114,19 +114,18 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 
                         SubmitTopup bean = new SubmitTopup();
                         bean.setAmount(sAmount);
-                        bean.setFileurl(filePath);
+//                        bean.setFileurl(filePath);
+                        bean.setFileurl(uploadBase64);
                         bean.setExtentionfile(exten);
                         if(exten.equals("pdf")||exten.equals("PDF"))
                         {
-                            bean.setPdfExtenstion(filePath);
+//                            bean.setPdfExtenstion(filePath);
+                            bean.setPdfExtenstion(uploadBase64);
                         }
                         else {
                             bean.setPdfExtenstion("");
                         }
-
                         Submittopup.SubmitTopupRequest(bean);
-
-
                     } else {
                         showDialog("Please connect to internet");
                     }
@@ -137,7 +136,8 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 
             case R.id.tv_upload_file:
 //                GetFile();
-                selectImage();
+//                selectImage();
+                selectImage1();
                 break;
 
             case R.id.imgBack:
@@ -259,8 +259,20 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //                    startActivityForResult(intent, 2);
 
                     try {
-                        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(intent, 1);
+//                        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                        startActivityForResult(intent, 1);//working
+
+//                        new MaterialFilePicker()
+//                                .withActivity(AddMoneyTransactionDetail.this)
+//                                .withRequestCode(3)
+//                                .withHiddenFiles(true)
+//                                .withTitle("Sample title")
+//                                .start();
+//                        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+//                        chooseFile.setType("image/*|pdf/*");
+//                        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+//                        startActivityForResult(chooseFile, 1);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("","shyam error= "+e);
@@ -274,6 +286,8 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //                            Log.e("","shyam error1111= "+e);
 //                        }
                     }
+
+
                 }
                 else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -283,56 +297,56 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
         builder.show();
     }
     String filePath="",fileNm="";
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch (requestCode) {
-//            case 7:
-//                if (resultCode == RESULT_OK) {
-////                    filePath = data.getData().getPath();
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+//        switch (requestCode) {
+////            case 7:
+////                if (resultCode == RESULT_OK) {
+//////                    filePath = data.getData().getPath();
+//////                    File f = new File(filePath);
+//////                    fileNm = f.getName();
+////////                    Toast.makeText(AddMoneyTransactionDetail.this, PathHolder+" filename= "+filename, Toast.LENGTH_LONG).show();
+//////                    tvFileNm.setText(fileNm);
+////
+////                   //image pickup
+////                    Uri selectedImageUri = data.getData();
+////                    filePath = getPath(selectedImageUri);
 ////                    File f = new File(filePath);
 ////                    fileNm = f.getName();
-//////                    Toast.makeText(AddMoneyTransactionDetail.this, PathHolder+" filename= "+filename, Toast.LENGTH_LONG).show();
 ////                    tvFileNm.setText(fileNm);
+////
+////                }
+////                break;
 //
-//                   //image pickup
-//                    Uri selectedImageUri = data.getData();
-//                    filePath = getPath(selectedImageUri);
+//            case 0://camera
+//                if(resultCode == RESULT_OK){
+//                  Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
+//                    Uri selectedImage = getImageUri(getApplicationContext(), photo);
+//
+//                      //  Uri selectedImage = imageReturnedIntent.getData();
+//                        filePath = getPath(selectedImage);
+//                        File f = new File(filePath);
+//                        fileNm = f.getName();
+//                        tvFileNm.setText(fileNm);
+//
+//                }
+//                break;
+//            case 1://gallery
+//                if(resultCode == RESULT_OK&& null != imageReturnedIntent){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//
+//                    filePath = getPath(selectedImage);
 //                    File f = new File(filePath);
 //                    fileNm = f.getName();
 //                    tvFileNm.setText(fileNm);
 //
 //                }
+//
+//
 //                break;
-
-            case 0://camera
-                if(resultCode == RESULT_OK){
-                  Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
-                    Uri selectedImage = getImageUri(getApplicationContext(), photo);
-
-                      //  Uri selectedImage = imageReturnedIntent.getData();
-                        filePath = getPath(selectedImage);
-                        File f = new File(filePath);
-                        fileNm = f.getName();
-                        tvFileNm.setText(fileNm);
-
-                }
-                break;
-            case 1://gallery
-                if(resultCode == RESULT_OK&& null != imageReturnedIntent){
-                    Uri selectedImage = imageReturnedIntent.getData();
-
-                    filePath = getPath(selectedImage);
-                    File f = new File(filePath);
-                    fileNm = f.getName();
-                    tvFileNm.setText(fileNm);
-
-                }
-
-
-                break;
-        }
-    }
+//        }
+//    }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -369,77 +383,201 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
             @Override
             public void onClick() {
                 prettyDialog.dismiss();
-//                Intent intent = new Intent();
-//                setResult(Activity.RESULT_OK, intent);
                 finish();
                 Animatoo.animateFade(AddMoneyTransactionDetail.this);
 
 
             }
         }).show();
-
-//        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
-//            @Override
-//            public void onClick() {
-//                prettyDialog.dismiss();
-//
-//            }
-//        }).show();
     }
 
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+ static  int CAMERA_REQUEST=3,Result_Load_Image=4;
+ int MY_CAMERA_PERMISSION_CODE=11;
+    private void selectImage1() {
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddMoneyTransactionDetail.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Take Photo")) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                MY_CAMERA_PERMISSION_CODE);
+                    } else {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                    }
+                } else if (items[item].equals("Choose from Library")) {
+//                    Intent intent = new Intent();
+//                    intent.setType("image/*");//only for image
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(intent, "Select File"), Result_Load_Image);
+
+                    new MaterialFilePicker()
+                            .withActivity(AddMoneyTransactionDetail.this)
+                            .withRequestCode(1)
+                            .withHiddenFiles(true)
+                            .withTitle("Sample title")
+                            .start();
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    String uploadBase64="";
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                File f = new File(Environment.getExternalStorageDirectory().toString());
-                for (File temp : f.listFiles()) {
-                    if (temp.getName().equals("temp.jpg")) {
-                        f = temp;
-                        break;
-                    }
-                }
+            if (requestCode == Result_Load_Image && data != null && data.getData() != null) {
+                Uri filePath2 = data.getData();
+
                 try {
-                    Bitmap bitmap;
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                            bitmapOptions);
-//                    viewImage.setImageBitmap(bitmap);
-                    String path = android.os.Environment
-                            .getExternalStorageDirectory()
-                            + File.separator
-                            + "Phoenix" + File.separator + "default";
-                    f.delete();
-                    OutputStream outFile = null;
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    try {
-                        outFile = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-                        outFile.flush();
-                        outFile.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                 Bitmap   bitmap= MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), filePath2);
+                    Bitmap bit=Bitmap.createScaledBitmap(bitmap,150,150,false);
+
+                    Uri selectedImage = getImageUri(getApplicationContext(), bit);
+
+                     filePath = getPath(selectedImage);
+                    File f = new File(filePath);
+                    fileNm = f.getName();
+                    tvFileNm.setText(fileNm);
+                    Log.e("","shyam file size= "+f.length());
+
+//                    img_profile.setImageBitmap(bitmap);
+//                    ImageHolder = getStringImage(bit);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (requestCode == 2) {
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                Log.w("path of image from gallery......******************.........", picturePath+"");
-                viewImage.setImageBitmap(thumbnail);
+            } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                Bitmap bit=Bitmap.createScaledBitmap(photo ,150,150,false);
+
+//                uploadBase64=EncodeImageIntoBase64(bit);
+                Uri selectedImage = getImageUri(getApplicationContext(), bit);
+                filePath = getPath(selectedImage);
+                File f = new File(filePath);
+                fileNm = f.getName();
+                tvFileNm.setText(fileNm);
+//                uploadBase64=getFileToBase64(filePath);
+                uploadBase64=getFileToBase64_1(f);
+
+                Log.e("","shyam file size11= "+f.length()+" uploadBase64= "+uploadBase64);
+
+            }
+            else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+
+                File f  = new File(data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH));
+                filePath = f.getAbsolutePath();
+
+                File f1 = new File(filePath);
+                fileNm = f1.getName();
+                tvFileNm.setText(fileNm);
+//                uploadBase64=getFileToBase64(filePath);
+                uploadBase64=getFileToBase64_1(f);
+                Log.e("","shyam file size22= "+f.length()+" uploadBase64= "+uploadBase64);
+
+
+//                filepath1.setText(file_path1);
+//                ContentTypeHolder1=file_path1.substring(file_path1.lastIndexOf("/")+1);
+//                FileHolder1= getBase64FromPath(file_path1);
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
+//                Bitmap bit=Bitmap.createScaledBitmap(photo ,150,150,false);
+//
+//
+//                Uri selectedImage = getImageUri(getApplicationContext(), bit);
+//                String filePath1 = getPath(selectedImage);
+//                File f = new File(filePath1);
+//                fileNm = f.getName();
+//                tvFileNm.setText(fileNm);
+
+
+            }
+            else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
             }
         }
-    }*/
+    }
+
+    public  String getFileToBase64(String filePath){
+        Bitmap bmp = null;
+        ByteArrayOutputStream bos = null;
+        byte[] bt = null;
+        String encodeString = null;
+        try{
+            bmp = BitmapFactory.decodeFile(filePath);
+            bos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bt = bos.toByteArray();
+            encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return encodeString;
+    }
+    public String getFileToBase64_1(File f) {
+        InputStream inputStream = null;
+        String encodedFile= "", lastVal;
+        try {
+            inputStream = new FileInputStream(f.getAbsolutePath());
+
+            byte[] buffer = new byte[10240];//specify the size to allow
+            int bytesRead;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            Base64OutputStream output64 = new Base64OutputStream(output, Base64.DEFAULT);
+
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output64.write(buffer, 0, bytesRead);
+            }
+            output64.close();
+            encodedFile =  output.toString();
+        }
+        catch (FileNotFoundException e1 ) {
+            e1.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        lastVal = encodedFile;
+        return lastVal;
+    }
+
+
+    private String EncodeImageIntoBase64(Bitmap bm)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new
+                        Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            } else {
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
 }

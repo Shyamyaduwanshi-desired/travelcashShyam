@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -55,6 +58,8 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.johnnylambada.location.LocationObserver;
 import com.johnnylambada.location.LocationProvider;
 import com.travelcash.R;
@@ -75,9 +80,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 import model.Vendor;
+import presenter.DeviceTokenPresenter;
 import presenter.VendorListPresenter;
 import view.activity.ActNotification;
 import view.activity.AddMoney;
+import view.activity.LoginActivity;
 import view.activity.ProfileActivity;
 import view.activity.ViewVendorReview;
 import view.adapter.CashPointAdapter;
@@ -88,7 +95,7 @@ import view.customview.CustomTextViewBold;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFragment extends Fragment implements CashPointAdapter.Clickable, View.OnClickListener, LocationObserver, Runnable, VendorListPresenter.Agent {
+public class HomeFragment extends Fragment implements CashPointAdapter.Clickable, View.OnClickListener, LocationObserver, Runnable, VendorListPresenter.Agent, DeviceTokenPresenter.SaveDeviceToken {
     private static HomeFragment fragment;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter cashPointerAdapter;
@@ -107,8 +114,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     private ArrayList<Vendor> response;
     private String apiUrl;
     PlacesClient placesClient;
+    RelativeLayout rlCurLoc;
 //    AutocompleteSupportFragment frag_pick;
     AppCompatImageView ivNoti;
+    private DeviceTokenPresenter DeviceTokenPresenter;
 
     public static HomeFragment getInstance() {
         fragment = new HomeFragment();
@@ -120,6 +129,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        DeviceTokenPresenter = new DeviceTokenPresenter(getActivity(), HomeFragment.this);
         presenter = new VendorListPresenter(getContext(), HomeFragment.this);
         orderData = new OrderData(getContext());
         orderData.clearData();
@@ -129,11 +139,12 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
          placesClient = Places.createClient(getActivity());
         initView();
         SetPredata();
+        GetFCMToken();
         return view;
     }
 
     private void SetPredata() {
-        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
+        DecimalFormat df = new DecimalFormat( "#,###,###,###" );
 //        DecimalFormat df = new DecimalFormat( "#,###,###,###.00" );
         double dd = Double.parseDouble(appData.getWalletAmount());
 //        tvAmount.setText("" + df.format(dd));
@@ -171,6 +182,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         tv_temp = view.findViewById(R.id.temp);
         tv_city = view.findViewById(R.id.tv_city);
         ivNoti = view.findViewById(R.id.imgNotification);
+        rlCurLoc = view.findViewById(R.id.rl_location);
 
 
         edtSearchLocation.setOnClickListener(this);
@@ -185,6 +197,7 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
         btnTopUp.setOnClickListener(this);
         btnAll.setOnClickListener(this);
         ivNoti.setOnClickListener(this);
+        rlCurLoc.setOnClickListener(this);
 
 
         appData = new AppData(getContext());
@@ -328,6 +341,24 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 locationProvider.stopTrackingLocation();
                 startAutocompleteActivity();
                 break;
+            case R.id.rl_location://my current location
+                latitude="0.0";
+                longitude="0.0";
+                tvLocation.setText("");
+                setCurLoc();
+
+//                if(locationProvider!=null)
+//                locationProvider.startTrackingLocation();
+//
+////                Toast.makeText(getActivity(), "latitude= "+latitude+" longitude= "+longitude, Toast.LENGTH_SHORT).show();
+//                if (isNetworkConnected()) {
+//                    presenter.getVendor(latitude, longitude);
+//                } else {
+//                    showDialog("Please connect to internet.");
+//                }
+//
+
+                break;
 
             case R.id.btnWithPromo:
                 if (isNetworkConnected())
@@ -358,6 +389,31 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
                 else
                     showDialog("Please connect to internet");
                 break;
+        }
+    }
+
+    public void setCurLoc()
+    {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkLocationPermission()) {
+                LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivityForResult(intent, 101);
+                } else {
+                    initLocation();
+                }
+            } else {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+            }
+        } else {
+            LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, 101);
+            } else {
+                initLocation();
+            }
         }
     }
     private void showDialog(String message) {
@@ -525,10 +581,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
 
         runLayoutAnimation(recyclerView);
 
-//        DecimalFormat df = new DecimalFormat("#,###,###,###");
+        DecimalFormat df = new DecimalFormat("#,###,###,###");
 //        DecimalFormat df = new DecimalFormat("#,###,###,###.00");
-//        double dd = Double.parseDouble(amount);
-//        tvWalletBalance.setText("" + df.format(dd));//1
+        double dd = Double.parseDouble(amount);
+        tvWalletBalance.setText("" + df.format(dd));//1
     }
 
     @Override
@@ -693,5 +749,40 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
     }
 
 
+    public void GetFCMToken()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
 
+// Get the Instance ID token//
+                        String token = task.getResult().getToken();
+//                        String msg = getString(R.string.fcm_token, token);
+                        Log.d("shyam home Token ", "shyam fcm token= "+token);
+
+                        DeviceTokenPresenter.SaveToken(token);
+
+                    }
+                });
+
+    }
+//for device token
+    @Override
+    public void success(String response, String check) {
+
+    }
+
+    @Override
+    public void error(String response, String check) {
+
+    }
+
+    @Override
+    public void fail(String response, String check) {
+
+    }
 }

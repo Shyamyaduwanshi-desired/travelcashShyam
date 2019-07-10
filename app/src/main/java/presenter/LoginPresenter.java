@@ -57,6 +57,7 @@ public class LoginPresenter {
                         appData.setPin(reader.getString("user_pin"));
                         appData.setProfile(reader.getString("profile"));
                         appData.setWalletAmount(reader.getString("wallet_amount"));
+                        appData.setReferalCode(reader.getString("user_referal_code"));
                     }else if(status == 0){
                        login.error(reader.getString("message"));
                     }

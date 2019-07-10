@@ -183,34 +183,42 @@ public class AddMoney extends AppCompatActivity implements View.OnClickListener,
         String amount = tvAmount.getText().toString().trim();
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
-        if (amt == 0 || amt < 10000) {
+//        if (amt == 0 || amt < 10000)
+        {
             int val = amt + value;
-            if (val <= 10000) {
+//            if (val <= 10000)
+            {
                 DecimalFormat df = new DecimalFormat("#,###,###,###");
                 double dd = Double.parseDouble("" + val);
                 tvAmount.setText("" + df.format(dd));
-            } else
-                showDialog();
-        } else {
-            showDialog();
+            }
+//            else
+//                showDialog();
         }
+//        else {
+//            showDialog();
+//        }
     }
 
     private void add() {
         String amount = tvAmount.getText().toString().trim();
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
-        if (amt == 0 || amt < 10000) {
+//        if (amt == 0 || amt < 10000)
+        {
             int val = amt + 100;
-            if (val <= 10000) {
+//            if (val <= 10000)
+            {
                 DecimalFormat df = new DecimalFormat("#,###,###,###");
                 double dd = Double.parseDouble("" + val);
                 tvAmount.setText("" + df.format(dd));
-            } else
-                showDialog();
-        } else {
-            showDialog();
+            }
+//            else
+//                showDialog();
         }
+//        else {
+//            showDialog();
+//        }
     }
 
     private void minus() {
