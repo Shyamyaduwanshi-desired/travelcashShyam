@@ -7,14 +7,16 @@ public class HistoryModel {
     private String amount;
     private String id;
     private String agentId;
+    private String agentNm;
 
-    public HistoryModel(String id, String date, String mode, String time, String amount, String agentId) {
+    public HistoryModel(String id, String date, String mode, String time, String amount, String agentId, String agentNm) {
         this.id = id;
         this.date = date;
         this.mode = mode;
         this.time = time;
         this.amount = amount;
         this.agentId = agentId;
+        this.agentNm = agentNm;
     }
 
     public String getID() {
@@ -40,5 +42,8 @@ public class HistoryModel {
         return agentId;
     }
 
+    public String getAgentNm() {
+        return agentNm;
+    }
 
 }

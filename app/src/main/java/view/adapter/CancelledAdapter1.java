@@ -43,6 +43,7 @@ public class CancelledAdapter1 extends RecyclerView.Adapter<CancelledAdapter1.My
 
         holder.tvDate.setText(appData.ConvertDate4(history.getDate())+", "+appData.ConvertTime(history.getDate()));
         holder.tvStatus.setText(history.getMode());
+        holder.tvAgentNm.setText(history.getAgentNm());
 
         if(history.getAmount().contains(",")) {
             holder.tvAmount.setText("IDR " + history.getAmount());
@@ -53,6 +54,7 @@ public class CancelledAdapter1 extends RecyclerView.Adapter<CancelledAdapter1.My
             double dd = Double.parseDouble(history.getAmount());
             holder.tvAmount.setText("IDR " + df.format(dd));
         }
+
 
         holder.tvStatus.setTypeface(null, Typeface.ITALIC);
         holder.itemView.setOnClickListener(new View.OnClickListener() {

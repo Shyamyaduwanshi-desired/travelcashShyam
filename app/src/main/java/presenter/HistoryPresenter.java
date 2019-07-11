@@ -68,8 +68,9 @@ public class HistoryPresenter {
 //                            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy");
 //                            SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("withdraw_date_time");
+                            String agent_fname = object.getString("agent_fname");
 //                            Date date_change = input.parse(date);
-                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"),date, "Total Cash Withdraw", date, object.getString("withdraw_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"),date, "Total Cash Withdraw", date, object.getString("withdraw_amount"),"",agent_fname);
 //                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"),output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"));
                             list.add(his);
                         }
@@ -81,10 +82,11 @@ public class HistoryPresenter {
 //                            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy");
 //                            SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_bank_date_time");
+                            String agent_fname = object.getString("agent_fname");
 //                            Date date_change = input.parse(date);
 //                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"));
 //                            create new object only for show information with proper date
-                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), date, "Total Transfer To Bank", date, object.getString("transfered_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), date, "Total Transfer To Bank", date, object.getString("transfered_amount"),"",agent_fname);
                             list.add(his);
                         }
 
@@ -95,10 +97,11 @@ public class HistoryPresenter {
 //                            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy");
 //                            SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_friends_date_time");
+                            String friend_name = object.getString("friend_name");
 //                            Date date_change = input.parse(date);
 //                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"));
 
-                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), date, "Total Transfer To Friends", date, object.getString("transfered_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), date, "Total Transfer To Friends", date, object.getString("transfered_amount"),"",friend_name);
                             list.add(his);
                         }
 
@@ -112,7 +115,7 @@ public class HistoryPresenter {
 //                            Date date_change = input.parse(date);
 //                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"));
 
-                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), date, "Total Donated", date, object.getString("donated_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), date, "Total Donated", date, object.getString("donated_amount"),"","");
                             list.add(his);
                         }
 
@@ -124,10 +127,11 @@ public class HistoryPresenter {
 //                            SimpleDateFormat time = new SimpleDateFormat("hh:mm");
 
                             String date = object.getString("user_transfered_to_friends_date_time");
+                            String user_fname = object.getString("user_fname");
 
 //                            Date date_change = input.parse(date);
                             //object.getString("user_transfered_to_friends_id")
-                            HistoryModel his = new HistoryModel("",date, object.getString("user_fname"), date, object.getString("transfered_amount"),"");
+                            HistoryModel his = new HistoryModel("",date, object.getString("user_fname"), date, object.getString("transfered_amount"),"",user_fname);
                             list.add(his);
                         }
 
@@ -198,7 +202,7 @@ public class HistoryPresenter {
 //                            Date date_change = input.parse(date);
 
 
-                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),agentid);
+                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),agentid,"");
 //                            String id, String date, String mode, String time, String amount
                             list.add(his);
                         }
@@ -215,7 +219,7 @@ public class HistoryPresenter {
 //                            Date date_change = input.parse(date);
 
 
-                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),agentid);
+                            HistoryModel his = new HistoryModel(agent_recieved_request_id,date, object.getString("agent_fname"), status1, object.getString("user_request_amount"),agentid,"");
 //                            String id, String date, String mode, String time, String amount
                             list.add(his);
                         }
@@ -273,7 +277,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("withdraw_date_time");
                             Date date_change = input.parse(date);
-                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"), output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_withdraw_id"), output.format(date_change), "Total Cash Withdraw", time.format(date_change), object.getString("withdraw_amount"),"","");
                             list.add(his);
                         }
 
@@ -285,7 +289,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_bank_date_time");
                             Date date_change = input.parse(date);
-                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_transfer_to_bank_id"), output.format(date_change), "Total Transfer To Bank", time.format(date_change), object.getString("transfered_amount"),"","");
                             list.add(his);
                         }
 
@@ -297,7 +301,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("user_transfered_to_friends_date_time");
                             Date date_change = input.parse(date);
-                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_transfered_to_friends_id"), output.format(date_change), "Total Transfer To Friends", time.format(date_change), object.getString("transfered_amount"),"","");
                             list.add(his);
                         }
 
@@ -309,7 +313,7 @@ public class HistoryPresenter {
                             SimpleDateFormat time = new SimpleDateFormat("hh:mm");
                             String date = object.getString("donated_date_time");
                             Date date_change = input.parse(date);
-                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"),"");
+                            HistoryModel his = new HistoryModel(object.getString("user_donated_id"), output.format(date_change), "Total Donated", time.format(date_change), object.getString("donated_amount"),"","");
                             list.add(his);
                         }
 
@@ -371,7 +375,9 @@ public class HistoryPresenter {
                             String agent_recieved_request_id = object.getString("agent_recieved_request_id");
                             String request_updated_on = object.getString("request_updated_on");
 
-                            HistoryModel his = new HistoryModel(transaction_id,request_date, status1, request_updated_on/*agent_recieved_request_id*/, user_request_amount,"");
+                            String agent_fname = object.getString("agent_fname");
+
+                            HistoryModel his = new HistoryModel(transaction_id,request_date, status1, request_updated_on/*agent_recieved_request_id*/, user_request_amount,"",agent_fname);
 //                            String id, String date, String mode, String time, String amount
                             list.add(his);
                         }

@@ -46,6 +46,10 @@ public class SplashActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION);
         }
+        else   if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)==PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_PERMISSION);
+        }
         else{
             new Handler().postDelayed(new Runnable() {
                 @Override

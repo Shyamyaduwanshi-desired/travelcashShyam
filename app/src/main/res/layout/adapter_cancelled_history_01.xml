@@ -16,14 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/margin_5"
-            android:layout_marginRight="@dimen/margin_5"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
             >
 
              <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
            >
 
 <TextView
@@ -31,7 +31,6 @@ android:layout_marginTop="@dimen/margin_10"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="data,time"
-
     android:textColor="@android:color/black"
     android:textSize="@dimen/text_size_normal"
     android:layout_toLeftOf="@+id/tv_amount"
@@ -45,7 +44,7 @@ android:layout_marginTop="@dimen/margin_10"
                 android:layout_alignParentRight="true"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_size_normal"
-
+                android:paddingRight="@dimen/margin_10"
                 />
 
         </RelativeLayout>
@@ -75,7 +74,7 @@ android:textStyle="bold"
                     android:layout_alignParentRight="true"
                     android:textColor="@color/cancel_colo"
                     android:textSize="@dimen/text_size_normal"
-
+                    android:paddingRight="@dimen/margin_10"
 
                     />
 

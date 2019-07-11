@@ -126,9 +126,10 @@ public class WalletFragment extends Fragment implements ShowWalletInfoPresenter.
             if (resultCode == Activity.RESULT_OK) {
 //               presenter.recentActivity(appData.getUserID());
                 showwalletPresenter.ShowWalletInfo(appData.getUserID());
-            }else {
-                showDialog("Failed to add money to wallet.");
             }
+//            else {
+//                showDialog("Failed to add money to wallet.");
+//            }
         }
     }
 

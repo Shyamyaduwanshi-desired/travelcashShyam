@@ -395,11 +395,11 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
  static  int CAMERA_REQUEST=3,Result_Load_Image=4;
  int MY_CAMERA_PERMISSION_CODE=11;
     private void selectImage1() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
+        final CharSequence[] items = {"Take Photo", "Choose from Library","Choose pdf",
                 "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddMoneyTransactionDetail.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Add File");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -415,10 +415,12 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                         startActivityForResult(cameraIntent, CAMERA_REQUEST);
                     }
                 } else if (items[item].equals("Choose from Library")) {
-//                    Intent intent = new Intent();
-//                    intent.setType("image/*");//only for image
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    startActivityForResult(Intent.createChooser(intent, "Select File"), Result_Load_Image);
+                    Intent intent = new Intent();
+                    intent.setType("image/*");//only for image
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select File"), Result_Load_Image);
+                }
+                else if (items[item].equals("Choose pdf")) {
 
                     new MaterialFilePicker()
                             .withActivity(AddMoneyTransactionDetail.this)
@@ -427,7 +429,9 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                             .withTitle("Sample title")
                             .start();
 
-                } else if (items[item].equals("Cancel")) {
+                }
+
+                else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -450,10 +454,11 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                     Uri selectedImage = getImageUri(getApplicationContext(), bit);
 
                      filePath = getPath(selectedImage);
-                    File f = new File(filePath);
+                     File f = new File(filePath);
                     fileNm = f.getName();
                     tvFileNm.setText(fileNm);
-                    Log.e("","shyam file size= "+f.length());
+                    uploadBase64=getFileToBase64_1(f);
+                    Log.e("","shyam photo size11= "+f.length()+" uploadBase64= "+uploadBase64);
 
 //                    img_profile.setImageBitmap(bitmap);
 //                    ImageHolder = getStringImage(bit);

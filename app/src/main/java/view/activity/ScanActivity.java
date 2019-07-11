@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     private String amount = "", request_id = "", agent_request_id = "", agentId = "";
     private CancelOrderPresenter cancelOrderPresenter;
     private AgentLocPresenter agenlocPresenter;
+    RelativeLayout rlPhone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         tvAddress = findViewById(R.id.tvAddress);
         tvName = findViewById(R.id.tv_name);
         tvPhone = findViewById(R.id.tv_phone);
+        rlPhone = findViewById(R.id.rl_phone);
 
 
         imageView = toolbar.findViewById(R.id.imgBack);
@@ -93,6 +96,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         imageView.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnNavi.setOnClickListener(this);
+        rlPhone.setOnClickListener(this);
 
         barcodeCapture = (BarcodeCapture) getSupportFragmentManager().findFragmentById(R.id.barcode);
         barcodeCapture.setRetrieval(this);
@@ -124,6 +128,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 showDialog("Please connect to internet");
             }
+        }
+        else if (v == rlPhone) {
+            PhoneCall(phoneNumber);
         }else if (v == imageView) {
             finish();
             Animatoo.animateSlideRight(ScanActivity.this);
@@ -184,7 +191,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }).show();
     }
-
+String phoneNumber="";
     public void getRequestNumber() {
         final ProgressDialog progress = new ProgressDialog(ScanActivity.this);
         progress.setMessage("Please Wait..");
@@ -208,6 +215,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
                         tvName.setText(jsonObject.getString("agent_name"));
                         tvPhone.setText(jsonObject.getString("agent_mobile_number"));
+                        phoneNumber=jsonObject.getString("agent_mobile_number");
 
 
                     } else if (status == 0) {
@@ -240,6 +248,19 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
         RequestQueue queue = Volley.newRequestQueue(ScanActivity.this);
         queue.add(postRequest);
+    }
+
+    public void PhoneCall(String number)
+    {
+        if(TextUtils.isEmpty(number))
+        {
+            Toast.makeText(this, "not find phone number", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + number));
+            startActivity(callIntent);
+        }
     }
 //
     @Override

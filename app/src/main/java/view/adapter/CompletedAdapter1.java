@@ -41,7 +41,9 @@ public class CompletedAdapter1 extends RecyclerView.Adapter<CompletedAdapter1.My
         final HistoryModel history = mList.get(position);
 
         holder.tvDate.setText(appData.ConvertDate4(history.getDate())+", "+appData.ConvertTime(history.getDate()));
-        holder.tvNm.setText(history.getMode());
+
+//        holder.tvNm.setText(history.getMode());
+        holder.tvNm.setText(history.getAgentNm());
         holder.tvStatus.setText("Completed");
         if(history.getAmount().contains(",")) {
             holder.tvAmount.setText("IDR " + history.getAmount());
