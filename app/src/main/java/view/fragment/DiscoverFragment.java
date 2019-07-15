@@ -127,7 +127,8 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
         recyclerView.setHasFixedSize(true);
 
         if (isNetworkConnected()) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
                 if (checkLocationPermission()) {
                     LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -139,7 +140,8 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
                 } else {
                     requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
                 }
-            } else {
+            }
+            else {
                 LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -199,7 +201,7 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
                 Place place = Autocomplete.getPlaceFromIntent(data);
 
                 String addressname="";
-                if(TextUtils.isEmpty(place.getAddress()))
+                if(TextUtils.isEmpty(place.getAddress())||place.getAddress().equals("null")||place.getAddress()=="null")
                 {
                     addressname=place.getName();
                 }
@@ -339,7 +341,12 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     public void onStop() {
         super.onStop();
         if (isNetworkConnected())
-            locationProvider.stopTrackingLocation();
+//            if(locationProvider!=null)
+            try {
+                locationProvider.stopTrackingLocation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
@@ -352,8 +359,15 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     @Override
     public void onClick(View v) {
         if (v == edtSearchLocation) {
-            locationProvider.stopTrackingLocation();
-            startAutocompleteActivity();
+//            if(locationProvider!=null)
+            {
+                try {
+                    locationProvider.stopTrackingLocation();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                startAutocompleteActivity();
+            }
         } else if (v == rlCurLoc) {
             latitude="0.0";
             longitude="0.0";
@@ -425,7 +439,13 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
                 @Override
                 public void onClick() {
                     prettyDialog.dismiss();
-                    locationProvider.stopTrackingLocation();
+//                    if(locationProvider!=null)
+
+                    try {
+                        locationProvider.stopTrackingLocation();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     startAutocompleteActivity();
 
 
@@ -444,7 +464,8 @@ public class DiscoverFragment extends Fragment implements CashPointAdapter.Click
     public void setCurLoc()
     {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkLocationPermission()) {
+            if (checkLocationPermission())
+            {
                 LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);

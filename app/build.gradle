@@ -81,6 +81,9 @@ dependencies {
 
 //    for pdf or image pick
     implementation 'com.nbsp:library:1.8'
+
+//    for htmltext with image
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 //    implementation 'com.droidninja:filepicker:1.0.0'
 //    implementation 'com.google.firebase:firebase-auth:16.2.1'
 //    implementation 'com.google.firebase:firebase-database:16.1.0'

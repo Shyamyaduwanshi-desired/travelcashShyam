@@ -57,7 +57,7 @@ public class VerifyOtp extends AppCompatActivity implements OtpPresenter.Otp {
         imageView = toolbar.findViewById(R.id.imgBack);
         otpView = findViewById(R.id.otp_view);
         String mobile = SignUpPreference.getInstance(VerifyOtp.this).getValue("mobile");
-        tvLabel.setText("Enter OTP sent to: +91-" + mobile);
+        tvLabel.setText("Enter OTP sent to: -" + mobile);//+91
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/tvAmount"
-                    android:text="IDR"
+                    android:text=" IDR"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_normal"
                     android:textStyle="normal"

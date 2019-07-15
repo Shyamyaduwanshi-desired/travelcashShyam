@@ -113,6 +113,7 @@ public class AppData {
     public String getWalletAmount() {
         return  sharedPref.getString("walletAmount", "0");
     }
+
     public void setReferalCode(String referalcode) {
         editor.putString("referal_code", referalcode);
         editor.commit();
@@ -260,5 +261,16 @@ public class AppData {
         }*/
         return shortTimeStr;
     }
+
+    public void setNotiClick(String setNotivalue) {
+        editor.putString("set_noti", setNotivalue);
+        editor.commit();
+    }
+
+    public String getNotiClick() {
+
+        return  sharedPref.getString("set_noti", "0");
+    }
+
 
 }

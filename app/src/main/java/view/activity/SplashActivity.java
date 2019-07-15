@@ -1,9 +1,12 @@
 package view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,17 +19,27 @@ import java.util.TimerTask;
 import constant.AppData;
 
 public class SplashActivity extends AppCompatActivity {
-
+    private AppData appData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        appData = new AppData(this);
+//        GPSStatus();
         checkPermissions();
     }
     private static final int REQUEST_CODE_PERMISSION = 2;
+    LocationManager locationManager ;
+    boolean GpsStatus ;
     private  void checkPermissions(){
-        if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED)) {
+
+//        if(!GpsStatus)
+//        {
+//          Intent  intent1 = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            startActivity(intent1);
+//        }
+//        else
+            if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSION);
 
@@ -50,7 +63,9 @@ public class SplashActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_PERMISSION);
         }
+
         else{
+            appData.setNotiClick("0");
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -84,4 +99,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         checkPermissions();
     }
+    public void GPSStatus(){
+        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        GpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
 }

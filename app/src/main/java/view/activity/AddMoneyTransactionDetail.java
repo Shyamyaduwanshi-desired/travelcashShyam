@@ -80,6 +80,8 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
     private void initView() {
         try {
             sAmount = getIntent().getStringExtra("amount");
+
+            Log.e("","sAmount= "+sAmount);
 //            sAmount = "500";
         } catch (NullPointerException ex) {
             ex.printStackTrace();
@@ -113,6 +115,11 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                        String exten= filePath.substring(filePath.lastIndexOf(".") + 1);
 
                         SubmitTopup bean = new SubmitTopup();
+                        if(sAmount.contains(","))
+                        {
+                            sAmount=sAmount.replaceAll(",","");
+                        }
+
                         bean.setAmount(sAmount);
 //                        bean.setFileurl(filePath);
                         bean.setFileurl(uploadBase64);
@@ -208,94 +215,94 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
         return cm.getActiveNetworkInfo() != null;
     }
 
-    public void GetFile()
-    {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("*/*");
-//        startActivityForResult(intent, 7);
-
-//        Intent intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
-//        intent.putExtra("CONTENT_TYPE", "*/*");
-//        startActivityForResult(intent, 7);//not working
-
-
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("file/*");
-//        startActivityForResult(intent,7);
-
-        //only for image
-        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, 7);
-    }
-
-
-    private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Photo");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                    startActivityForResult(intent, 1);
-
-                    try {
-                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takePicture, 0);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-//                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                    startActivityForResult(intent, 2);
-
-                    try {
-//                        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                        startActivityForResult(intent, 1);//working
-
-//                        new MaterialFilePicker()
-//                                .withActivity(AddMoneyTransactionDetail.this)
-//                                .withRequestCode(3)
-//                                .withHiddenFiles(true)
-//                                .withTitle("Sample title")
-//                                .start();
-//                        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-//                        chooseFile.setType("image/*|pdf/*");
-//                        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-//                        startActivityForResult(chooseFile, 1);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e("","shyam error= "+e);
-//                        try {
-//                            Intent intent = new Intent();
-//                            intent.setType("image/*");
-//                            intent.setAction(Intent.ACTION_GET_CONTENT);
-//                            startActivityForResult(intent, 1);
-//                        } catch (Exception e1) {
-//                            e1.printStackTrace();
-//                            Log.e("","shyam error1111= "+e);
-//                        }
-                    }
-
-
-                }
-                else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
+//    public void GetFile()
+//    {
+////        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+////        intent.setType("*/*");
+////        startActivityForResult(intent, 7);
+//
+////        Intent intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+////        intent.putExtra("CONTENT_TYPE", "*/*");
+////        startActivityForResult(intent, 7);//not working
+//
+//
+////        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+////        intent.setType("file/*");
+////        startActivityForResult(intent,7);
+//
+//        //only for image
+//        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(i, 7);
+//    }
+//
+//
+//    private void selectImage() {
+//        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Select Photo");
+//        builder.setItems(options, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//                if (options[item].equals("Take Photo"))
+//                {
+////                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+////                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+////                    startActivityForResult(intent, 1);
+//
+//                    try {
+//                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        startActivityForResult(takePicture, 0);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                }
+//                else if (options[item].equals("Choose from Gallery"))
+//                {
+////                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                    startActivityForResult(intent, 2);
+//
+//                    try {
+////                        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                        startActivityForResult(intent, 1);//working
+//
+////                        new MaterialFilePicker()
+////                                .withActivity(AddMoneyTransactionDetail.this)
+////                                .withRequestCode(3)
+////                                .withHiddenFiles(true)
+////                                .withTitle("Sample title")
+////                                .start();
+////                        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+////                        chooseFile.setType("image/*|pdf/*");
+////                        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+////                        startActivityForResult(chooseFile, 1);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Log.e("","shyam error= "+e);
+////                        try {
+////                            Intent intent = new Intent();
+////                            intent.setType("image/*");
+////                            intent.setAction(Intent.ACTION_GET_CONTENT);
+////                            startActivityForResult(intent, 1);
+////                        } catch (Exception e1) {
+////                            e1.printStackTrace();
+////                            Log.e("","shyam error1111= "+e);
+////                        }
+//                    }
+//
+//
+//                }
+//                else if (options[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//                }
+//            }
+//        });
+//        builder.show();
+//    }
     String filePath="",fileNm="";
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -460,17 +467,12 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
                     uploadBase64=getFileToBase64_1(f);
                     Log.e("","shyam photo size11= "+f.length()+" uploadBase64= "+uploadBase64);
 
-//                    img_profile.setImageBitmap(bitmap);
-//                    ImageHolder = getStringImage(bit);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 Bitmap bit=Bitmap.createScaledBitmap(photo ,150,150,false);
-
-//                uploadBase64=EncodeImageIntoBase64(bit);
                 Uri selectedImage = getImageUri(getApplicationContext(), bit);
                 filePath = getPath(selectedImage);
                 File f = new File(filePath);
@@ -493,22 +495,6 @@ public class AddMoneyTransactionDetail extends AppCompatActivity implements View
 //                uploadBase64=getFileToBase64(filePath);
                 uploadBase64=getFileToBase64_1(f);
                 Log.e("","shyam file size22= "+f.length()+" uploadBase64= "+uploadBase64);
-
-
-//                filepath1.setText(file_path1);
-//                ContentTypeHolder1=file_path1.substring(file_path1.lastIndexOf("/")+1);
-//                FileHolder1= getBase64FromPath(file_path1);
-//                Bitmap photo = (Bitmap) data.getExtras().get("data");
-//                Bitmap bit=Bitmap.createScaledBitmap(photo ,150,150,false);
-//
-//
-//                Uri selectedImage = getImageUri(getApplicationContext(), bit);
-//                String filePath1 = getPath(selectedImage);
-//                File f = new File(filePath1);
-//                fileNm = f.getName();
-//                tvFileNm.setText(fileNm);
-
-
             }
             else {
                 Toast.makeText(this, "You haven't picked Image",

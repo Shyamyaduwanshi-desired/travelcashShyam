@@ -58,7 +58,27 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="view.activity.ActAboutWeb"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" >
+            <!-- <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
 
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name="view.activity.ActAbout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" >
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        </activity>
         <activity
             android:name="view.activity.AddMoneyTransactionDetail"
             android:screenOrientation="portrait"
@@ -106,14 +126,8 @@
             android:name="view.activity.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
-        <activity
-            android:name="view.activity.ActAboutWeb"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
-        <activity
-            android:name="view.activity.ActAbout"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+
+
         <activity
             android:name="view.activity.TransferToBank"
             android:screenOrientation="portrait"
@@ -121,10 +135,6 @@
 
         <activity
             android:name="view.activity.ConfirmCashpoint"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="view.activity.ScanAndCollect"
             android:screenOrientation="portrait" />
 
         <activity
@@ -224,6 +234,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key1" />
+
         <!-- Firebase Notifications -->
         <service android:name="view.activity.MyFirebaseMessagingService">
             <intent-filter>

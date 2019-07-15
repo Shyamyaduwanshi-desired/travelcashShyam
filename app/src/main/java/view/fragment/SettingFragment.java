@@ -144,28 +144,28 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
 
             case 1://Transfer to Bank
 
-                final BottomDialog dialog1 = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
-                dialog1.show(getFragmentManager(), "dialog");
-                dialog1.setCancelable(false);
-                //add item click listener
-                dialog1.setListener(new BottomDialog.OnClickListener() {
-                    @Override
-                    public void click(int position) {
-                        if (position == 0) {
-                            Intent intent = new Intent(getContext(), TransferToBank.class);
-                            intent.putExtra("flagPurchase", "qr");
-                            startActivity(intent);
-                            dialog1.dismiss();
-                            Animatoo.animateSwipeRight(getContext());
-                        } else {
-                            Intent intent = new Intent(getContext(), TransferToBank.class);
-                            intent.putExtra("flagPurchase", "username");
-                            startActivity(intent);
-                            dialog1.dismiss();
-                            Animatoo.animateSwipeRight(getContext());
-                        }
-                    }
-                });
+//                final BottomDialog dialog1 = BottomDialog.newInstance("Select one of the option to transfer", "Cancel", new String[]{"Using QR Code", "Using Username"});
+//                dialog1.show(getFragmentManager(), "dialog");
+//                dialog1.setCancelable(false);
+//                //add item click listener
+//                dialog1.setListener(new BottomDialog.OnClickListener() {
+//                    @Override
+//                    public void click(int position) {
+//                        if (position == 0) {
+//                            Intent intent = new Intent(getContext(), TransferToBank.class);
+//                            intent.putExtra("flagPurchase", "qr");
+//                            startActivity(intent);
+//                            dialog1.dismiss();
+//                            Animatoo.animateSwipeRight(getContext());
+//                        } else {
+//                            Intent intent = new Intent(getContext(), TransferToBank.class);
+//                            intent.putExtra("flagPurchase", "username");
+//                            startActivity(intent);
+//                            dialog1.dismiss();
+//                            Animatoo.animateSwipeRight(getContext());
+//                        }
+//                    }
+//                });
                 break;
 
                 case 2://Transfer to Friend
@@ -227,7 +227,8 @@ public class SettingFragment extends Fragment implements SettingAdapter.ItemClic
     }
     public void NaviAbout(int diff_1)
     {
-        startActivity(new Intent(getContext(), ActAbout.class).putExtra("diff_",diff_1));
+//        startActivity(new Intent(getContext(), ActAbout.class).putExtra("diff_",diff_1));
+        startActivity(new Intent(getContext(), ActAboutWeb.class).putExtra("diff_",diff_1));
         Animatoo.animateSwipeRight(getContext());
     }
 

@@ -461,9 +461,10 @@ public class HomeFragment extends Fragment implements CashPointAdapter.Clickable
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 String addressname="";
-                if(TextUtils.isEmpty(place.getAddress()))
+                if(TextUtils.isEmpty(place.getAddress())||place.getAddress().equals("null")||place.getAddress()=="null")
                 {
                     addressname=place.getName();
+//                    addressname="";
                 }
                 else
                 {

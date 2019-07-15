@@ -13,11 +13,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -183,79 +186,75 @@ public class AddMoney extends AppCompatActivity implements View.OnClickListener,
         String amount = tvAmount.getText().toString().trim();
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
-//        if (amt == 0 || amt < 10000)
+        if (amt == 0 || amt < 2000)//10000
         {
             int val = amt + value;
-//            if (val <= 10000)
+            if (val <= 2000)//10000
             {
                 DecimalFormat df = new DecimalFormat("#,###,###,###");
                 double dd = Double.parseDouble("" + val);
                 tvAmount.setText("" + df.format(dd));
             }
-//            else
-//                showDialog();
+            else
+                showDialog();
         }
-//        else {
-//            showDialog();
-//        }
+        else {
+            showDialog();
+        }
     }
 
     private void add() {
         String amount = tvAmount.getText().toString().trim();
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
-//        if (amt == 0 || amt < 10000)
+        if (amt == 0 || amt < 2000)//10000
         {
-            int val = amt + 100;
-//            if (val <= 10000)
+            int val = amt + 50;//100
+            if (val <= 2000)//10000
             {
                 DecimalFormat df = new DecimalFormat("#,###,###,###");
                 double dd = Double.parseDouble("" + val);
                 tvAmount.setText("" + df.format(dd));
             }
-//            else
-//                showDialog();
+            else
+                showDialog();
         }
-//        else {
-//            showDialog();
-//        }
+        else {
+            showDialog();
+        }
     }
 
     private void minus() {
         String amount = tvAmount.getText().toString().trim();
         amount = amount.replaceAll(",", "");
         int amt = Integer.parseInt(amount);
-        if (amt > 100) {
-            int val = amt - 100;
+        if (amt > 50) {//100
+            int val = amt - 50;//100
             DecimalFormat df = new DecimalFormat("#,###,###,###");
             double dd = Double.parseDouble("" + val);
             tvAmount.setText("" + df.format(dd));
         }
     }
 
-    private void proceedPayment() {
-        double amount = Double.parseDouble(tvAmount.getText().toString());
-        if (amount != 0.0) {
-            AddMoneyModel addMoneyModel = new AddMoneyModel();
-            addMoneyModel.setAmount(tvAmount.getText().toString());
-            addMoneyModel.setBank_name("ICIC Bank");
-            addMoneyModel.setBank_txnID("TNX" + System.currentTimeMillis());
-            addMoneyModel.setAcc_num("" + System.currentTimeMillis());
-            addMoneyModel.setPayment_status("1");
-            addMoneyModel.setPayment_tnxID("" + System.currentTimeMillis());
-            SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String date_time = s.format(new Date());
-            addMoneyModel.setDate_time(date_time);
-//            if (isNetworkConnected())
-////                moneyPresenter.proceedPayment(addMoneyModel);
-//            else
-//                showDialog("Please connect to internet");
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please Select Amount.", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
-    }
+//    private void proceedPayment() {
+//        double amount = Double.parseDouble(tvAmount.getText().toString());
+//        if (amount != 0.0) {
+//            AddMoneyModel addMoneyModel = new AddMoneyModel();
+//            addMoneyModel.setAmount(tvAmount.getText().toString());
+//            addMoneyModel.setBank_name("ICIC Bank");
+//            addMoneyModel.setBank_txnID("TNX" + System.currentTimeMillis());
+//            addMoneyModel.setAcc_num("" + System.currentTimeMillis());
+//            addMoneyModel.setPayment_status("1");
+//            addMoneyModel.setPayment_tnxID("" + System.currentTimeMillis());
+//            SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//            String date_time = s.format(new Date());
+//            addMoneyModel.setDate_time(date_time);
+//        } else {
+//            Toast toast = Toast.makeText(getApplicationContext(), "Please Select Amount.", Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.CENTER, 0, 0);
+//            toast.show();
+//        }
+//    }
 
     private void showDialog(String message) {
         new AlertDialog.Builder(this)
@@ -274,7 +273,7 @@ public class AddMoney extends AppCompatActivity implements View.OnClickListener,
 
     private void showDialog() {
         new AlertDialog.Builder(this)
-                .setMessage("Please enter an amount lower than maximum transaction of $10,000.")
+                .setMessage("Please enter an amount lower than maximum transaction of $2,000.")//10,000
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -302,13 +301,11 @@ String sBankdetail="";
     @Override
     public void error(String response) {
         sBankdetail="error";//fail
-//        showDialog(response);
     }
 
     @Override
     public void fail(String response) {
         sBankdetail="fail";
-//        showDialog(response);
     }
 
     private boolean isNetworkConnected() {
@@ -353,14 +350,6 @@ String sBankdetail="";
 
             }
         }).show();
-
-//        prettyDialog.addButton("Search again", R.color.black, R.color.white, new PrettyDialogCallback() {
-//            @Override
-//            public void onClick() {
-//                prettyDialog.dismiss();
-//
-//            }
-//        }).show();
     }
 
     private void ShowBankDetails(){
@@ -372,11 +361,19 @@ String sBankdetail="";
          android.app.AlertDialog bankDetailDlg = dialogBuilder.create();
 
          TextView tvCloseDlg = dialogView.findViewById(R.id.tv_close);
-         TextView tvBankAccnt = dialogView.findViewById(R.id.tv_bank_no);
+//         TextView tvBankAccnt = dialogView.findViewById(R.id.tv_bank_no);
+         WebView
+                 webViewBank = dialogView.findViewById(R.id.wv_bank_no);
 //         TextView tvBankNm = dialogView.findViewById(R.id.tv_bank_name);
         CustomButton btProcee = dialogView.findViewById(R.id.btn_proceed);
 
-        tvBankAccnt.setText(sBankdetail);
+//        tvBankAccnt.setText(Html.fromHtml(sBankdetail));
+Log.e("","sBankdetail= "+sBankdetail);
+        webViewBank.setWebViewClient(new WebViewClient());
+        webViewBank.getSettings().setJavaScriptEnabled(true);
+        webViewBank.getSettings().setDomStorageEnabled(true);
+        webViewBank.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+        webViewBank.loadDataWithBaseURL("", sBankdetail, "text/html", "utf-8", "");
 
         tvCloseDlg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -398,9 +395,6 @@ String sBankdetail="";
         });
         bankDetailDlg.show();
     }
-
-//        String[] axisData = { "Apr", "May", "June", "July"};//date
-//        int[] yAxisData = {50, 20, 15, 30};//rate
 public void ShowChart()
 {
     List yAxisValues = new ArrayList();
@@ -416,85 +410,52 @@ public void ShowChart()
         Log.e("","value= "+value+" value1= "+value1);
         yAxisValues.add(new PointValue(i, value1));
     }
-
     List lines = new ArrayList();
     lines.add(line);
-
     LineChartData data = new LineChartData();
     data.setLines(lines);
-
     Axis axis = new Axis();
     axis.setValues(axisValues);
     axis.setTextSize(12);
     axis.setTextColor(Color.parseColor("#000000"));
-
-
     Axis yAxis = new Axis();
     yAxis.setTextSize(12);
     yAxis.setTextColor(Color.parseColor("#000000"));
-
     data.setAxisXBottom(axis);
     data.setAxisYLeft(yAxis);
     lineChartView.setLineChartData(data);
 
 }
-public void ShowChart11()
-{
-    List yAxisValues = new ArrayList();
-    List axisValues = new ArrayList();
-//    List yAxisValues1 = new ArrayList();
-    Line line = new Line(yAxisValues).setColor(Color.parseColor("#13acbe"));
-    for (int i = 0; i < arGraphData.size(); i++) {
-        axisValues.add(i, new AxisValue(i).setLabel(appData.ConvertDate3(arGraphData.get(i).getDate())));
-//        yAxisValues1.add(i, new AxisValue(i).setLabel(arGraphData.get(i).getRate()));
-    }
-
-    for (int i = 0; i < arGraphData.size(); i++) {
-        float value=Float.parseFloat(arGraphData.get(i).getRate());
-        int value1=Math.round(Math.round(value));
-//        double value=Double.parseDouble(arGraphData.get(i).getRate());
-        Log.e("","value= "+value+" value1= "+value1);
-        yAxisValues.add(new PointValue(i, value1));
-    }
-
-    List lines = new ArrayList();
-    lines.add(line);
-
-    LineChartData data = new LineChartData();
-    data.setLines(lines);
-
-    Axis axis = new Axis();
-    axis.setValues(axisValues);
-    axis.setTextSize(12);
-//    axis.setName("date");//date
-    axis.setTextColor(Color.parseColor("#000000"));
-    data.setAxisXBottom(axis);
-
-    Axis yAxis = new Axis();
-
-//    yAxis.setValues(yAxisValues1);
-    yAxis.setTextSize(12);
-//    yAxis.setName("");//Currency rate
-    yAxis.setTextColor(Color.parseColor("#000000"));
-
-    data.setAxisYLeft(yAxis);
-
-    //    axis.setValues();
-//    mChart.getAxisLeft().setLabelCount(3);
-//    yAxis.setLabelCount(5);
-//    chart.setYRange(0, 30, true);
-
-
-
-    lineChartView.setLineChartData(data);
-
-    Viewport viewport = new Viewport(lineChartView.getMaximumViewport());
-//    viewport.top = 110;
-//    lineChartView.setMaximumViewport(viewport);
-//    lineChartView.setCurrentViewport(viewport);
-
-//    YAxis yAxis = chart.getAxis(YAxis.AxisDependency.LEFT);
-}
+//public void ShowChart11()
+//{
+//    List yAxisValues = new ArrayList();
+//    List axisValues = new ArrayList();
+//    Line line = new Line(yAxisValues).setColor(Color.parseColor("#13acbe"));
+//    for (int i = 0; i < arGraphData.size(); i++) {
+//        axisValues.add(i, new AxisValue(i).setLabel(appData.ConvertDate3(arGraphData.get(i).getDate())));
+//    }
+//
+//    for (int i = 0; i < arGraphData.size(); i++) {
+//        float value=Float.parseFloat(arGraphData.get(i).getRate());
+//        int value1=Math.round(Math.round(value));
+//        Log.e("","value= "+value+" value1= "+value1);
+//        yAxisValues.add(new PointValue(i, value1));
+//    }
+//    List lines = new ArrayList();
+//    lines.add(line);
+//    LineChartData data = new LineChartData();
+//    data.setLines(lines);
+//    Axis axis = new Axis();
+//    axis.setValues(axisValues);
+//    axis.setTextSize(12);
+//    axis.setTextColor(Color.parseColor("#000000"));
+//    data.setAxisXBottom(axis);
+//    Axis yAxis = new Axis();
+//    yAxis.setTextSize(12);
+//    yAxis.setTextColor(Color.parseColor("#000000"));
+//    data.setAxisYLeft(yAxis);
+//    lineChartView.setLineChartData(data);
+//}
 
 
     public void getCurrentExchangeRate() {
@@ -509,7 +470,7 @@ public void ShowChart11()
                     rate_data = rate_data.replaceAll(",", "");
                     DecimalFormat df = new DecimalFormat("#,###,###,###.00");
                     double dd = Double.parseDouble(rate_data);
-                    tvRate.setText("$1 To IDR "+df.format(dd));
+                    tvRate.setText("AUD $1 To IDR "+df.format(dd));
 
 //                    tvRate.setText("$1 To IDR "+String.format("%.2f", rate_data));
                 } catch (JSONException e) {
